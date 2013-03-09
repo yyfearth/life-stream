@@ -1,53 +1,133 @@
 #include <iostream>
+#include <stdio.h>
+#include <ostream>
+
+#include <boost/thread.hpp>
+#include <boost/bind.hpp>
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
+
 // #include "exif.h"
+
+using namespace std;
 
 using boost::asio::ip::tcp;
 
+const size_t BUF_LEN = 128;
+
+class TCPClient
+{
+public:
+    TCPClient(boost::asio::io_service& io_service, tcp::resolver::iterator endpoint_iterator);
+
+    void close();
+private:
+    boost::asio::io_service& io_service;
+    tcp::socket socket;
+
+    boost::array<char, BUF_LEN> buffer;
+
+protected:
+    void on_connect(const boost::system::error_code& err_code,
+            tcp::resolver::iterator endpoint_iterator);
+
+    void on_receive(const boost::system::error_code& err_code);
+
+    void do_close();
+};
+
+TCPClient::TCPClient(boost::asio::io_service& io_svc, tcp::resolver::iterator endpoint_iterator)
+: io_service(io_svc), socket(io_svc)
+{
+
+    tcp::endpoint endpoint = *endpoint_iterator;
+
+    socket.async_connect(endpoint,
+            boost::bind(&TCPClient::on_connect, this, boost::asio::placeholders::error, ++endpoint_iterator));
+}
+
+void TCPClient::close()
+{
+    io_service.post(boost::bind(&TCPClient::do_close, this));
+}
+
+void TCPClient::on_connect(const boost::system::error_code& err_code,
+    tcp::resolver::iterator endpoint_iterator)
+{
+    if (err_code == 0)
+    // Successful connected
+    {
+        socket.async_receive(boost::asio::buffer(buffer.data(), BUF_LEN),
+                boost::bind(&TCPClient::on_receive, this, boost::asio::placeholders::error));
+
+
+    } else if (endpoint_iterator != tcp::resolver::iterator())
+    {
+        socket.close();
+        tcp::endpoint endpoint = *endpoint_iterator;
+
+        socket.async_connect(endpoint,
+                boost::bind(&TCPClient::on_connect, this, boost::asio::placeholders::error, ++endpoint_iterator));
+    }
+}
+
+void TCPClient::on_receive(const boost::system::error_code& err_code)
+{
+    if (err_code == 0)
+    {
+        std::cout << buffer.data() << std::endl;
+
+        socket.async_receive(boost::asio::buffer(buffer.data(), BUF_LEN),
+                boost::bind(&TCPClient::on_receive, this, boost::asio::placeholders::error));
+    } else {
+        do_close();
+    }
+}
+
+void TCPClient::do_close()
+{
+    socket.close();
+}
+
 int main(int argc, char* argv[])
 {
-  try
-  {
     if (argc != 3)
     {
       std::cerr << "Usage: client <host> <port>" << std::endl;
       return 1;
     }
 
-    boost::asio::io_service io_service;
+    try {
+        boost::asio::io_service io_service;
 
-    tcp::resolver resolver(io_service);
-    tcp::resolver::query query(argv[1], argv[2]);
-    tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
+        tcp::resolver resolver(io_service);
+        tcp::resolver::query query(argv[1], argv[2]);
 
-    tcp::socket socket(io_service);
-    boost::asio::connect(socket, endpoint_iterator);
+        tcp::resolver::iterator endpoint_iteratorator = resolver.resolve(query);
 
-    for (;;)
+        TCPClient client(io_service, endpoint_iteratorator);
+
+        boost::thread thread(
+                boost::bind(&boost::asio::io_service::run, &io_service));
+
+        std::cout << "Client started." << std::endl;
+
+        std::string Input;
+        while (Input != "exit")
+        {
+            std::cin >> Input;
+        }
+
+        client.close();
+        thread.join();
+    } catch (std::exception& e)
     {
-      boost::array<char, 128> buf;
-      boost::system::error_code error;
-
-      size_t len = socket.read_some(boost::asio::buffer(buf), error);
-
-      if (error == boost::asio::error::eof)
-        break; // Connection closed cleanly by peer.
-      else if (error)
-        throw boost::system::system_error(error); // Some other error.
-
-      std::cout.write(buf.data(), len);
+        std::cerr << e.what() << std::endl;
     }
-  }
-  catch (std::exception& e)
-  {
-    std::cerr << e.what() << std::endl;
-  }
 
-  return 0;
 }
 
-//int test(int argc, char *argv[]) {
+//int exif(int argc, char *argv[]) {
 //  if (argc < 2) {
 //    printf("Usage: demo <JPEG file>\n");
 //    return -1;
