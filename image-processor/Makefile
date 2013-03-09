@@ -1,8 +1,7 @@
 COMPILER=G++
 
-# todo: object files into output path, processing c / c++ files in the same time (?), nested directories for source files (?)
 C = cpp
-OUTPUT_PATH = out/production/ImageProcessor/
+OUTPUT_PATH = ../out/production/ImageProcessor/
 SOURCE_PATH = src/
 EXE = $(OUTPUT_PATH)ImageProcessor
 
@@ -19,7 +18,7 @@ ifeq ($(COMPILER), G++)
 # INCLUDES = -I../.includes
   INCLUDES =
 # LIBS = -lgc
-  LIBS =
+  LIBS = -lboost_system-mt -lboost_thread-mt
 # LIBPATH = -L../gc/.libs
   LIBPATH =
   CPPFLAGS = $(COPT) -g $(INCLUDES)
