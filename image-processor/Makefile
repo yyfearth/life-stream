@@ -53,3 +53,7 @@ clean:
 
 rebuild: clean all
 #rebuild is not entirely correct
+
+run: 
+	@echo Run...
+	$(EXE) 127.0.0.1 8888
