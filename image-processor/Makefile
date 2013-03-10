@@ -18,7 +18,7 @@ ifeq ($(COMPILER), G++)
 # INCLUDES = -I../.includes
   INCLUDES =
 # LIBS = -lgc
-  LIBS = -lboost_system-mt -lboost_thread-mt
+  LIBS = -lboost_system-mt -lboost_thread-mt -lprotobuf
 # LIBPATH = -L../gc/.libs
   LIBPATH =
   CPPFLAGS = $(COPT) -g $(INCLUDES)
