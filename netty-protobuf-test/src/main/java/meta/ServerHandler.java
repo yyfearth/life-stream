@@ -46,11 +46,7 @@ public class ServerHandler extends SimpleChannelUpstreamHandler {
             logger.info(e.toString());
             if (((ChannelStateEvent) e).getState().equals(ChannelState.CONNECTED)) {
                 channel = e.getChannel();
-//                request(); // test only
-//                request(); // test only
-//                request(); // test only
-//                request(); // test only
-//                request(); // test only
+                request(); // test only
             }
         }
         super.handleUpstream(ctx, e);
@@ -61,11 +57,6 @@ public class ServerHandler extends SimpleChannelUpstreamHandler {
         logger.info("received metadata:");
         Meta.Image image = (Meta.Image) e.getMessage();
         logger.info(image.toString());
-//        logger.info("filename " + image.getFilename());
-//        logger.info("meta count " + image.getMetadataCount());
-//        for (Meta.Image.Metadata meta : image.getMetadataList()) {
-//            logger.info("meta " + meta.getName() + " " + meta.getValue());
-//        }
     }
 
     @Override
