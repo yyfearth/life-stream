@@ -86,7 +86,7 @@ void Client::on_receive(const boost::system::error_code& err_code)
 {
     if (err_code == 0)
     {
-        string str(buffer.data());
+        string str(buffer.data(), buffer.length());
         std::cout << "received: " << str.length() << std::endl;
 
         meta::Image image;
@@ -112,7 +112,8 @@ void Client::write()
     string buf;
     image.SerializeToString(&buf);
     std::cout << "write " << buf.length() << std::endl << image.DebugString() << std::endl;
-    boost::asio::write(socket, boost::asio::buffer(buf.c_str(), buf.length()));
+    std::cout << '[' << buf << ']' << std::endl;
+    boost::asio::write(socket, boost::asio::buffer(buf, buf.length()));
     // boost::asio::async_write(socket,
     //     boost::asio::buffer(buf, buf.length()),
     //     boost::bind(&Client::on_write, this, boost::asio::placeholders::error));
