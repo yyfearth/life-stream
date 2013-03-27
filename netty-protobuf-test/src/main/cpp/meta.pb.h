@@ -239,6 +239,18 @@ class Image : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::meta::Image_Metadata >*
       mutable_metadata();
 
+  // optional bytes data = 5;
+  inline bool has_data() const;
+  inline void clear_data();
+  static const int kDataFieldNumber = 5;
+  inline const ::std::string& data() const;
+  inline void set_data(const ::std::string& value);
+  inline void set_data(const char* value);
+  inline void set_data(const void* value, size_t size);
+  inline ::std::string* mutable_data();
+  inline ::std::string* release_data();
+  inline void set_allocated_data(::std::string* data);
+
   // @@protoc_insertion_point(class_scope:meta.Image)
  private:
   inline void set_has_uuid();
@@ -247,16 +259,19 @@ class Image : public ::google::protobuf::Message {
   inline void clear_has_filename();
   inline void set_has_processed();
   inline void clear_has_processed();
+  inline void set_has_data();
+  inline void clear_has_data();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::std::string* uuid_;
   ::std::string* filename_;
   ::google::protobuf::RepeatedPtrField< ::meta::Image_Metadata > metadata_;
+  ::std::string* data_;
   bool processed_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
 
   friend void  protobuf_AddDesc_meta_2eproto();
   friend void protobuf_AssignDesc_meta_2eproto();
@@ -601,6 +616,76 @@ Image::metadata() const {
 inline ::google::protobuf::RepeatedPtrField< ::meta::Image_Metadata >*
 Image::mutable_metadata() {
   return &metadata_;
+}
+
+// optional bytes data = 5;
+inline bool Image::has_data() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void Image::set_has_data() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void Image::clear_has_data() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void Image::clear_data() {
+  if (data_ != &::google::protobuf::internal::kEmptyString) {
+    data_->clear();
+  }
+  clear_has_data();
+}
+inline const ::std::string& Image::data() const {
+  return *data_;
+}
+inline void Image::set_data(const ::std::string& value) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(value);
+}
+inline void Image::set_data(const char* value) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(value);
+}
+inline void Image::set_data(const void* value, size_t size) {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  data_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* Image::mutable_data() {
+  set_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    data_ = new ::std::string;
+  }
+  return data_;
+}
+inline ::std::string* Image::release_data() {
+  clear_has_data();
+  if (data_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = data_;
+    data_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void Image::set_allocated_data(::std::string* data) {
+  if (data_ != &::google::protobuf::internal::kEmptyString) {
+    delete data_;
+  }
+  if (data) {
+    set_has_data();
+    data_ = data;
+  } else {
+    clear_has_data();
+    data_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
 }
 
 

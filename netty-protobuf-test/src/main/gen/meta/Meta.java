@@ -75,6 +75,16 @@ public final class Meta {
      */
     meta.Meta.Image.MetadataOrBuilder getMetadataOrBuilder(
         int index);
+
+    // optional bytes data = 5;
+    /**
+     * <code>optional bytes data = 5;</code>
+     */
+    boolean hasData();
+    /**
+     * <code>optional bytes data = 5;</code>
+     */
+    com.google.protobuf.ByteString getData();
   }
   /**
    * Protobuf type {@code meta.Image}
@@ -148,6 +158,11 @@ public final class Meta {
                 mutable_bitField0_ |= 0x00000008;
               }
               metadata_.add(input.readMessage(meta.Meta.Image.Metadata.PARSER, extensionRegistry));
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000008;
+              data_ = input.readBytes();
               break;
             }
           }
@@ -974,11 +989,28 @@ public final class Meta {
       return metadata_.get(index);
     }
 
+    // optional bytes data = 5;
+    public static final int DATA_FIELD_NUMBER = 5;
+    private com.google.protobuf.ByteString data_;
+    /**
+     * <code>optional bytes data = 5;</code>
+     */
+    public boolean hasData() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional bytes data = 5;</code>
+     */
+    public com.google.protobuf.ByteString getData() {
+      return data_;
+    }
+
     private void initFields() {
       uuid_ = "";
       filename_ = "";
       processed_ = false;
       metadata_ = java.util.Collections.emptyList();
+      data_ = com.google.protobuf.ByteString.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1018,6 +1050,9 @@ public final class Meta {
       for (int i = 0; i < metadata_.size(); i++) {
         output.writeMessage(4, metadata_.get(i));
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(5, data_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1042,6 +1077,10 @@ public final class Meta {
       for (int i = 0; i < metadata_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, metadata_.get(i));
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, data_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1172,6 +1211,8 @@ public final class Meta {
         } else {
           metadataBuilder_.clear();
         }
+        data_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -1221,6 +1262,10 @@ public final class Meta {
         } else {
           result.metadata_ = metadataBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.data_ = data_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1275,6 +1320,9 @@ public final class Meta {
               metadataBuilder_.addAllMessages(other.metadata_);
             }
           }
+        }
+        if (other.hasData()) {
+          setData(other.getData());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1738,6 +1786,42 @@ public final class Meta {
         return metadataBuilder_;
       }
 
+      // optional bytes data = 5;
+      private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes data = 5;</code>
+       */
+      public boolean hasData() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional bytes data = 5;</code>
+       */
+      public com.google.protobuf.ByteString getData() {
+        return data_;
+      }
+      /**
+       * <code>optional bytes data = 5;</code>
+       */
+      public Builder setData(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        data_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes data = 5;</code>
+       */
+      public Builder clearData() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        data_ = getDefaultInstance().getData();
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:meta.Image)
     }
 
@@ -1768,11 +1852,11 @@ public final class Meta {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\nmeta.proto\022\004meta\"\213\001\n\005Image\022\014\n\004uuid\030\001 \002" +
+      "\n\nmeta.proto\022\004meta\"\231\001\n\005Image\022\014\n\004uuid\030\001 \002" +
       "(\t\022\020\n\010filename\030\002 \002(\t\022\021\n\tprocessed\030\003 \001(\010\022" +
-      "&\n\010metadata\030\004 \003(\0132\024.meta.Image.Metadata\032" +
-      "\'\n\010Metadata\022\014\n\004name\030\001 \002(\t\022\r\n\005value\030\002 \002(\t" +
-      "B\010\n\004metaH\001"
+      "&\n\010metadata\030\004 \003(\0132\024.meta.Image.Metadata\022" +
+      "\014\n\004data\030\005 \001(\014\032\'\n\010Metadata\022\014\n\004name\030\001 \002(\t\022" +
+      "\r\n\005value\030\002 \002(\tB\010\n\004metaH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1784,7 +1868,7 @@ public final class Meta {
           internal_static_meta_Image_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_meta_Image_descriptor,
-              new java.lang.String[] { "Uuid", "Filename", "Processed", "Metadata", });
+              new java.lang.String[] { "Uuid", "Filename", "Processed", "Metadata", "Data", });
           internal_static_meta_Image_Metadata_descriptor =
             internal_static_meta_Image_descriptor.getNestedTypes().get(0);
           internal_static_meta_Image_Metadata_fieldAccessorTable = new

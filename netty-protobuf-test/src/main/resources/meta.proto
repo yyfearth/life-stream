@@ -7,6 +7,7 @@ message Image {
     required string filename = 2;
     optional bool processed = 3;
     repeated Metadata metadata = 4;
+    optional bytes data = 5;
 
     message Metadata {
         required string name = 1;

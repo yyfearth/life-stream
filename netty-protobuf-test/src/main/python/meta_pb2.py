@@ -13,7 +13,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='meta.proto',
   package='meta',
-  serialized_pb='\n\nmeta.proto\x12\x04meta\"\x8b\x01\n\x05Image\x12\x0c\n\x04uuid\x18\x01 \x02(\t\x12\x10\n\x08\x66ilename\x18\x02 \x02(\t\x12\x11\n\tprocessed\x18\x03 \x01(\x08\x12&\n\x08metadata\x18\x04 \x03(\x0b\x32\x14.meta.Image.Metadata\x1a\'\n\x08Metadata\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\r\n\x05value\x18\x02 \x02(\tB\x08\n\x04metaH\x01')
+  serialized_pb='\n\nmeta.proto\x12\x04meta\"\x99\x01\n\x05Image\x12\x0c\n\x04uuid\x18\x01 \x02(\t\x12\x10\n\x08\x66ilename\x18\x02 \x02(\t\x12\x11\n\tprocessed\x18\x03 \x01(\x08\x12&\n\x08metadata\x18\x04 \x03(\x0b\x32\x14.meta.Image.Metadata\x12\x0c\n\x04\x64\x61ta\x18\x05 \x01(\x0c\x1a\'\n\x08Metadata\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\r\n\x05value\x18\x02 \x02(\tB\x08\n\x04metaH\x01')
 
 
 
@@ -48,8 +48,8 @@ _IMAGE_METADATA = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=121,
-  serialized_end=160,
+  serialized_start=135,
+  serialized_end=174,
 )
 
 _IMAGE = _descriptor.Descriptor(
@@ -87,6 +87,13 @@ _IMAGE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='data', full_name='meta.Image.data', index=4,
+      number=5, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value="",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -97,7 +104,7 @@ _IMAGE = _descriptor.Descriptor(
   is_extendable=False,
   extension_ranges=[],
   serialized_start=21,
-  serialized_end=160,
+  serialized_end=174,
 )
 
 _IMAGE_METADATA.containing_type = _IMAGE;

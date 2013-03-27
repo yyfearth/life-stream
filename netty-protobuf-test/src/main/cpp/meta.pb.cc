@@ -37,11 +37,12 @@ void protobuf_AssignDesc_meta_2eproto() {
       "meta.proto");
   GOOGLE_CHECK(file != NULL);
   Image_descriptor_ = file->message_type(0);
-  static const int Image_offsets_[4] = {
+  static const int Image_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Image, uuid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Image, filename_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Image, processed_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Image, metadata_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Image, data_),
   };
   Image_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -104,11 +105,11 @@ void protobuf_AddDesc_meta_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\nmeta.proto\022\004meta\"\213\001\n\005Image\022\014\n\004uuid\030\001 \002"
+    "\n\nmeta.proto\022\004meta\"\231\001\n\005Image\022\014\n\004uuid\030\001 \002"
     "(\t\022\020\n\010filename\030\002 \002(\t\022\021\n\tprocessed\030\003 \001(\010\022"
-    "&\n\010metadata\030\004 \003(\0132\024.meta.Image.Metadata\032"
-    "\'\n\010Metadata\022\014\n\004name\030\001 \002(\t\022\r\n\005value\030\002 \002(\t"
-    "B\010\n\004metaH\001", 170);
+    "&\n\010metadata\030\004 \003(\0132\024.meta.Image.Metadata\022"
+    "\014\n\004data\030\005 \001(\014\032\'\n\010Metadata\022\014\n\004name\030\001 \002(\t\022"
+    "\r\n\005value\030\002 \002(\tB\010\n\004metaH\001", 184);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "meta.proto", &protobuf_RegisterTypes);
   Image::default_instance_ = new Image();
@@ -415,6 +416,7 @@ const int Image::kUuidFieldNumber;
 const int Image::kFilenameFieldNumber;
 const int Image::kProcessedFieldNumber;
 const int Image::kMetadataFieldNumber;
+const int Image::kDataFieldNumber;
 #endif  // !_MSC_VER
 
 Image::Image()
@@ -436,6 +438,7 @@ void Image::SharedCtor() {
   uuid_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   filename_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   processed_ = false;
+  data_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -449,6 +452,9 @@ void Image::SharedDtor() {
   }
   if (filename_ != &::google::protobuf::internal::kEmptyString) {
     delete filename_;
+  }
+  if (data_ != &::google::protobuf::internal::kEmptyString) {
+    delete data_;
   }
   if (this != default_instance_) {
   }
@@ -488,6 +494,11 @@ void Image::Clear() {
       }
     }
     processed_ = false;
+    if (has_data()) {
+      if (data_ != &::google::protobuf::internal::kEmptyString) {
+        data_->clear();
+      }
+    }
   }
   metadata_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -560,6 +571,20 @@ bool Image::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(34)) goto parse_metadata;
+        if (input->ExpectTag(42)) goto parse_data;
+        break;
+      }
+
+      // optional bytes data = 5;
+      case 5: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_data:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_data()));
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -611,6 +636,12 @@ void Image::SerializeWithCachedSizes(
       4, this->metadata(i), output);
   }
 
+  // optional bytes data = 5;
+  if (has_data()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytes(
+      5, this->data(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -651,6 +682,13 @@ void Image::SerializeWithCachedSizes(
         4, this->metadata(i), target);
   }
 
+  // optional bytes data = 5;
+  if (has_data()) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        5, this->data(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -679,6 +717,13 @@ int Image::ByteSize() const {
     // optional bool processed = 3;
     if (has_processed()) {
       total_size += 1 + 1;
+    }
+
+    // optional bytes data = 5;
+    if (has_data()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->data());
     }
 
   }
@@ -726,6 +771,9 @@ void Image::MergeFrom(const Image& from) {
     if (from.has_processed()) {
       set_processed(from.processed());
     }
+    if (from.has_data()) {
+      set_data(from.data());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -757,6 +805,7 @@ void Image::Swap(Image* other) {
     std::swap(filename_, other->filename_);
     std::swap(processed_, other->processed_);
     metadata_.Swap(&other->metadata_);
+    std::swap(data_, other->data_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
