@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
+import sys
 import socket
 import meta_pb2
+import struct
 
 def write():
     print "write"
@@ -13,9 +15,14 @@ def write():
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect(("127.0.0.1", 8888))
         print "connected"
-        sock.sendall(img.SerializeToString())
+        data = img.SerializeToString()
+        size = sys.getsizeof(data)
+        size_buf = struct.pack('>I', size)
+        sock.send(size_buf)
+        sock.sendall(data)
+        raw_input("Press ENTER to exit")
         sock.close()
-        print "sent"
+        print "sent: " + str(size)
 
 
 def read():
@@ -23,13 +30,10 @@ def read():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(("127.0.0.1", 8888))
     print "connected"
-    pb_data = sock.recv(1024)
-    #while 1:
-    #    data = sock.recv(1024)
-    #    if not data:
-    #        break
-    #    pb_data += data
-    print 'get all data: \n"' + pb_data + '"'
+    size_buf = sock.recv(4)
+    size = struct.unpack('>I', size_buf)[0]
+    pb_data = sock.recv(size)
+    print "get: " + str(size)
     sock.close()
     img = meta_pb2.Image()
     img.ParseFromString(pb_data)
@@ -37,7 +41,7 @@ def read():
 
 
 def main():
-    read()
+#    read()
     write()
 
 
