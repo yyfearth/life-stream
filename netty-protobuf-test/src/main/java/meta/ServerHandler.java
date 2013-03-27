@@ -15,8 +15,13 @@
  */
 package meta;
 
+import com.google.protobuf.ByteString;
 import org.jboss.netty.channel.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +31,19 @@ public class ServerHandler extends SimpleChannelUpstreamHandler {
     private static final Logger logger = Logger.getLogger(ServerHandler.class.getName());
 
     private volatile Channel channel = null;
+    static private ByteString img = null;
+
+    {
+        try {
+            FileInputStream in = new FileInputStream(new File("/Users/wilson/Dev/life-stream/out/production/ImageProcessor/test1.jpg"));
+            img = ByteString.readFrom(in);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public void request() {
         if (channel == null) {
@@ -34,7 +52,8 @@ public class ServerHandler extends SimpleChannelUpstreamHandler {
             Meta.Image.Builder builder = Meta.Image.newBuilder();
             builder.setUuid(UUID.randomUUID().toString())
                     .setFilename("test1.jpg")
-                    .setProcessed(false);
+                    .setProcessed(false)
+                    .setData(img);
             channel.write(builder.build());
             logger.info("sent request");
         }

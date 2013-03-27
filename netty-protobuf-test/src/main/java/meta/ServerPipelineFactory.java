@@ -17,8 +17,10 @@ package meta;
 
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
+import org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder;
 import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
 import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
+import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 
 import static org.jboss.netty.channel.Channels.pipeline;
 
@@ -26,11 +28,11 @@ public class ServerPipelineFactory implements ChannelPipelineFactory {
 
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline();
-//        p.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(67108864, 0, 4, 0, 4));
+        p.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(67108864, 0, 4, 0, 4));
         p.addLast("protobufDecoder", new ProtobufDecoder(Meta.Image.getDefaultInstance()));
 
         p.addLast("frameEncoder", new LengthFieldPrepender(4));
-//        p.addLast("protobufEncoder", new ProtobufEncoder());
+        p.addLast("protobufEncoder", new ProtobufEncoder());
 
         p.addLast("handler", new ServerHandler());
         return p;
