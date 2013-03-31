@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-import sys
 import socket
 import meta_pb2
 import struct
@@ -8,21 +7,21 @@ import struct
 def write():
     print "write"
     img = meta_pb2.Image()
-    img.uuid = "xxxxxxxx"
+    img.uuid = "b9e5f791-faa2-4c37-9f76-46f288ace593"
     img.filename = "test2.jpg"
     print "img created: \n" + str(img)
     if img.IsInitialized():
+        data = img.SerializeToString()
+        buf = struct.pack('>I', len(data))
+        # print buf.encode("hex")
+        buf += data
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect(("127.0.0.1", 8888))
         print "connected"
-        data = img.SerializeToString()
-        size = sys.getsizeof(data)
-        size_buf = struct.pack('>I', size)
-        sock.send(size_buf)
-        sock.sendall(data)
+        sock.sendall(buf)
         raw_input("Press ENTER to exit")
+        sock.shutdown(socket.SHUT_RDWR)
         sock.close()
-        print "sent: " + str(size)
 
 
 def read():
@@ -31,17 +30,19 @@ def read():
     sock.connect(("127.0.0.1", 8888))
     print "connected"
     size_buf = sock.recv(4)
+    # print size_buf.encode("hex")
     size = struct.unpack('>I', size_buf)[0]
-    pb_data = sock.recv(size)
+    data_buf = sock.recv(size)
     print "get: " + str(size)
+    sock.shutdown(socket.SHUT_RDWR)
     sock.close()
     img = meta_pb2.Image()
-    img.ParseFromString(pb_data)
+    img.ParseFromString(data_buf)
     print "img read: \n" + str(img)
 
 
 def main():
-#    read()
+    read()
     write()
 
 

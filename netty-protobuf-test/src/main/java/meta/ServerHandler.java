@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.channels.ClosedChannelException;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,7 +81,12 @@ public class ServerHandler extends SimpleChannelUpstreamHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-        logger.log(Level.WARNING, "Unexpected exception from downstream.", e.getCause());
+        Throwable ex = e.getCause();
+        if (ex instanceof ClosedChannelException) {
+            logger.log(Level.WARNING, "Unexpected channel close from downstream.");
+        } else {
+            logger.log(Level.WARNING, "Unexpected exception from downstream.", ex);
+        }
         e.getChannel().close();
         channel = null;
     }
