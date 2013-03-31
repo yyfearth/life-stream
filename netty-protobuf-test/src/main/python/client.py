@@ -32,13 +32,17 @@ def read():
     size_buf = sock.recv(4)
     # print size_buf.encode("hex")
     size = struct.unpack('>I', size_buf)[0]
-    data_buf = sock.recv(size)
-    print "get: " + str(size)
+    data_buf = sock.recv(size, socket.MSG_WAITALL)
+    print "get: " + str(size) + ", " + str(len(data_buf))
     sock.shutdown(socket.SHUT_RDWR)
     sock.close()
     img = meta_pb2.Image()
     img.ParseFromString(data_buf)
-    print "img read: \n" + str(img)
+    print "img read: \n" + str(img)[:64]
+    f = open("output.jpg", "w")
+    f.write(img.data)
+    f.close()
+
 
 
 def main():
