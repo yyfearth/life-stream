@@ -7,7 +7,6 @@ import org.jboss.netty.channel.*;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 import java.net.InetSocketAddress;
-import java.util.Date;
 import java.util.concurrent.Executors;
 
 public class Server {
@@ -32,6 +31,7 @@ public class Server {
 }
 
 class ServerHandler extends SimpleChannelHandler {
+	static int count = 0;
 
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
@@ -58,30 +58,28 @@ class ServerHandler extends SimpleChannelHandler {
 		Channel channel = e.getChannel();
 
 		ChannelBuffer inChannelBuffer = (ChannelBuffer) e.getMessage();
-//		inChannelBuffer.read
-		StringBuilder stringBuilder = new StringBuilder();
+
+
+		byte[] buffer = new byte[8192];
+//		inChannelBuffer.readBytes(buffer);
 
 		while (inChannelBuffer.readable()) {
-			stringBuilder.append((char) inChannelBuffer.readByte());
+			System.out.println("inChannelBuffer.readableBytes(): " + inChannelBuffer.readableBytes());
+
+			int numReadBytes = Math.min(buffer.length, inChannelBuffer.readableBytes());
+			inChannelBuffer.readBytes(buffer, 0, numReadBytes);
+			count += numReadBytes;
+
+			Thread.sleep(100);
 		}
 
-		String message = stringBuilder.toString();
-
-		System.out.println(new Date() + " Got message from client:" + message);
-
-		ChannelBuffer outChannelBuffer = ChannelBuffers.dynamicBuffer();
-
-		if (outChannelBuffer.writable()) {
-			outChannelBuffer.writeBytes("Pong".getBytes());
-		}
-
-		System.out.println(new Date() + " Send: Pong");
-		channel.write(outChannelBuffer);
+		System.out.println(count + " bytes received");
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
 		e.getCause().printStackTrace();
 		e.getChannel().close();
+		System.out.println("Channel closed");
 	}
 }
