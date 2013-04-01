@@ -26,7 +26,7 @@
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 
-namespace image {
+namespace data {
 
 // Internal implementation detail -- do not call these.
 void  protobuf_AddDesc_image_2eproto();
@@ -107,7 +107,7 @@ class Image_Resolution : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 height() const;
   inline void set_height(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:image.Image.Resolution)
+  // @@protoc_insertion_point(class_scope:data.Image.Resolution)
  private:
   inline void set_has_width();
   inline void clear_has_width();
@@ -206,7 +206,7 @@ class Image_GeoLocation : public ::google::protobuf::Message {
   inline double alt() const;
   inline void set_alt(double value);
 
-  // @@protoc_insertion_point(class_scope:image.Image.GeoLocation)
+  // @@protoc_insertion_point(class_scope:data.Image.GeoLocation)
  private:
   inline void set_has_lat();
   inline void clear_has_lat();
@@ -371,32 +371,32 @@ class Image : public ::google::protobuf::Message {
   inline ::google::protobuf::uint64 datetime() const;
   inline void set_datetime(::google::protobuf::uint64 value);
 
-  // required .image.Image.Resolution size = 15;
+  // required .data.Image.Resolution size = 15;
   inline bool has_size() const;
   inline void clear_size();
   static const int kSizeFieldNumber = 15;
-  inline const ::image::Image_Resolution& size() const;
-  inline ::image::Image_Resolution* mutable_size();
-  inline ::image::Image_Resolution* release_size();
-  inline void set_allocated_size(::image::Image_Resolution* size);
+  inline const ::data::Image_Resolution& size() const;
+  inline ::data::Image_Resolution* mutable_size();
+  inline ::data::Image_Resolution* release_size();
+  inline void set_allocated_size(::data::Image_Resolution* size);
 
-  // optional .image.Image.Resolution original_size = 20;
+  // optional .data.Image.Resolution original_size = 20;
   inline bool has_original_size() const;
   inline void clear_original_size();
   static const int kOriginalSizeFieldNumber = 20;
-  inline const ::image::Image_Resolution& original_size() const;
-  inline ::image::Image_Resolution* mutable_original_size();
-  inline ::image::Image_Resolution* release_original_size();
-  inline void set_allocated_original_size(::image::Image_Resolution* original_size);
+  inline const ::data::Image_Resolution& original_size() const;
+  inline ::data::Image_Resolution* mutable_original_size();
+  inline ::data::Image_Resolution* release_original_size();
+  inline void set_allocated_original_size(::data::Image_Resolution* original_size);
 
-  // optional .image.Image.GeoLocation geo_location = 21;
+  // optional .data.Image.GeoLocation geo_location = 21;
   inline bool has_geo_location() const;
   inline void clear_geo_location();
   static const int kGeoLocationFieldNumber = 21;
-  inline const ::image::Image_GeoLocation& geo_location() const;
-  inline ::image::Image_GeoLocation* mutable_geo_location();
-  inline ::image::Image_GeoLocation* release_geo_location();
-  inline void set_allocated_geo_location(::image::Image_GeoLocation* geo_location);
+  inline const ::data::Image_GeoLocation& geo_location() const;
+  inline ::data::Image_GeoLocation* mutable_geo_location();
+  inline ::data::Image_GeoLocation* release_geo_location();
+  inline void set_allocated_geo_location(::data::Image_GeoLocation* geo_location);
 
   // optional uint64 original_datetime = 22;
   inline bool has_original_datetime() const;
@@ -424,7 +424,7 @@ class Image : public ::google::protobuf::Message {
   inline ::std::string* release_data();
   inline void set_allocated_data(::std::string* data);
 
-  // @@protoc_insertion_point(class_scope:image.Image)
+  // @@protoc_insertion_point(class_scope:data.Image)
  private:
   inline void set_has_id();
   inline void clear_has_id();
@@ -464,9 +464,9 @@ class Image : public ::google::protobuf::Message {
   ::std::string* desc_;
   ::google::protobuf::uint64 length_;
   ::google::protobuf::uint64 datetime_;
-  ::image::Image_Resolution* size_;
-  ::image::Image_Resolution* original_size_;
-  ::image::Image_GeoLocation* geo_location_;
+  ::data::Image_Resolution* size_;
+  ::data::Image_Resolution* original_size_;
+  ::data::Image_GeoLocation* geo_location_;
   ::google::protobuf::uint64 original_datetime_;
   ::google::protobuf::uint64 upload_datetime_;
   ::std::string* data_;
@@ -1023,7 +1023,7 @@ inline void Image::set_datetime(::google::protobuf::uint64 value) {
   datetime_ = value;
 }
 
-// required .image.Image.Resolution size = 15;
+// required .data.Image.Resolution size = 15;
 inline bool Image::has_size() const {
   return (_has_bits_[0] & 0x00000100u) != 0;
 }
@@ -1034,24 +1034,24 @@ inline void Image::clear_has_size() {
   _has_bits_[0] &= ~0x00000100u;
 }
 inline void Image::clear_size() {
-  if (size_ != NULL) size_->::image::Image_Resolution::Clear();
+  if (size_ != NULL) size_->::data::Image_Resolution::Clear();
   clear_has_size();
 }
-inline const ::image::Image_Resolution& Image::size() const {
+inline const ::data::Image_Resolution& Image::size() const {
   return size_ != NULL ? *size_ : *default_instance_->size_;
 }
-inline ::image::Image_Resolution* Image::mutable_size() {
+inline ::data::Image_Resolution* Image::mutable_size() {
   set_has_size();
-  if (size_ == NULL) size_ = new ::image::Image_Resolution;
+  if (size_ == NULL) size_ = new ::data::Image_Resolution;
   return size_;
 }
-inline ::image::Image_Resolution* Image::release_size() {
+inline ::data::Image_Resolution* Image::release_size() {
   clear_has_size();
-  ::image::Image_Resolution* temp = size_;
+  ::data::Image_Resolution* temp = size_;
   size_ = NULL;
   return temp;
 }
-inline void Image::set_allocated_size(::image::Image_Resolution* size) {
+inline void Image::set_allocated_size(::data::Image_Resolution* size) {
   delete size_;
   size_ = size;
   if (size) {
@@ -1061,7 +1061,7 @@ inline void Image::set_allocated_size(::image::Image_Resolution* size) {
   }
 }
 
-// optional .image.Image.Resolution original_size = 20;
+// optional .data.Image.Resolution original_size = 20;
 inline bool Image::has_original_size() const {
   return (_has_bits_[0] & 0x00000200u) != 0;
 }
@@ -1072,24 +1072,24 @@ inline void Image::clear_has_original_size() {
   _has_bits_[0] &= ~0x00000200u;
 }
 inline void Image::clear_original_size() {
-  if (original_size_ != NULL) original_size_->::image::Image_Resolution::Clear();
+  if (original_size_ != NULL) original_size_->::data::Image_Resolution::Clear();
   clear_has_original_size();
 }
-inline const ::image::Image_Resolution& Image::original_size() const {
+inline const ::data::Image_Resolution& Image::original_size() const {
   return original_size_ != NULL ? *original_size_ : *default_instance_->original_size_;
 }
-inline ::image::Image_Resolution* Image::mutable_original_size() {
+inline ::data::Image_Resolution* Image::mutable_original_size() {
   set_has_original_size();
-  if (original_size_ == NULL) original_size_ = new ::image::Image_Resolution;
+  if (original_size_ == NULL) original_size_ = new ::data::Image_Resolution;
   return original_size_;
 }
-inline ::image::Image_Resolution* Image::release_original_size() {
+inline ::data::Image_Resolution* Image::release_original_size() {
   clear_has_original_size();
-  ::image::Image_Resolution* temp = original_size_;
+  ::data::Image_Resolution* temp = original_size_;
   original_size_ = NULL;
   return temp;
 }
-inline void Image::set_allocated_original_size(::image::Image_Resolution* original_size) {
+inline void Image::set_allocated_original_size(::data::Image_Resolution* original_size) {
   delete original_size_;
   original_size_ = original_size;
   if (original_size) {
@@ -1099,7 +1099,7 @@ inline void Image::set_allocated_original_size(::image::Image_Resolution* origin
   }
 }
 
-// optional .image.Image.GeoLocation geo_location = 21;
+// optional .data.Image.GeoLocation geo_location = 21;
 inline bool Image::has_geo_location() const {
   return (_has_bits_[0] & 0x00000400u) != 0;
 }
@@ -1110,24 +1110,24 @@ inline void Image::clear_has_geo_location() {
   _has_bits_[0] &= ~0x00000400u;
 }
 inline void Image::clear_geo_location() {
-  if (geo_location_ != NULL) geo_location_->::image::Image_GeoLocation::Clear();
+  if (geo_location_ != NULL) geo_location_->::data::Image_GeoLocation::Clear();
   clear_has_geo_location();
 }
-inline const ::image::Image_GeoLocation& Image::geo_location() const {
+inline const ::data::Image_GeoLocation& Image::geo_location() const {
   return geo_location_ != NULL ? *geo_location_ : *default_instance_->geo_location_;
 }
-inline ::image::Image_GeoLocation* Image::mutable_geo_location() {
+inline ::data::Image_GeoLocation* Image::mutable_geo_location() {
   set_has_geo_location();
-  if (geo_location_ == NULL) geo_location_ = new ::image::Image_GeoLocation;
+  if (geo_location_ == NULL) geo_location_ = new ::data::Image_GeoLocation;
   return geo_location_;
 }
-inline ::image::Image_GeoLocation* Image::release_geo_location() {
+inline ::data::Image_GeoLocation* Image::release_geo_location() {
   clear_has_geo_location();
-  ::image::Image_GeoLocation* temp = geo_location_;
+  ::data::Image_GeoLocation* temp = geo_location_;
   geo_location_ = NULL;
   return temp;
 }
-inline void Image::set_allocated_geo_location(::image::Image_GeoLocation* geo_location) {
+inline void Image::set_allocated_geo_location(::data::Image_GeoLocation* geo_location) {
   delete geo_location_;
   geo_location_ = geo_location;
   if (geo_location) {
@@ -1254,7 +1254,7 @@ inline void Image::set_allocated_data(::std::string* data) {
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace image
+}  // namespace data
 
 #ifndef SWIG
 namespace google {

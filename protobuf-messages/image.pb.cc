@@ -16,7 +16,7 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 
-namespace image {
+namespace data {
 
 namespace {
 
@@ -138,18 +138,18 @@ void protobuf_AddDesc_image_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\013image.proto\022\005image\"\256\003\n\005Image\022\n\n\002id\030\001 \002"
-    "(\t\022\017\n\007node_id\030\002 \002(\r\022\017\n\007user_id\030\003 \002(\t\022\014\n\004"
-    "name\030\n \002(\t\022\014\n\004mime\030\013 \002(\t\022\014\n\004desc\030\014 \002(\t\022\016"
-    "\n\006length\030\r \002(\004\022\020\n\010datetime\030\016 \002(\004\022%\n\004size"
-    "\030\017 \002(\0132\027.image.Image.Resolution\022.\n\rorigi"
-    "nal_size\030\024 \001(\0132\027.image.Image.Resolution\022"
-    ".\n\014geo_location\030\025 \001(\0132\030.image.Image.GeoL"
-    "ocation\022\031\n\021original_datetime\030\026 \001(\004\022\027\n\017up"
-    "load_datetime\030\027 \001(\004\022\r\n\004data\030\377\001 \001(\014\032+\n\nRe"
-    "solution\022\r\n\005width\030\001 \002(\r\022\016\n\006height\030\002 \002(\r\032"
-    "4\n\013GeoLocation\022\013\n\003lat\030\001 \002(\001\022\013\n\003lng\030\002 \002(\001"
-    "\022\013\n\003alt\030\004 \001(\001B\027\n\005imageB\014ImageMessageH\001", 478);
+    "\n\013image.proto\022\004data\"\253\003\n\005Image\022\n\n\002id\030\001 \002("
+    "\t\022\017\n\007node_id\030\002 \002(\r\022\017\n\007user_id\030\003 \002(\t\022\014\n\004n"
+    "ame\030\n \002(\t\022\014\n\004mime\030\013 \002(\t\022\014\n\004desc\030\014 \002(\t\022\016\n"
+    "\006length\030\r \002(\004\022\020\n\010datetime\030\016 \002(\004\022$\n\004size\030"
+    "\017 \002(\0132\026.data.Image.Resolution\022-\n\rorigina"
+    "l_size\030\024 \001(\0132\026.data.Image.Resolution\022-\n\014"
+    "geo_location\030\025 \001(\0132\027.data.Image.GeoLocat"
+    "ion\022\031\n\021original_datetime\030\026 \001(\004\022\027\n\017upload"
+    "_datetime\030\027 \001(\004\022\r\n\004data\030\377\001 \001(\014\032+\n\nResolu"
+    "tion\022\r\n\005width\030\001 \002(\r\022\016\n\006height\030\002 \002(\r\0324\n\013G"
+    "eoLocation\022\013\n\003lat\030\001 \002(\001\022\013\n\003lng\030\002 \002(\001\022\013\n\003"
+    "alt\030\004 \001(\001B\020B\014ImageMessageH\001", 467);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "image.proto", &protobuf_RegisterTypes);
   Image::default_instance_ = new Image();
@@ -725,9 +725,9 @@ Image::Image()
 }
 
 void Image::InitAsDefaultInstance() {
-  size_ = const_cast< ::image::Image_Resolution*>(&::image::Image_Resolution::default_instance());
-  original_size_ = const_cast< ::image::Image_Resolution*>(&::image::Image_Resolution::default_instance());
-  geo_location_ = const_cast< ::image::Image_GeoLocation*>(&::image::Image_GeoLocation::default_instance());
+  size_ = const_cast< ::data::Image_Resolution*>(&::data::Image_Resolution::default_instance());
+  original_size_ = const_cast< ::data::Image_Resolution*>(&::data::Image_Resolution::default_instance());
+  geo_location_ = const_cast< ::data::Image_GeoLocation*>(&::data::Image_GeoLocation::default_instance());
 }
 
 Image::Image(const Image& from)
@@ -839,13 +839,13 @@ void Image::Clear() {
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (has_size()) {
-      if (size_ != NULL) size_->::image::Image_Resolution::Clear();
+      if (size_ != NULL) size_->::data::Image_Resolution::Clear();
     }
     if (has_original_size()) {
-      if (original_size_ != NULL) original_size_->::image::Image_Resolution::Clear();
+      if (original_size_ != NULL) original_size_->::data::Image_Resolution::Clear();
     }
     if (has_geo_location()) {
-      if (geo_location_ != NULL) geo_location_->::image::Image_GeoLocation::Clear();
+      if (geo_location_ != NULL) geo_location_->::data::Image_GeoLocation::Clear();
     }
     original_datetime_ = GOOGLE_ULONGLONG(0);
     upload_datetime_ = GOOGLE_ULONGLONG(0);
@@ -997,7 +997,7 @@ bool Image::MergePartialFromCodedStream(
         break;
       }
 
-      // required .image.Image.Resolution size = 15;
+      // required .data.Image.Resolution size = 15;
       case 15: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -1011,7 +1011,7 @@ bool Image::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .image.Image.Resolution original_size = 20;
+      // optional .data.Image.Resolution original_size = 20;
       case 20: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -1025,7 +1025,7 @@ bool Image::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .image.Image.GeoLocation geo_location = 21;
+      // optional .data.Image.GeoLocation geo_location = 21;
       case 21: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -1163,19 +1163,19 @@ void Image::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt64(14, this->datetime(), output);
   }
 
-  // required .image.Image.Resolution size = 15;
+  // required .data.Image.Resolution size = 15;
   if (has_size()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       15, this->size(), output);
   }
 
-  // optional .image.Image.Resolution original_size = 20;
+  // optional .data.Image.Resolution original_size = 20;
   if (has_original_size()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       20, this->original_size(), output);
   }
 
-  // optional .image.Image.GeoLocation geo_location = 21;
+  // optional .data.Image.GeoLocation geo_location = 21;
   if (has_geo_location()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       21, this->geo_location(), output);
@@ -1270,21 +1270,21 @@ void Image::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(14, this->datetime(), target);
   }
 
-  // required .image.Image.Resolution size = 15;
+  // required .data.Image.Resolution size = 15;
   if (has_size()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         15, this->size(), target);
   }
 
-  // optional .image.Image.Resolution original_size = 20;
+  // optional .data.Image.Resolution original_size = 20;
   if (has_original_size()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         20, this->original_size(), target);
   }
 
-  // optional .image.Image.GeoLocation geo_location = 21;
+  // optional .data.Image.GeoLocation geo_location = 21;
   if (has_geo_location()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -1377,21 +1377,21 @@ int Image::ByteSize() const {
 
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    // required .image.Image.Resolution size = 15;
+    // required .data.Image.Resolution size = 15;
     if (has_size()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->size());
     }
 
-    // optional .image.Image.Resolution original_size = 20;
+    // optional .data.Image.Resolution original_size = 20;
     if (has_original_size()) {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->original_size());
     }
 
-    // optional .image.Image.GeoLocation geo_location = 21;
+    // optional .data.Image.GeoLocation geo_location = 21;
     if (has_geo_location()) {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -1473,13 +1473,13 @@ void Image::MergeFrom(const Image& from) {
   }
   if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_size()) {
-      mutable_size()->::image::Image_Resolution::MergeFrom(from.size());
+      mutable_size()->::data::Image_Resolution::MergeFrom(from.size());
     }
     if (from.has_original_size()) {
-      mutable_original_size()->::image::Image_Resolution::MergeFrom(from.original_size());
+      mutable_original_size()->::data::Image_Resolution::MergeFrom(from.original_size());
     }
     if (from.has_geo_location()) {
-      mutable_geo_location()->::image::Image_GeoLocation::MergeFrom(from.geo_location());
+      mutable_geo_location()->::data::Image_GeoLocation::MergeFrom(from.geo_location());
     }
     if (from.has_original_datetime()) {
       set_original_datetime(from.original_datetime());
@@ -1554,6 +1554,6 @@ void Image::Swap(Image* other) {
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace image
+}  // namespace data
 
 // @@protoc_insertion_point(global_scope)
