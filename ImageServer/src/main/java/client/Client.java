@@ -9,6 +9,7 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
@@ -25,7 +26,6 @@ public class Client {
 				return Channels.pipeline(new ClientHandler());
 			}
 		});
-
 		clientBootstrap.setOption("tcpNoDelay", true);
 		clientBootstrap.setOption("keepAlive", true);
 
@@ -33,19 +33,45 @@ public class Client {
 	}
 
 	public static void connnect() {
-		ChannelFuture channelFuture = clientBootstrap.connect(new InetSocketAddress(8080));
-		channelFuture.addListener(new ChannelFutureListener() {
-			@Override
-			public void operationComplete(ChannelFuture future) throws Exception {
-				if (future.isSuccess() == false) {
-					System.out.println("Connection failed, retry after 5 seconds.");
-					Thread.sleep(5000);
-
-					System.out.println("Retrying");
-					connnect();
+		while (true) {
+			ChannelFuture channelFuture = clientBootstrap.connect(new InetSocketAddress(8080));
+			channelFuture.addListener(new ChannelFutureListener() {
+				@Override
+				public void operationComplete(ChannelFuture future) throws Exception {
+					System.out.println();
 				}
+			});
+
+			channelFuture.awaitUninterruptibly();
+
+			if (channelFuture.isSuccess() == false) {
+				Throwable cause = channelFuture.getCause();
+
+				if (cause instanceof ConnectException) {
+					int delayedSeconds = 5;
+					System.out.println("Connection failed. Retry after " + delayedSeconds + " seconds");
+
+					try {
+						Thread.sleep(delayedSeconds * 1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+
+					continue;
+				}
+
+				cause.printStackTrace();
+				break;
 			}
-		});
+
+			channelFuture.getChannel().getCloseFuture().awaitUninterruptibly();
+			channelFuture.getChannel().getFactory().releaseExternalResources();
+			break;
+		}
+	}
+
+	public static void close() {
+		clientBootstrap.getFactory().releaseExternalResources();
 	}
 }
 
@@ -74,7 +100,7 @@ class ClientHandler extends SimpleChannelHandler {
 			channelFuture.addListener(new ChannelFutureListener() {
 				@Override
 				public void operationComplete(ChannelFuture future) throws Exception {
-					System.out.println("The image has been sent");
+					System.out.println("The image has been sent.");
 				}
 			});
 		} catch (IOException ex) {
@@ -84,12 +110,23 @@ class ClientHandler extends SimpleChannelHandler {
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+		ChannelBuffer channelBuffer = (ChannelBuffer) e.getMessage();
+
+		StringBuilder stringBuilder = new StringBuilder();
+
+		while (channelBuffer.readable()) {
+			stringBuilder.append((char)channelBuffer.readByte());
+		}
+
+		System.out.println("Message received from server: " + stringBuilder.toString());
+
+		e.getChannel().close();
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+		System.out.println("Unepected exception occured in client handler.");
 		e.getCause().printStackTrace();
 		e.getChannel().close();
-		System.out.println("Channel closed");
 	}
 }
