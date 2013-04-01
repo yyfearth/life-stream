@@ -1,0 +1,35 @@
+package data;
+option optimize_for = SPEED;
+option java_outer_classname = "ImageMessage";
+
+message Image {
+    required string id = 1;
+    required uint32 node_id = 2;
+    required string user_id = 3;
+
+    required string name = 10;
+    required string mime = 11;
+    required string desc = 12;
+    required uint64 length = 13;
+    required uint64 datetime = 14;
+    required Resolution size = 15;
+
+    optional Resolution original_size = 20;
+    optional GeoLocation geo_location = 21;
+    optional uint64 original_datetime = 22;
+    optional uint64 upload_datetime = 23;
+
+    optional bytes data = 255;
+
+    message Resolution {
+        required uint32 width = 1;
+        required uint32 height = 2;
+    }
+
+    message GeoLocation {
+        required double lat = 1;
+        required double lng = 2;
+        optional double alt = 4;
+    }
+
+}
