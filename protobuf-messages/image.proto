@@ -1,6 +1,5 @@
-package image;
+package data;
 option optimize_for = SPEED;
-option java_package = "image";
 option java_outer_classname = "ImageMessage";
 
 message Image {
