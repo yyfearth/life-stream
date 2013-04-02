@@ -18,6 +18,8 @@
 -- ----------------------------
 --  Table structure for "image"
 -- ----------------------------
+CREATE EXTENSION postgis;
+
 DROP TABLE IF EXISTS "image";
 CREATE TABLE "image" (
   "id"           UUID         NOT NULL,
