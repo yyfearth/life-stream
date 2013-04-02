@@ -1,0 +1,48 @@
+package data;
+option optimize_for = SPEED;
+option java_package = "data";
+option java_outer_classname = "ImageMessage";
+
+message Image {
+    required string id = 1;
+    required uint32 node_id = 2;
+    required string user_id = 3;
+
+    required string name = 10;
+    required string mime = 11;
+    required uint64 length = 12;
+
+    required uint64 created = 18;
+    required uint64 modified = 19;
+
+    optional string desc = 20;
+    optional Resolution size = 21;
+    optional GeoPoint geo_location = 22;
+    optional uint64 timestamp = 23;
+
+    // tags ?
+
+    optional bytes data = 255;
+
+    message Resolution {
+        required uint32 width = 1;
+        required uint32 height = 2;
+    }
+
+    message GeoPoint {
+        required double lat = 1;
+        required double lng = 2;
+    }
+
+}
+
+message ServerMessage {
+	enum OperationType {
+		ADD_IMAGE = 0;
+		GET_IMAGE = 1;
+		RETURN_IMAGE = 2;
+	}
+	
+	required OperationType operation = 1;
+	optional Image image = 2;
+}

@@ -7,7 +7,7 @@
 #
 
 # CHANGE ME: this needs to be your specific path to the project
-project_base="/Users/wilson/Dev/cmpe275/core-netty"
+project_base="$(cd "$(dirname "$(which $0)")" && pwd)"
 
 rm -r ${project_base}/generated/*
 protoc --proto_path=${project_base}/resources --java_out=${project_base}/generated ${project_base}/resources/comm.proto
