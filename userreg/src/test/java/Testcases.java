@@ -102,7 +102,7 @@ public class Testcases {
     }
 
     @Test(groups = {"update"}, dependsOnGroups = {"read"})
-    public void udpateUsername() {
+    public void updateUsername() {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
@@ -136,15 +136,15 @@ public class Testcases {
             session.delete(userEntity);
         }
 
-       // transaction.commit();
+       transaction.commit();
 
        // transaction = session.beginTransaction();
 
        // Criteria criteria = session.createCriteria(UserEntity.class);
-      //  criteria.add(Restrictions.like("username", "testing%"));
-      //  List<UserEntity> userList = criteria.list(); // This stupid method implicitly executes the query.
+       //  criteria.add(Restrictions.like("username", "testing%"));
+       //  List<UserEntity> userList = criteria.list(); // This stupid method implicitly executes the query.
 
-      //  transaction.commit();
+       //  transaction.commit();
 
        // assertEquals(userList.size(), 0);
 

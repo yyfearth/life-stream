@@ -17,72 +17,11 @@ import static org.testng.Assert.assertEquals;
  * Time: 4:05 PM
  * To change this template use File | Settings | File Templates.
  */
-public class UserDao {
-
-    SessionFactory sessionFactory;
-
-    @BeforeClass
-    public void before() {
-        Configuration configuration = new Configuration();
-        configuration.addResource("hibernate.cfg.xml");
-        configuration.configure();
-
-        ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration.getProperties());
-        ServiceRegistry serviceRegistry = serviceRegistryBuilder.buildServiceRegistry();
-        sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-    }
-
-    public void createRegistry() {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(10);
-        userEntity.setUsername("testing");
-        userEntity.setPassword("testpass");
-        session.saveOrUpdate(userEntity);
-
-        transaction.commit();
-
-        session.close();
-    }
-
-
-    public void readSingleRegistry(){
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-
-        Criteria criteria = session.createCriteria(UserEntity.class);
-        criteria.add(Restrictions.eq("username", "testing"));
-        List<UserEntity> userList = criteria.list(); // This stupid method implicitly executes the query.
-
-        assertEquals(userList.size(), 1);
-    }
-
-    public void readAllRegistry() {
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("from UserEntity");
-
-        System.out.println("The query is " + query.getQueryString());
-
-        List<UserEntity> userList = (List<UserEntity>) query.list();
-
-        for (UserEntity user : userList) {
-            System.out.format("Id: %s Name: %s\n", user.getId(), user.getUsername());
-        }
-
-        session.close();
-    }
-
-
-    public void updateRegistry() {
-
-
-    }
-
-
-    public void deleteRegistry() {
-
-
-    }
+public interface UserDAO {
+    public void create(int id, String userName,String password, String eMail);
+    public void searchId(int id);
+    public void searchName(String name);
+    public void listAll();
+    public void update(int id, String password, String email);
+    public void delete(int id);
 }

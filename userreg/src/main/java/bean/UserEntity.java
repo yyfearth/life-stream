@@ -14,6 +14,9 @@ import javax.persistence.Entity;
 @Entity
 public class UserEntity {
     private int id;
+    private String username;
+    private String email;
+    private String password;
 
     @javax.persistence.Id
     @javax.persistence.Column(name = "id")
@@ -25,8 +28,6 @@ public class UserEntity {
         this.id = id;
     }
 
-    private String username;
-
     @javax.persistence.Column(name = "username")
     @Basic
     public String getUsername() {
@@ -37,8 +38,6 @@ public class UserEntity {
         this.username = username;
     }
 
-    private String email;
-
     @javax.persistence.Column(name = "email")
     @Basic
     public String getEmail() {
@@ -48,8 +47,6 @@ public class UserEntity {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    private String password;
 
     @javax.persistence.Column(name = "password")
     @Basic
