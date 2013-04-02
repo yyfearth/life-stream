@@ -1,8 +1,10 @@
 package server;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
+import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.*;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
+import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
@@ -20,12 +22,19 @@ public class ConnectionMonitor implements Runnable {
 
 	boolean isStopping = false;
 
-	int listeningPort;
+	int bindingPort;
+	InetSocketAddress[] listeningAddresses;
+	ServerBootstrap serverBootstrap;
 	ClientBootstrap clientBootstrap;
-	ChannelFactory channelFactory;
+	ChannelFactory clientChannelFactory;
+	ChannelFactory serverChannelFactory;
 
-	public ConnectionMonitor(int listeningPort) {
-		this.listeningPort = listeningPort;
+	Channel bindingChannel;
+	Channel[] connectorChannels;
+
+	public ConnectionMonitor(int bindingPort, InetSocketAddress[] listeningAddresses) {
+		this.bindingPort = bindingPort;
+		this.listeningAddresses = listeningAddresses;
 
 		configueBootstrap();
 	}
@@ -33,11 +42,19 @@ public class ConnectionMonitor implements Runnable {
 	void configueBootstrap() {
 		Executor bossPool = Executors.newCachedThreadPool();
 		Executor workerPool = Executors.newCachedThreadPool();
-		channelFactory = new NioClientSocketChannelFactory(bossPool, workerPool);
-		clientBootstrap = new ClientBootstrap(channelFactory);
+		clientChannelFactory = new NioClientSocketChannelFactory(bossPool, workerPool);
+		clientBootstrap = new ClientBootstrap(clientChannelFactory);
 		clientBootstrap.setPipelineFactory(new MonitorPipelineFactory());
 		clientBootstrap.setOption("tcpNoDelay", true);
 		clientBootstrap.setOption("keepAlive", true);
+
+		bossPool = Executors.newCachedThreadPool();
+		workerPool = Executors.newCachedThreadPool();
+		serverChannelFactory = new NioServerSocketChannelFactory(bossPool, workerPool);
+		serverBootstrap = new ServerBootstrap(serverChannelFactory);
+		serverBootstrap.setPipelineFactory(new MonitorPipelineFactory());
+		serverBootstrap.setOption("child.tcpNoDelay", true);
+		serverBootstrap.setOption("child.keepAlive", true);
 	}
 
 	@Override
@@ -45,7 +62,7 @@ public class ConnectionMonitor implements Runnable {
 
 		try {
 			System.out.println("Monitor is started");
-			connnect(new InetSocketAddress("localhost", 8080));
+			connnect();
 
 			while (isStopping == false) {
 				Thread.sleep(100);
@@ -55,6 +72,8 @@ public class ConnectionMonitor implements Runnable {
 			System.out.println("Monitor is stopped");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		} catch (ChannelException ex) {
+			ex.printStackTrace();
 		}
 	}
 
@@ -62,31 +81,38 @@ public class ConnectionMonitor implements Runnable {
 		isStopping = true;
 	}
 
-	Channel channelConnector ;
+	public void connnect() {
 
-	public boolean connnect(InetSocketAddress inetSocketAddress) {
-		ChannelFuture channelFuture = clientBootstrap.connect(inetSocketAddress);
-		channelFuture.addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+		System.out.println("Binding " + bindingPort);
+		bindingChannel = serverBootstrap.bind(new InetSocketAddress(bindingPort));
+		connectorChannels = new Channel[listeningAddresses.length];
 
-		channelFuture.awaitUninterruptibly();
+		for (int i = 0; i < listeningAddresses.length; i++) {
+			InetSocketAddress inetSocketAddress = listeningAddresses[i];
+			ChannelFuture channelFuture = clientBootstrap.connect(inetSocketAddress);
+			channelFuture.addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
 
-		if (channelFuture.isSuccess() == false) {
-			channelFactory.releaseExternalResources();
+			channelFuture.awaitUninterruptibly();
+
+			if (channelFuture.isSuccess() == false) {
+				System.out.println("Fail to connect " + inetSocketAddress.toString());
+			}
+
+			connectorChannels[i] = channelFuture.getChannel();
 		}
-
-		channelConnector = channelFuture.getChannel();
-
-		return channelConnector.isConnected();
 	}
 
 	public void disconnect() {
 
-		if (channelConnector == null || channelConnector.isConnected() == false) {
-			return;
+		for (int i = 0; i < connectorChannels.length; i++) {
+			Channel channel = connectorChannels[i];
+
+			if (channel.isConnected()) {
+				connectorChannels[i].close().awaitUninterruptibly();
+			}
 		}
 
-		channelConnector.close().awaitUninterruptibly();
-		channelFactory.releaseExternalResources();
+		clientChannelFactory.releaseExternalResources();
 	}
 }
 
