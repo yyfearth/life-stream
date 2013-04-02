@@ -22,6 +22,7 @@ import java.util.UUID;
 public class PostGISTest {
 	private static final SessionFactory sessionFactory;
 	private static final GeometryFactory geometryFactory = new GeometryFactory();
+	private static final UUID testUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
 	static {
 		try {
@@ -39,12 +40,24 @@ public class PostGISTest {
 	}
 
 	@Test
-	public void testPostGIS() throws Exception {
+	public void testGetFromPostGIS() throws Exception {
+		Session session = sessionFactory.openSession();
+		try {
+			ImageEntity imageEntity = (ImageEntity) session.get(ImageEntity.class, testUUID);
+			assert imageEntity != null;
+			System.out.println(imageEntity.toString());
+		} finally {
+			session.close();
+		}
+	}
+
+	@Test
+	public void testAddToPostGIS() throws Exception {
 		Session session = sessionFactory.openSession();
 		try {
 			Transaction transaction = session.beginTransaction();
 			ImageEntity imageEntity = new ImageEntity();
-			imageEntity.setId(UUID.randomUUID());
+			imageEntity.setId(testUUID);
 			imageEntity.setName("test");
 			imageEntity.setCreatedDateTime(DateTime.now());
 			imageEntity.setLength(0);
@@ -55,7 +68,7 @@ public class PostGISTest {
 			imageEntity.setOriginalDateTime(DateTime.now());
 			Point point = geometryFactory.createPoint(new Coordinate(0, 0));
 			imageEntity.setGeoLocation(point);
-			session.save(imageEntity);
+			session.saveOrUpdate(imageEntity);
 			transaction.commit();
 		} finally {
 			session.close();
