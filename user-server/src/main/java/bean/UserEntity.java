@@ -26,23 +26,25 @@ public class UserEntity {
 	@Type(type = "pg-uuid")
 	private UUID id;
 
-	@Column(name = "username", nullable = false)
+	@Column(name = "username", nullable = false, length = 256)
 	@Basic
 	private String username;
 
-	@Column(name = "email", unique = true, nullable = false)
+	@Column(name = "email", unique = true, nullable = false, length = 256)
 	@Basic
 	private String email;
 
-	@Column(name = "password", nullable = false)
+	@Column(name = "password", nullable = false, length = 64)
 	@Basic
 	private String password;
 
 	@Column(name = "created_ts", nullable = false)
+	@Type(type = "timestamp")
 	@Basic
 	private Date createdTimestamp;
 
 	@Column(name = "modified_ts", nullable = false)
+	@Type(type = "timestamp")
 	@Basic
 	private Date modifiedTimestamp;
 
