@@ -20,21 +20,21 @@
 -- ----------------------------
 DROP TABLE IF EXISTS "image";
 CREATE TABLE "image" (
-	"id" uuid NOT NULL,
-	--"user_id" uuid NOT NULL,
-	"name" varchar(256) NOT NULL,
-	"mime" varchar(256) NOT NULL,
-	"length" int8 NOT NULL,
-	--"desc" text,
-	"width" int4,
-	"height" int4,
-	"geo_location" geometry,
-	"original_ts" timestamp NULL,
-	"created_ts" timestamp NOT NULL,
-	"modified_ts" timestamp NOT NULL
+  "id"           UUID         NOT NULL,
+  "name"         VARCHAR(256) NOT NULL,
+  "mime"         VARCHAR(256) NOT NULL,
+  "length"       INT8         NOT NULL,
+--"user_id"      UUID,
+--"desc"         TEXT,
+  "width"        INT4,
+  "height"       INT4,
+  "geo_location" geometry,
+  "original_ts"  TIMESTAMP    NULL,
+  "created_ts"   TIMESTAMP    NOT NULL,
+  "modified_ts"  TIMESTAMP    NOT NULL
 )
-WITH (OIDS=FALSE);
-ALTER TABLE "image" OWNER TO "wilson";
+WITH (OIDS = FALSE);
+ALTER TABLE "image" OWNER TO "lifestream";
 
 -- ----------------------------
 --  Primary key structure for table "image"
