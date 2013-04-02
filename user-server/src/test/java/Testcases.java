@@ -39,7 +39,7 @@ public class Testcases {
         Transaction transaction = session.beginTransaction();
 
         UserEntity userEntity = new UserEntity();
-        userEntity.setId(10);
+		userEntity.setEmail("testing@ab.com");
         userEntity.setUsername("testing");
         userEntity.setPassword("testpass");
         session.saveOrUpdate(userEntity);
@@ -56,6 +56,8 @@ public class Testcases {
 
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername("testing.1");
+		userEntity.setEmail("testing.1@ab.com");
+		userEntity.setPassword("testpass");
         session.save(userEntity);
 
         transaction.commit();
@@ -65,7 +67,9 @@ public class Testcases {
         transaction = session.beginTransaction();
 
         UserEntity userEntity2 = new UserEntity();
+		userEntity2.setEmail("testing.2@ab.com");
         userEntity2.setUsername("testing.2");
+		userEntity2.setPassword("testpass");
         session.save(userEntity2);
 
         transaction.commit();
@@ -110,7 +114,6 @@ public class Testcases {
         List<UserEntity> userEntityList = (List<UserEntity>) criteria.list();
 
         for (UserEntity userEntity : userEntityList) {
-            userEntity.setId(99);
             userEntity.setUsername("testing");
             userEntity.setEmail("test@test.com");
             userEntity.setPassword("testing");
