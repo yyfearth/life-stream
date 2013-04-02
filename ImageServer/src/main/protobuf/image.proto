@@ -34,7 +34,6 @@ message Image {
         required double lng = 2;
         optional double alt = 3;
     }
-
 }
 
 message ServerMessage {
@@ -50,4 +49,14 @@ message ServerMessage {
 	required OperationType operation = 1;
 	required uint32 node_id = 2;
 	optional Image image = 4;
+}
+
+message HeartBeat {
+    required uint32 node_id = 1;
+    repeated uint64 timestamp = 2;
+}
+
+message SocketAddress {
+    required string hostname = 1;
+    required uint32 port = 2;
 }
