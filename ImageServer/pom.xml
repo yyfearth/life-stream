@@ -8,6 +8,17 @@
     <artifactId>ImageServer</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <repositories>
+        <repository>
+            <id>OSGEO GeoTools repo</id>
+            <url>http://download.osgeo.org/webdav/geotools</url>
+        </repository>
+        <repository>
+            <id>Hibernate Spatial repo</id>
+            <url>http://www.hibernatespatial.org/repository</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>io.netty</groupId>

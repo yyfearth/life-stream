@@ -18,7 +18,6 @@ import java.util.concurrent.Executors;
 public class Server {
 	public static void main(String[] args) {
 		ChannelFactory channelFactory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
-
 		ServerBootstrap serverBootstrap = new ServerBootstrap(channelFactory);
 
 		serverBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
