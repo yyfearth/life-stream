@@ -5,8 +5,8 @@ option java_outer_classname = "ImageMessage";
 
 message Image {
     required string id = 1;
-    required uint32 node_id = 2;
-    required string user_id = 3;
+    // required uint32 node_id = 2;
+    // required string user_id = 3;
 
     required string name = 10;
     required string mime = 11;
@@ -32,6 +32,7 @@ message Image {
     message GeoPoint {
         required double lat = 1;
         required double lng = 2;
+        optional double alt = 3;
     }
 
 }
@@ -41,8 +42,12 @@ message ServerMessage {
 		ADD_IMAGE = 0;
 		GET_IMAGE = 1;
 		RETURN_IMAGE = 2;
+		GET_META = 3;
+		UPDATE_META = 4;
+		RETURN_META = 5;
 	}
-	
+
 	required OperationType operation = 1;
-	optional Image image = 2;
+	required uint32 node_id = 2;
+	optional Image image = 4;
 }
