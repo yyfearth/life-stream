@@ -5,6 +5,7 @@ import server.ConnectionMonitor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 public class AdHocTest {
 	@Test
@@ -49,8 +50,13 @@ public class AdHocTest {
 		ConnectionMonitor[] connectionMonitor = new ConnectionMonitor[3];
 		Thread[] threads = new Thread[connectionMonitor.length];
 
+		InetSocketAddress[] listeningAddresses = new InetSocketAddress[connectionMonitor.length];
+		for (int i = 0; i < listeningAddresses.length; i++) {
+			listeningAddresses[i] = new InetSocketAddress(8080 + i);
+		}
+
 		for (int i = 0; i < connectionMonitor.length; i++) {
-			connectionMonitor[i] = new ConnectionMonitor(8080 + i);
+			connectionMonitor[i] = new ConnectionMonitor(8080 + i, listeningAddresses);
 
 			Thread thread = new Thread(connectionMonitor[i], "Connection Monitor " + (i + 1));
 			thread.setPriority(Thread.MIN_PRIORITY);

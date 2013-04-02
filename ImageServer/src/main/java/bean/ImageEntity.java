@@ -193,4 +193,21 @@ public class ImageEntity {
 		result = 31 * result + (modifiedTimestamp != null ? modifiedTimestamp.hashCode() : 0);
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return "ImageEntity{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", mime='" + mime + '\'' +
+				", length=" + length +
+				", width=" + width +
+				", height=" + height +
+				", geoLocation=" + geoLocation +
+				", originalTS=" + originalTimestamp +
+				", createdTS=" + createdTimestamp +
+				", modifiedTS=" + modifiedTimestamp +
+				'}';
+	}
+
 }
