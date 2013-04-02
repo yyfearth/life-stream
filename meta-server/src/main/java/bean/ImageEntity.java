@@ -2,6 +2,7 @@ package bean;
 
 import com.vividsolutions.jts.geom.Point;
 import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,7 +19,7 @@ import java.util.UUID;
 public class ImageEntity {
 	@Id
 	@Column(name = "id", unique = true, nullable = false)
-	@Type(type="pg-uuid")
+	@Type(type = "pg-uuid")
 	private UUID id;
 
 	public UUID getId() {
@@ -118,36 +119,36 @@ public class ImageEntity {
 	@Basic
 	private Date originalTimestamp;
 
-	public Date getOriginalTimestamp() {
-		return originalTimestamp;
+	public DateTime getOriginalDateTime() {
+		return new DateTime(originalTimestamp);
 	}
 
-	public void setOriginalTimestamp(Date originalTimestamp) {
-		this.originalTimestamp = originalTimestamp;
+	public void setOriginalDateTime(DateTime originalTimestamp) {
+		this.originalTimestamp = originalTimestamp.toDate();
 	}
 
 	@Column(name = "created_ts", nullable = false)
 	@Basic
 	private Date createdTimestamp;
 
-	public Date getCreatedTimestamp() {
-		return createdTimestamp;
+	public DateTime getCreatedDateTime() {
+		return new DateTime(createdTimestamp);
 	}
 
-	public void setCreatedTimestamp(Date createdTimestamp) {
-		this.createdTimestamp = createdTimestamp;
+	public void setCreatedDateTime(DateTime createdTimestamp) {
+		this.createdTimestamp = createdTimestamp.toDate();
 	}
 
 	@Column(name = "modified_ts", nullable = false)
 	@Basic
 	private Date modifiedTimestamp;
 
-	public Date getModifiedTimestamp() {
-		return modifiedTimestamp;
+	public DateTime getModifiedDateTime() {
+		return new DateTime(modifiedTimestamp);
 	}
 
-	public void setModifiedTimestamp(Date modifiedTimestamp) {
-		this.modifiedTimestamp = modifiedTimestamp;
+	public void setModifiedDateTime(DateTime modifiedTimestamp) {
+		this.modifiedTimestamp = modifiedTimestamp.toDate();
 	}
 
 	@Override

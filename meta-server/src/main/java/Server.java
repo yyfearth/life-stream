@@ -44,13 +44,13 @@ public class Server {
 			ImageEntity imageEntity = new ImageEntity();
 			imageEntity.setId(UUID.randomUUID());
 			imageEntity.setName("test");
-			imageEntity.setCreatedTimestamp(DateTime.now().toDate());
+			imageEntity.setCreatedDateTime(DateTime.now());
 			imageEntity.setLength(0);
 			imageEntity.setHeight(0);
 			imageEntity.setWidth(0);
 			imageEntity.setMime("image/png");
-			imageEntity.setModifiedTimestamp(DateTime.now().toDate());
-			imageEntity.setOriginalTimestamp(DateTime.now().toDate());
+			imageEntity.setModifiedDateTime(DateTime.now());
+			imageEntity.setOriginalDateTime(DateTime.now());
 			Point point = geometryFactory.createPoint(new Coordinate(0, 0));
 			imageEntity.setGeoLocation(point);
 			session.save(imageEntity);
