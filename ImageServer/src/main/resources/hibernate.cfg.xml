@@ -4,11 +4,11 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="dialect">org.hibernate.spatial.dialect.postgis.PostgisDialect</property>
-        <property name="connection.url">jdbc:postgresql://localhost/lifestream</property>
+        <property name="connection.url">jdbc:postgresql_postGIS://localhost/lifestream</property>
         <property name="connection.driver_class">org.postgis.DriverWrapper</property>
         <property name="connection.username">lifestream</property>
         <property name="connection.password">0EkfcfO7tqe8yfrq</property>
+        <property name="dialect">org.hibernate.spatial.dialect.postgis.PostgisDialect</property>
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">validate</property>
