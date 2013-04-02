@@ -1,12 +1,13 @@
-package client;
+package server;
 
 import com.google.common.net.MediaType;
 import com.google.protobuf.ByteString;
 import data.ImageMessage;
 import org.jboss.netty.bootstrap.ClientBootstrap;
+import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.*;
-import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
+import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder;
 import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
 import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
@@ -16,43 +17,84 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.ConnectException;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 
-public class Client {
+public class DistributedNode {
 	static ClientBootstrap clientBootstrap;
+	static ServerBootstrap serverBootstrap;
 
 	public static void main(String[] args) {
+		List<InetSocketAddress> serverAddressList = new ArrayList<InetSocketAddress>() {{
+			this.add(new InetSocketAddress("localhost", 8080));
+			this.add(new InetSocketAddress("localhost", 8081));
+			this.add(new InetSocketAddress("localhost", 8082));
+		}};
+
 		configueBootstrap();
 
-		connnect();
+		listenAllPossiblePorts();
 	}
 
-	private static void configueBootstrap() {
-		ChannelFactory channelFactory = new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
+	static void configueBootstrap() {
+		ChannelFactory channelFactory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
+		serverBootstrap = new ServerBootstrap(channelFactory);
 
-		clientBootstrap = new ClientBootstrap(channelFactory);
-		clientBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
+		serverBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 			@Override
 			public ChannelPipeline getPipeline() throws Exception {
 				ChannelPipeline channelPipeline = Channels.pipeline();
 
 				// Decoders
 				channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
-				channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ImageMessage.Image.getDefaultInstance()));
+				channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ImageMessage.ServerMessage.getDefaultInstance()));
 
 				// Encoder
 				channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
 				channelPipeline.addLast("protobufEncoder", new ProtobufEncoder());
 
-				channelPipeline.addLast("ServerHandler", new ClientHandler());
+				channelPipeline.addLast("ServerHandler", new ServerHandler());
 
 				return channelPipeline;
 			}
 		});
-		clientBootstrap.setOption("tcpNoDelay", true);
-		clientBootstrap.setOption("keepAlive", true);
+
+		serverBootstrap.setOption("child.tcpNoDelay", true);
+		serverBootstrap.setOption("child.keepAlive", true);
+	}
+
+	static void listenAllPossiblePorts() {
+		int[] possiblePorts = {
+				8080,
+				8081,
+				8082,
+		};
+		int portIndex = 0;
+		String hostname = "localhost";
+		int port = 0;
+
+		do {
+			try {
+				port = possiblePorts[portIndex];
+				serverBootstrap.bind(new InetSocketAddress(port));
+			} catch (ChannelException ex) {
+				System.out.println("Fail to listenAllPossiblePorts port: " + port);
+				++portIndex;
+
+				if (portIndex >= possiblePorts.length) {
+					System.out.println("Fail to listenAllPossiblePorts all possible ports.");
+					break;
+				}
+
+				continue;
+			}
+
+			System.out.println("Listening port: " + port);
+			break;
+		} while (true);
 	}
 
 	public static void connnect() {
@@ -92,13 +134,9 @@ public class Client {
 			break;
 		}
 	}
-
-	public static void close() {
-		clientBootstrap.getFactory().releaseExternalResources();
-	}
 }
 
-class ClientHandler extends SimpleChannelHandler {
+class NodeChannelHandler extends SimpleChannelHandler {
 
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {

@@ -81,102 +81,88 @@ public final class ImageMessage {
     com.google.protobuf.ByteString
         getMimeBytes();
 
-    // required string desc = 12;
+    // required uint64 length = 12;
     /**
-     * <code>required string desc = 12;</code>
+     * <code>required uint64 length = 12;</code>
+     */
+    boolean hasLength();
+    /**
+     * <code>required uint64 length = 12;</code>
+     */
+    long getLength();
+
+    // required uint64 created = 18;
+    /**
+     * <code>required uint64 created = 18;</code>
+     */
+    boolean hasCreated();
+    /**
+     * <code>required uint64 created = 18;</code>
+     */
+    long getCreated();
+
+    // required uint64 modified = 19;
+    /**
+     * <code>required uint64 modified = 19;</code>
+     */
+    boolean hasModified();
+    /**
+     * <code>required uint64 modified = 19;</code>
+     */
+    long getModified();
+
+    // optional string desc = 20;
+    /**
+     * <code>optional string desc = 20;</code>
      */
     boolean hasDesc();
     /**
-     * <code>required string desc = 12;</code>
+     * <code>optional string desc = 20;</code>
      */
     java.lang.String getDesc();
     /**
-     * <code>required string desc = 12;</code>
+     * <code>optional string desc = 20;</code>
      */
     com.google.protobuf.ByteString
         getDescBytes();
 
-    // required uint64 length = 13;
+    // optional .data.Image.Resolution size = 21;
     /**
-     * <code>required uint64 length = 13;</code>
-     */
-    boolean hasLength();
-    /**
-     * <code>required uint64 length = 13;</code>
-     */
-    long getLength();
-
-    // required uint64 datetime = 14;
-    /**
-     * <code>required uint64 datetime = 14;</code>
-     */
-    boolean hasDatetime();
-    /**
-     * <code>required uint64 datetime = 14;</code>
-     */
-    long getDatetime();
-
-    // required .data.Image.Resolution size = 15;
-    /**
-     * <code>required .data.Image.Resolution size = 15;</code>
+     * <code>optional .data.Image.Resolution size = 21;</code>
      */
     boolean hasSize();
     /**
-     * <code>required .data.Image.Resolution size = 15;</code>
+     * <code>optional .data.Image.Resolution size = 21;</code>
      */
     data.ImageMessage.Image.Resolution getSize();
     /**
-     * <code>required .data.Image.Resolution size = 15;</code>
+     * <code>optional .data.Image.Resolution size = 21;</code>
      */
     data.ImageMessage.Image.ResolutionOrBuilder getSizeOrBuilder();
 
-    // optional .data.Image.Resolution original_size = 20;
+    // optional .data.Image.GeoPoint geo_location = 22;
     /**
-     * <code>optional .data.Image.Resolution original_size = 20;</code>
-     */
-    boolean hasOriginalSize();
-    /**
-     * <code>optional .data.Image.Resolution original_size = 20;</code>
-     */
-    data.ImageMessage.Image.Resolution getOriginalSize();
-    /**
-     * <code>optional .data.Image.Resolution original_size = 20;</code>
-     */
-    data.ImageMessage.Image.ResolutionOrBuilder getOriginalSizeOrBuilder();
-
-    // optional .data.Image.GeoLocation geo_location = 21;
-    /**
-     * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+     * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
      */
     boolean hasGeoLocation();
     /**
-     * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+     * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
      */
-    data.ImageMessage.Image.GeoLocation getGeoLocation();
+    data.ImageMessage.Image.GeoPoint getGeoLocation();
     /**
-     * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+     * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
      */
-    data.ImageMessage.Image.GeoLocationOrBuilder getGeoLocationOrBuilder();
+    data.ImageMessage.Image.GeoPointOrBuilder getGeoLocationOrBuilder();
 
-    // optional uint64 original_datetime = 22;
+    // optional uint64 timestamp = 23;
     /**
-     * <code>optional uint64 original_datetime = 22;</code>
+     * <code>optional uint64 timestamp = 23;</code>
      */
-    boolean hasOriginalDatetime();
+    boolean hasTimestamp();
     /**
-     * <code>optional uint64 original_datetime = 22;</code>
+     * <code>optional uint64 timestamp = 23;</code>
      */
-    long getOriginalDatetime();
-
-    // optional uint64 upload_datetime = 23;
-    /**
-     * <code>optional uint64 upload_datetime = 23;</code>
-     */
-    boolean hasUploadDatetime();
-    /**
-     * <code>optional uint64 upload_datetime = 23;</code>
-     */
-    long getUploadDatetime();
+    long getTimestamp();
 
     // optional bytes data = 255;
     /**
@@ -264,24 +250,29 @@ public final class ImageMessage {
               mime_ = input.readBytes();
               break;
             }
-            case 98: {
+            case 96: {
               bitField0_ |= 0x00000020;
-              desc_ = input.readBytes();
-              break;
-            }
-            case 104: {
-              bitField0_ |= 0x00000040;
               length_ = input.readUInt64();
               break;
             }
-            case 112: {
-              bitField0_ |= 0x00000080;
-              datetime_ = input.readUInt64();
+            case 144: {
+              bitField0_ |= 0x00000040;
+              created_ = input.readUInt64();
               break;
             }
-            case 122: {
+            case 152: {
+              bitField0_ |= 0x00000080;
+              modified_ = input.readUInt64();
+              break;
+            }
+            case 162: {
+              bitField0_ |= 0x00000100;
+              desc_ = input.readBytes();
+              break;
+            }
+            case 170: {
               data.ImageMessage.Image.Resolution.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000100) == 0x00000100)) {
+              if (((bitField0_ & 0x00000200) == 0x00000200)) {
                 subBuilder = size_.toBuilder();
               }
               size_ = input.readMessage(data.ImageMessage.Image.Resolution.PARSER, extensionRegistry);
@@ -289,28 +280,15 @@ public final class ImageMessage {
                 subBuilder.mergeFrom(size_);
                 size_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000100;
-              break;
-            }
-            case 162: {
-              data.ImageMessage.Image.Resolution.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000200) == 0x00000200)) {
-                subBuilder = originalSize_.toBuilder();
-              }
-              originalSize_ = input.readMessage(data.ImageMessage.Image.Resolution.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(originalSize_);
-                originalSize_ = subBuilder.buildPartial();
-              }
               bitField0_ |= 0x00000200;
               break;
             }
-            case 170: {
-              data.ImageMessage.Image.GeoLocation.Builder subBuilder = null;
+            case 178: {
+              data.ImageMessage.Image.GeoPoint.Builder subBuilder = null;
               if (((bitField0_ & 0x00000400) == 0x00000400)) {
                 subBuilder = geoLocation_.toBuilder();
               }
-              geoLocation_ = input.readMessage(data.ImageMessage.Image.GeoLocation.PARSER, extensionRegistry);
+              geoLocation_ = input.readMessage(data.ImageMessage.Image.GeoPoint.PARSER, extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(geoLocation_);
                 geoLocation_ = subBuilder.buildPartial();
@@ -318,18 +296,13 @@ public final class ImageMessage {
               bitField0_ |= 0x00000400;
               break;
             }
-            case 176: {
-              bitField0_ |= 0x00000800;
-              originalDatetime_ = input.readUInt64();
-              break;
-            }
             case 184: {
-              bitField0_ |= 0x00001000;
-              uploadDatetime_ = input.readUInt64();
+              bitField0_ |= 0x00000800;
+              timestamp_ = input.readUInt64();
               break;
             }
             case 2042: {
-              bitField0_ |= 0x00002000;
+              bitField0_ |= 0x00001000;
               data_ = input.readBytes();
               break;
             }
@@ -865,7 +838,7 @@ public final class ImageMessage {
       // @@protoc_insertion_point(class_scope:data.Image.Resolution)
     }
 
-    public interface GeoLocationOrBuilder
+    public interface GeoPointOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
 
       // required double lat = 1;
@@ -887,36 +860,26 @@ public final class ImageMessage {
        * <code>required double lng = 2;</code>
        */
       double getLng();
-
-      // optional double alt = 4;
-      /**
-       * <code>optional double alt = 4;</code>
-       */
-      boolean hasAlt();
-      /**
-       * <code>optional double alt = 4;</code>
-       */
-      double getAlt();
     }
     /**
-     * Protobuf type {@code data.Image.GeoLocation}
+     * Protobuf type {@code data.Image.GeoPoint}
      */
-    public static final class GeoLocation extends
+    public static final class GeoPoint extends
         com.google.protobuf.GeneratedMessage
-        implements GeoLocationOrBuilder {
-      // Use GeoLocation.newBuilder() to construct.
-      private GeoLocation(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        implements GeoPointOrBuilder {
+      // Use GeoPoint.newBuilder() to construct.
+      private GeoPoint(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
         this.unknownFields = builder.getUnknownFields();
       }
-      private GeoLocation(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+      private GeoPoint(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-      private static final GeoLocation defaultInstance;
-      public static GeoLocation getDefaultInstance() {
+      private static final GeoPoint defaultInstance;
+      public static GeoPoint getDefaultInstance() {
         return defaultInstance;
       }
 
-      public GeoLocation getDefaultInstanceForType() {
+      public GeoPoint getDefaultInstanceForType() {
         return defaultInstance;
       }
 
@@ -926,7 +889,7 @@ public final class ImageMessage {
           getUnknownFields() {
         return this.unknownFields;
       }
-      private GeoLocation(
+      private GeoPoint(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
@@ -959,11 +922,6 @@ public final class ImageMessage {
                 lng_ = input.readDouble();
                 break;
               }
-              case 33: {
-                bitField0_ |= 0x00000004;
-                alt_ = input.readDouble();
-                break;
-              }
             }
           }
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -978,28 +936,28 @@ public final class ImageMessage {
       }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return data.ImageMessage.internal_static_data_Image_GeoLocation_descriptor;
+        return data.ImageMessage.internal_static_data_Image_GeoPoint_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return data.ImageMessage.internal_static_data_Image_GeoLocation_fieldAccessorTable
+        return data.ImageMessage.internal_static_data_Image_GeoPoint_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                data.ImageMessage.Image.GeoLocation.class, data.ImageMessage.Image.GeoLocation.Builder.class);
+                data.ImageMessage.Image.GeoPoint.class, data.ImageMessage.Image.GeoPoint.Builder.class);
       }
 
-      public static com.google.protobuf.Parser<GeoLocation> PARSER =
-          new com.google.protobuf.AbstractParser<GeoLocation>() {
-        public GeoLocation parsePartialFrom(
+      public static com.google.protobuf.Parser<GeoPoint> PARSER =
+          new com.google.protobuf.AbstractParser<GeoPoint>() {
+        public GeoPoint parsePartialFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new GeoLocation(input, extensionRegistry);
+          return new GeoPoint(input, extensionRegistry);
         }
       };
 
       @java.lang.Override
-      public com.google.protobuf.Parser<GeoLocation> getParserForType() {
+      public com.google.protobuf.Parser<GeoPoint> getParserForType() {
         return PARSER;
       }
 
@@ -1036,26 +994,9 @@ public final class ImageMessage {
         return lng_;
       }
 
-      // optional double alt = 4;
-      public static final int ALT_FIELD_NUMBER = 4;
-      private double alt_;
-      /**
-       * <code>optional double alt = 4;</code>
-       */
-      public boolean hasAlt() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional double alt = 4;</code>
-       */
-      public double getAlt() {
-        return alt_;
-      }
-
       private void initFields() {
         lat_ = 0D;
         lng_ = 0D;
-        alt_ = 0D;
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -1083,9 +1024,6 @@ public final class ImageMessage {
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
           output.writeDouble(2, lng_);
         }
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
-          output.writeDouble(4, alt_);
-        }
         getUnknownFields().writeTo(output);
       }
 
@@ -1103,10 +1041,6 @@ public final class ImageMessage {
           size += com.google.protobuf.CodedOutputStream
             .computeDoubleSize(2, lng_);
         }
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeDoubleSize(4, alt_);
-        }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
         return size;
@@ -1119,53 +1053,53 @@ public final class ImageMessage {
         return super.writeReplace();
       }
 
-      public static data.ImageMessage.Image.GeoLocation parseFrom(
+      public static data.ImageMessage.Image.GeoPoint parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static data.ImageMessage.Image.GeoLocation parseFrom(
+      public static data.ImageMessage.Image.GeoPoint parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static data.ImageMessage.Image.GeoLocation parseFrom(byte[] data)
+      public static data.ImageMessage.Image.GeoPoint parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static data.ImageMessage.Image.GeoLocation parseFrom(
+      public static data.ImageMessage.Image.GeoPoint parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static data.ImageMessage.Image.GeoLocation parseFrom(java.io.InputStream input)
+      public static data.ImageMessage.Image.GeoPoint parseFrom(java.io.InputStream input)
           throws java.io.IOException {
         return PARSER.parseFrom(input);
       }
-      public static data.ImageMessage.Image.GeoLocation parseFrom(
+      public static data.ImageMessage.Image.GeoPoint parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return PARSER.parseFrom(input, extensionRegistry);
       }
-      public static data.ImageMessage.Image.GeoLocation parseDelimitedFrom(java.io.InputStream input)
+      public static data.ImageMessage.Image.GeoPoint parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
         return PARSER.parseDelimitedFrom(input);
       }
-      public static data.ImageMessage.Image.GeoLocation parseDelimitedFrom(
+      public static data.ImageMessage.Image.GeoPoint parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return PARSER.parseDelimitedFrom(input, extensionRegistry);
       }
-      public static data.ImageMessage.Image.GeoLocation parseFrom(
+      public static data.ImageMessage.Image.GeoPoint parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return PARSER.parseFrom(input);
       }
-      public static data.ImageMessage.Image.GeoLocation parseFrom(
+      public static data.ImageMessage.Image.GeoPoint parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -1174,7 +1108,7 @@ public final class ImageMessage {
 
       public static Builder newBuilder() { return Builder.create(); }
       public Builder newBuilderForType() { return newBuilder(); }
-      public static Builder newBuilder(data.ImageMessage.Image.GeoLocation prototype) {
+      public static Builder newBuilder(data.ImageMessage.Image.GeoPoint prototype) {
         return newBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() { return newBuilder(this); }
@@ -1186,24 +1120,24 @@ public final class ImageMessage {
         return builder;
       }
       /**
-       * Protobuf type {@code data.Image.GeoLocation}
+       * Protobuf type {@code data.Image.GeoPoint}
        */
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements data.ImageMessage.Image.GeoLocationOrBuilder {
+         implements data.ImageMessage.Image.GeoPointOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
-          return data.ImageMessage.internal_static_data_Image_GeoLocation_descriptor;
+          return data.ImageMessage.internal_static_data_Image_GeoPoint_descriptor;
         }
 
         protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return data.ImageMessage.internal_static_data_Image_GeoLocation_fieldAccessorTable
+          return data.ImageMessage.internal_static_data_Image_GeoPoint_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-                  data.ImageMessage.Image.GeoLocation.class, data.ImageMessage.Image.GeoLocation.Builder.class);
+                  data.ImageMessage.Image.GeoPoint.class, data.ImageMessage.Image.GeoPoint.Builder.class);
         }
 
-        // Construct using data.ImageMessage.Image.GeoLocation.newBuilder()
+        // Construct using data.ImageMessage.Image.GeoPoint.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
@@ -1227,8 +1161,6 @@ public final class ImageMessage {
           bitField0_ = (bitField0_ & ~0x00000001);
           lng_ = 0D;
           bitField0_ = (bitField0_ & ~0x00000002);
-          alt_ = 0D;
-          bitField0_ = (bitField0_ & ~0x00000004);
           return this;
         }
 
@@ -1238,23 +1170,23 @@ public final class ImageMessage {
 
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return data.ImageMessage.internal_static_data_Image_GeoLocation_descriptor;
+          return data.ImageMessage.internal_static_data_Image_GeoPoint_descriptor;
         }
 
-        public data.ImageMessage.Image.GeoLocation getDefaultInstanceForType() {
-          return data.ImageMessage.Image.GeoLocation.getDefaultInstance();
+        public data.ImageMessage.Image.GeoPoint getDefaultInstanceForType() {
+          return data.ImageMessage.Image.GeoPoint.getDefaultInstance();
         }
 
-        public data.ImageMessage.Image.GeoLocation build() {
-          data.ImageMessage.Image.GeoLocation result = buildPartial();
+        public data.ImageMessage.Image.GeoPoint build() {
+          data.ImageMessage.Image.GeoPoint result = buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(result);
           }
           return result;
         }
 
-        public data.ImageMessage.Image.GeoLocation buildPartial() {
-          data.ImageMessage.Image.GeoLocation result = new data.ImageMessage.Image.GeoLocation(this);
+        public data.ImageMessage.Image.GeoPoint buildPartial() {
+          data.ImageMessage.Image.GeoPoint result = new data.ImageMessage.Image.GeoPoint(this);
           int from_bitField0_ = bitField0_;
           int to_bitField0_ = 0;
           if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -1265,34 +1197,27 @@ public final class ImageMessage {
             to_bitField0_ |= 0x00000002;
           }
           result.lng_ = lng_;
-          if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-            to_bitField0_ |= 0x00000004;
-          }
-          result.alt_ = alt_;
           result.bitField0_ = to_bitField0_;
           onBuilt();
           return result;
         }
 
         public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof data.ImageMessage.Image.GeoLocation) {
-            return mergeFrom((data.ImageMessage.Image.GeoLocation)other);
+          if (other instanceof data.ImageMessage.Image.GeoPoint) {
+            return mergeFrom((data.ImageMessage.Image.GeoPoint)other);
           } else {
             super.mergeFrom(other);
             return this;
           }
         }
 
-        public Builder mergeFrom(data.ImageMessage.Image.GeoLocation other) {
-          if (other == data.ImageMessage.Image.GeoLocation.getDefaultInstance()) return this;
+        public Builder mergeFrom(data.ImageMessage.Image.GeoPoint other) {
+          if (other == data.ImageMessage.Image.GeoPoint.getDefaultInstance()) return this;
           if (other.hasLat()) {
             setLat(other.getLat());
           }
           if (other.hasLng()) {
             setLng(other.getLng());
-          }
-          if (other.hasAlt()) {
-            setAlt(other.getAlt());
           }
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
@@ -1314,11 +1239,11 @@ public final class ImageMessage {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          data.ImageMessage.Image.GeoLocation parsedMessage = null;
+          data.ImageMessage.Image.GeoPoint parsedMessage = null;
           try {
             parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (data.ImageMessage.Image.GeoLocation) e.getUnfinishedMessage();
+            parsedMessage = (data.ImageMessage.Image.GeoPoint) e.getUnfinishedMessage();
             throw e;
           } finally {
             if (parsedMessage != null) {
@@ -1395,48 +1320,15 @@ public final class ImageMessage {
           return this;
         }
 
-        // optional double alt = 4;
-        private double alt_ ;
-        /**
-         * <code>optional double alt = 4;</code>
-         */
-        public boolean hasAlt() {
-          return ((bitField0_ & 0x00000004) == 0x00000004);
-        }
-        /**
-         * <code>optional double alt = 4;</code>
-         */
-        public double getAlt() {
-          return alt_;
-        }
-        /**
-         * <code>optional double alt = 4;</code>
-         */
-        public Builder setAlt(double value) {
-          bitField0_ |= 0x00000004;
-          alt_ = value;
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>optional double alt = 4;</code>
-         */
-        public Builder clearAlt() {
-          bitField0_ = (bitField0_ & ~0x00000004);
-          alt_ = 0D;
-          onChanged();
-          return this;
-        }
-
-        // @@protoc_insertion_point(builder_scope:data.Image.GeoLocation)
+        // @@protoc_insertion_point(builder_scope:data.Image.GeoPoint)
       }
 
       static {
-        defaultInstance = new GeoLocation(true);
+        defaultInstance = new GeoPoint(true);
         defaultInstance.initFields();
       }
 
-      // @@protoc_insertion_point(class_scope:data.Image.GeoLocation)
+      // @@protoc_insertion_point(class_scope:data.Image.GeoPoint)
     }
 
     private int bitField0_;
@@ -1628,17 +1520,65 @@ public final class ImageMessage {
       }
     }
 
-    // required string desc = 12;
-    public static final int DESC_FIELD_NUMBER = 12;
-    private java.lang.Object desc_;
+    // required uint64 length = 12;
+    public static final int LENGTH_FIELD_NUMBER = 12;
+    private long length_;
     /**
-     * <code>required string desc = 12;</code>
+     * <code>required uint64 length = 12;</code>
      */
-    public boolean hasDesc() {
+    public boolean hasLength() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>required string desc = 12;</code>
+     * <code>required uint64 length = 12;</code>
+     */
+    public long getLength() {
+      return length_;
+    }
+
+    // required uint64 created = 18;
+    public static final int CREATED_FIELD_NUMBER = 18;
+    private long created_;
+    /**
+     * <code>required uint64 created = 18;</code>
+     */
+    public boolean hasCreated() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>required uint64 created = 18;</code>
+     */
+    public long getCreated() {
+      return created_;
+    }
+
+    // required uint64 modified = 19;
+    public static final int MODIFIED_FIELD_NUMBER = 19;
+    private long modified_;
+    /**
+     * <code>required uint64 modified = 19;</code>
+     */
+    public boolean hasModified() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>required uint64 modified = 19;</code>
+     */
+    public long getModified() {
+      return modified_;
+    }
+
+    // optional string desc = 20;
+    public static final int DESC_FIELD_NUMBER = 20;
+    private java.lang.Object desc_;
+    /**
+     * <code>optional string desc = 20;</code>
+     */
+    public boolean hasDesc() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional string desc = 20;</code>
      */
     public java.lang.String getDesc() {
       java.lang.Object ref = desc_;
@@ -1655,7 +1595,7 @@ public final class ImageMessage {
       }
     }
     /**
-     * <code>required string desc = 12;</code>
+     * <code>optional string desc = 20;</code>
      */
     public com.google.protobuf.ByteString
         getDescBytes() {
@@ -1671,134 +1611,64 @@ public final class ImageMessage {
       }
     }
 
-    // required uint64 length = 13;
-    public static final int LENGTH_FIELD_NUMBER = 13;
-    private long length_;
-    /**
-     * <code>required uint64 length = 13;</code>
-     */
-    public boolean hasLength() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>required uint64 length = 13;</code>
-     */
-    public long getLength() {
-      return length_;
-    }
-
-    // required uint64 datetime = 14;
-    public static final int DATETIME_FIELD_NUMBER = 14;
-    private long datetime_;
-    /**
-     * <code>required uint64 datetime = 14;</code>
-     */
-    public boolean hasDatetime() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
-    }
-    /**
-     * <code>required uint64 datetime = 14;</code>
-     */
-    public long getDatetime() {
-      return datetime_;
-    }
-
-    // required .data.Image.Resolution size = 15;
-    public static final int SIZE_FIELD_NUMBER = 15;
+    // optional .data.Image.Resolution size = 21;
+    public static final int SIZE_FIELD_NUMBER = 21;
     private data.ImageMessage.Image.Resolution size_;
     /**
-     * <code>required .data.Image.Resolution size = 15;</code>
+     * <code>optional .data.Image.Resolution size = 21;</code>
      */
     public boolean hasSize() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
+      return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     /**
-     * <code>required .data.Image.Resolution size = 15;</code>
+     * <code>optional .data.Image.Resolution size = 21;</code>
      */
     public data.ImageMessage.Image.Resolution getSize() {
       return size_;
     }
     /**
-     * <code>required .data.Image.Resolution size = 15;</code>
+     * <code>optional .data.Image.Resolution size = 21;</code>
      */
     public data.ImageMessage.Image.ResolutionOrBuilder getSizeOrBuilder() {
       return size_;
     }
 
-    // optional .data.Image.Resolution original_size = 20;
-    public static final int ORIGINAL_SIZE_FIELD_NUMBER = 20;
-    private data.ImageMessage.Image.Resolution originalSize_;
+    // optional .data.Image.GeoPoint geo_location = 22;
+    public static final int GEO_LOCATION_FIELD_NUMBER = 22;
+    private data.ImageMessage.Image.GeoPoint geoLocation_;
     /**
-     * <code>optional .data.Image.Resolution original_size = 20;</code>
-     */
-    public boolean hasOriginalSize() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
-    }
-    /**
-     * <code>optional .data.Image.Resolution original_size = 20;</code>
-     */
-    public data.ImageMessage.Image.Resolution getOriginalSize() {
-      return originalSize_;
-    }
-    /**
-     * <code>optional .data.Image.Resolution original_size = 20;</code>
-     */
-    public data.ImageMessage.Image.ResolutionOrBuilder getOriginalSizeOrBuilder() {
-      return originalSize_;
-    }
-
-    // optional .data.Image.GeoLocation geo_location = 21;
-    public static final int GEO_LOCATION_FIELD_NUMBER = 21;
-    private data.ImageMessage.Image.GeoLocation geoLocation_;
-    /**
-     * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+     * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
      */
     public boolean hasGeoLocation() {
       return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+     * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
      */
-    public data.ImageMessage.Image.GeoLocation getGeoLocation() {
+    public data.ImageMessage.Image.GeoPoint getGeoLocation() {
       return geoLocation_;
     }
     /**
-     * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+     * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
      */
-    public data.ImageMessage.Image.GeoLocationOrBuilder getGeoLocationOrBuilder() {
+    public data.ImageMessage.Image.GeoPointOrBuilder getGeoLocationOrBuilder() {
       return geoLocation_;
     }
 
-    // optional uint64 original_datetime = 22;
-    public static final int ORIGINAL_DATETIME_FIELD_NUMBER = 22;
-    private long originalDatetime_;
+    // optional uint64 timestamp = 23;
+    public static final int TIMESTAMP_FIELD_NUMBER = 23;
+    private long timestamp_;
     /**
-     * <code>optional uint64 original_datetime = 22;</code>
+     * <code>optional uint64 timestamp = 23;</code>
      */
-    public boolean hasOriginalDatetime() {
+    public boolean hasTimestamp() {
       return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     /**
-     * <code>optional uint64 original_datetime = 22;</code>
+     * <code>optional uint64 timestamp = 23;</code>
      */
-    public long getOriginalDatetime() {
-      return originalDatetime_;
-    }
-
-    // optional uint64 upload_datetime = 23;
-    public static final int UPLOAD_DATETIME_FIELD_NUMBER = 23;
-    private long uploadDatetime_;
-    /**
-     * <code>optional uint64 upload_datetime = 23;</code>
-     */
-    public boolean hasUploadDatetime() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
-    }
-    /**
-     * <code>optional uint64 upload_datetime = 23;</code>
-     */
-    public long getUploadDatetime() {
-      return uploadDatetime_;
+    public long getTimestamp() {
+      return timestamp_;
     }
 
     // optional bytes data = 255;
@@ -1808,7 +1678,7 @@ public final class ImageMessage {
      * <code>optional bytes data = 255;</code>
      */
     public boolean hasData() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
+      return ((bitField0_ & 0x00001000) == 0x00001000);
     }
     /**
      * <code>optional bytes data = 255;</code>
@@ -1823,14 +1693,13 @@ public final class ImageMessage {
       userId_ = "";
       name_ = "";
       mime_ = "";
-      desc_ = "";
       length_ = 0L;
-      datetime_ = 0L;
+      created_ = 0L;
+      modified_ = 0L;
+      desc_ = "";
       size_ = data.ImageMessage.Image.Resolution.getDefaultInstance();
-      originalSize_ = data.ImageMessage.Image.Resolution.getDefaultInstance();
-      geoLocation_ = data.ImageMessage.Image.GeoLocation.getDefaultInstance();
-      originalDatetime_ = 0L;
-      uploadDatetime_ = 0L;
+      geoLocation_ = data.ImageMessage.Image.GeoPoint.getDefaultInstance();
+      timestamp_ = 0L;
       data_ = com.google.protobuf.ByteString.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
@@ -1858,28 +1727,20 @@ public final class ImageMessage {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasDesc()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       if (!hasLength()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasDatetime()) {
+      if (!hasCreated()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasSize()) {
+      if (!hasModified()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!getSize().isInitialized()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (hasOriginalSize()) {
-        if (!getOriginalSize().isInitialized()) {
+      if (hasSize()) {
+        if (!getSize().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -1913,30 +1774,27 @@ public final class ImageMessage {
         output.writeBytes(11, getMimeBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBytes(12, getDescBytes());
+        output.writeUInt64(12, length_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeUInt64(13, length_);
+        output.writeUInt64(18, created_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeUInt64(14, datetime_);
+        output.writeUInt64(19, modified_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeMessage(15, size_);
+        output.writeBytes(20, getDescBytes());
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeMessage(20, originalSize_);
+        output.writeMessage(21, size_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeMessage(21, geoLocation_);
+        output.writeMessage(22, geoLocation_);
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeUInt64(22, originalDatetime_);
+        output.writeUInt64(23, timestamp_);
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        output.writeUInt64(23, uploadDatetime_);
-      }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
         output.writeBytes(255, data_);
       }
       getUnknownFields().writeTo(output);
@@ -1970,37 +1828,33 @@ public final class ImageMessage {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(12, getDescBytes());
+          .computeUInt64Size(12, length_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(13, length_);
+          .computeUInt64Size(18, created_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(14, datetime_);
+          .computeUInt64Size(19, modified_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(15, size_);
+          .computeBytesSize(20, getDescBytes());
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(20, originalSize_);
+          .computeMessageSize(21, size_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(21, geoLocation_);
+          .computeMessageSize(22, geoLocation_);
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(22, originalDatetime_);
+          .computeUInt64Size(23, timestamp_);
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(23, uploadDatetime_);
-      }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(255, data_);
       }
@@ -2113,7 +1967,6 @@ public final class ImageMessage {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getSizeFieldBuilder();
-          getOriginalSizeFieldBuilder();
           getGeoLocationFieldBuilder();
         }
       }
@@ -2133,36 +1986,30 @@ public final class ImageMessage {
         bitField0_ = (bitField0_ & ~0x00000008);
         mime_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
-        desc_ = "";
-        bitField0_ = (bitField0_ & ~0x00000020);
         length_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        created_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000040);
-        datetime_ = 0L;
+        modified_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000080);
+        desc_ = "";
+        bitField0_ = (bitField0_ & ~0x00000100);
         if (sizeBuilder_ == null) {
           size_ = data.ImageMessage.Image.Resolution.getDefaultInstance();
         } else {
           sizeBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
-        if (originalSizeBuilder_ == null) {
-          originalSize_ = data.ImageMessage.Image.Resolution.getDefaultInstance();
-        } else {
-          originalSizeBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000200);
         if (geoLocationBuilder_ == null) {
-          geoLocation_ = data.ImageMessage.Image.GeoLocation.getDefaultInstance();
+          geoLocation_ = data.ImageMessage.Image.GeoPoint.getDefaultInstance();
         } else {
           geoLocationBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000400);
-        originalDatetime_ = 0L;
+        timestamp_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000800);
-        uploadDatetime_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00001000);
         data_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         return this;
       }
 
@@ -2214,30 +2061,26 @@ public final class ImageMessage {
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.desc_ = desc_;
+        result.length_ = length_;
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000040;
         }
-        result.length_ = length_;
+        result.created_ = created_;
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
           to_bitField0_ |= 0x00000080;
         }
-        result.datetime_ = datetime_;
+        result.modified_ = modified_;
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000100;
+        }
+        result.desc_ = desc_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
         }
         if (sizeBuilder_ == null) {
           result.size_ = size_;
         } else {
           result.size_ = sizeBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
-          to_bitField0_ |= 0x00000200;
-        }
-        if (originalSizeBuilder_ == null) {
-          result.originalSize_ = originalSize_;
-        } else {
-          result.originalSize_ = originalSizeBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
           to_bitField0_ |= 0x00000400;
@@ -2250,13 +2093,9 @@ public final class ImageMessage {
         if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
           to_bitField0_ |= 0x00000800;
         }
-        result.originalDatetime_ = originalDatetime_;
+        result.timestamp_ = timestamp_;
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00001000;
-        }
-        result.uploadDatetime_ = uploadDatetime_;
-        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
-          to_bitField0_ |= 0x00002000;
         }
         result.data_ = data_;
         result.bitField0_ = to_bitField0_;
@@ -2298,31 +2137,28 @@ public final class ImageMessage {
           mime_ = other.mime_;
           onChanged();
         }
-        if (other.hasDesc()) {
-          bitField0_ |= 0x00000020;
-          desc_ = other.desc_;
-          onChanged();
-        }
         if (other.hasLength()) {
           setLength(other.getLength());
         }
-        if (other.hasDatetime()) {
-          setDatetime(other.getDatetime());
+        if (other.hasCreated()) {
+          setCreated(other.getCreated());
+        }
+        if (other.hasModified()) {
+          setModified(other.getModified());
+        }
+        if (other.hasDesc()) {
+          bitField0_ |= 0x00000100;
+          desc_ = other.desc_;
+          onChanged();
         }
         if (other.hasSize()) {
           mergeSize(other.getSize());
         }
-        if (other.hasOriginalSize()) {
-          mergeOriginalSize(other.getOriginalSize());
-        }
         if (other.hasGeoLocation()) {
           mergeGeoLocation(other.getGeoLocation());
         }
-        if (other.hasOriginalDatetime()) {
-          setOriginalDatetime(other.getOriginalDatetime());
-        }
-        if (other.hasUploadDatetime()) {
-          setUploadDatetime(other.getUploadDatetime());
+        if (other.hasTimestamp()) {
+          setTimestamp(other.getTimestamp());
         }
         if (other.hasData()) {
           setData(other.getData());
@@ -2352,28 +2188,20 @@ public final class ImageMessage {
           
           return false;
         }
-        if (!hasDesc()) {
-          
-          return false;
-        }
         if (!hasLength()) {
           
           return false;
         }
-        if (!hasDatetime()) {
+        if (!hasCreated()) {
           
           return false;
         }
-        if (!hasSize()) {
+        if (!hasModified()) {
           
           return false;
         }
-        if (!getSize().isInitialized()) {
-          
-          return false;
-        }
-        if (hasOriginalSize()) {
-          if (!getOriginalSize().isInitialized()) {
+        if (hasSize()) {
+          if (!getSize().isInitialized()) {
             
             return false;
           }
@@ -2735,16 +2563,115 @@ public final class ImageMessage {
         return this;
       }
 
-      // required string desc = 12;
-      private java.lang.Object desc_ = "";
+      // required uint64 length = 12;
+      private long length_ ;
       /**
-       * <code>required string desc = 12;</code>
+       * <code>required uint64 length = 12;</code>
        */
-      public boolean hasDesc() {
+      public boolean hasLength() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>required string desc = 12;</code>
+       * <code>required uint64 length = 12;</code>
+       */
+      public long getLength() {
+        return length_;
+      }
+      /**
+       * <code>required uint64 length = 12;</code>
+       */
+      public Builder setLength(long value) {
+        bitField0_ |= 0x00000020;
+        length_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required uint64 length = 12;</code>
+       */
+      public Builder clearLength() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        length_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // required uint64 created = 18;
+      private long created_ ;
+      /**
+       * <code>required uint64 created = 18;</code>
+       */
+      public boolean hasCreated() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>required uint64 created = 18;</code>
+       */
+      public long getCreated() {
+        return created_;
+      }
+      /**
+       * <code>required uint64 created = 18;</code>
+       */
+      public Builder setCreated(long value) {
+        bitField0_ |= 0x00000040;
+        created_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required uint64 created = 18;</code>
+       */
+      public Builder clearCreated() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        created_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // required uint64 modified = 19;
+      private long modified_ ;
+      /**
+       * <code>required uint64 modified = 19;</code>
+       */
+      public boolean hasModified() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>required uint64 modified = 19;</code>
+       */
+      public long getModified() {
+        return modified_;
+      }
+      /**
+       * <code>required uint64 modified = 19;</code>
+       */
+      public Builder setModified(long value) {
+        bitField0_ |= 0x00000080;
+        modified_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required uint64 modified = 19;</code>
+       */
+      public Builder clearModified() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        modified_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // optional string desc = 20;
+      private java.lang.Object desc_ = "";
+      /**
+       * <code>optional string desc = 20;</code>
+       */
+      public boolean hasDesc() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional string desc = 20;</code>
        */
       public java.lang.String getDesc() {
         java.lang.Object ref = desc_;
@@ -2758,7 +2685,7 @@ public final class ImageMessage {
         }
       }
       /**
-       * <code>required string desc = 12;</code>
+       * <code>optional string desc = 20;</code>
        */
       public com.google.protobuf.ByteString
           getDescBytes() {
@@ -2774,119 +2701,53 @@ public final class ImageMessage {
         }
       }
       /**
-       * <code>required string desc = 12;</code>
+       * <code>optional string desc = 20;</code>
        */
       public Builder setDesc(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  bitField0_ |= 0x00000100;
         desc_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string desc = 12;</code>
+       * <code>optional string desc = 20;</code>
        */
       public Builder clearDesc() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000100);
         desc_ = getDefaultInstance().getDesc();
         onChanged();
         return this;
       }
       /**
-       * <code>required string desc = 12;</code>
+       * <code>optional string desc = 20;</code>
        */
       public Builder setDescBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  bitField0_ |= 0x00000100;
         desc_ = value;
         onChanged();
         return this;
       }
 
-      // required uint64 length = 13;
-      private long length_ ;
-      /**
-       * <code>required uint64 length = 13;</code>
-       */
-      public boolean hasLength() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>required uint64 length = 13;</code>
-       */
-      public long getLength() {
-        return length_;
-      }
-      /**
-       * <code>required uint64 length = 13;</code>
-       */
-      public Builder setLength(long value) {
-        bitField0_ |= 0x00000040;
-        length_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint64 length = 13;</code>
-       */
-      public Builder clearLength() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        length_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      // required uint64 datetime = 14;
-      private long datetime_ ;
-      /**
-       * <code>required uint64 datetime = 14;</code>
-       */
-      public boolean hasDatetime() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
-      }
-      /**
-       * <code>required uint64 datetime = 14;</code>
-       */
-      public long getDatetime() {
-        return datetime_;
-      }
-      /**
-       * <code>required uint64 datetime = 14;</code>
-       */
-      public Builder setDatetime(long value) {
-        bitField0_ |= 0x00000080;
-        datetime_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required uint64 datetime = 14;</code>
-       */
-      public Builder clearDatetime() {
-        bitField0_ = (bitField0_ & ~0x00000080);
-        datetime_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      // required .data.Image.Resolution size = 15;
+      // optional .data.Image.Resolution size = 21;
       private data.ImageMessage.Image.Resolution size_ = data.ImageMessage.Image.Resolution.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           data.ImageMessage.Image.Resolution, data.ImageMessage.Image.Resolution.Builder, data.ImageMessage.Image.ResolutionOrBuilder> sizeBuilder_;
       /**
-       * <code>required .data.Image.Resolution size = 15;</code>
+       * <code>optional .data.Image.Resolution size = 21;</code>
        */
       public boolean hasSize() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>required .data.Image.Resolution size = 15;</code>
+       * <code>optional .data.Image.Resolution size = 21;</code>
        */
       public data.ImageMessage.Image.Resolution getSize() {
         if (sizeBuilder_ == null) {
@@ -2896,7 +2757,7 @@ public final class ImageMessage {
         }
       }
       /**
-       * <code>required .data.Image.Resolution size = 15;</code>
+       * <code>optional .data.Image.Resolution size = 21;</code>
        */
       public Builder setSize(data.ImageMessage.Image.Resolution value) {
         if (sizeBuilder_ == null) {
@@ -2908,11 +2769,11 @@ public final class ImageMessage {
         } else {
           sizeBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         return this;
       }
       /**
-       * <code>required .data.Image.Resolution size = 15;</code>
+       * <code>optional .data.Image.Resolution size = 21;</code>
        */
       public Builder setSize(
           data.ImageMessage.Image.Resolution.Builder builderForValue) {
@@ -2922,15 +2783,15 @@ public final class ImageMessage {
         } else {
           sizeBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         return this;
       }
       /**
-       * <code>required .data.Image.Resolution size = 15;</code>
+       * <code>optional .data.Image.Resolution size = 21;</code>
        */
       public Builder mergeSize(data.ImageMessage.Image.Resolution value) {
         if (sizeBuilder_ == null) {
-          if (((bitField0_ & 0x00000100) == 0x00000100) &&
+          if (((bitField0_ & 0x00000200) == 0x00000200) &&
               size_ != data.ImageMessage.Image.Resolution.getDefaultInstance()) {
             size_ =
               data.ImageMessage.Image.Resolution.newBuilder(size_).mergeFrom(value).buildPartial();
@@ -2941,11 +2802,11 @@ public final class ImageMessage {
         } else {
           sizeBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         return this;
       }
       /**
-       * <code>required .data.Image.Resolution size = 15;</code>
+       * <code>optional .data.Image.Resolution size = 21;</code>
        */
       public Builder clearSize() {
         if (sizeBuilder_ == null) {
@@ -2954,19 +2815,19 @@ public final class ImageMessage {
         } else {
           sizeBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
       /**
-       * <code>required .data.Image.Resolution size = 15;</code>
+       * <code>optional .data.Image.Resolution size = 21;</code>
        */
       public data.ImageMessage.Image.Resolution.Builder getSizeBuilder() {
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         onChanged();
         return getSizeFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .data.Image.Resolution size = 15;</code>
+       * <code>optional .data.Image.Resolution size = 21;</code>
        */
       public data.ImageMessage.Image.ResolutionOrBuilder getSizeOrBuilder() {
         if (sizeBuilder_ != null) {
@@ -2976,7 +2837,7 @@ public final class ImageMessage {
         }
       }
       /**
-       * <code>required .data.Image.Resolution size = 15;</code>
+       * <code>optional .data.Image.Resolution size = 21;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           data.ImageMessage.Image.Resolution, data.ImageMessage.Image.Resolution.Builder, data.ImageMessage.Image.ResolutionOrBuilder> 
@@ -2992,137 +2853,20 @@ public final class ImageMessage {
         return sizeBuilder_;
       }
 
-      // optional .data.Image.Resolution original_size = 20;
-      private data.ImageMessage.Image.Resolution originalSize_ = data.ImageMessage.Image.Resolution.getDefaultInstance();
+      // optional .data.Image.GeoPoint geo_location = 22;
+      private data.ImageMessage.Image.GeoPoint geoLocation_ = data.ImageMessage.Image.GeoPoint.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          data.ImageMessage.Image.Resolution, data.ImageMessage.Image.Resolution.Builder, data.ImageMessage.Image.ResolutionOrBuilder> originalSizeBuilder_;
+          data.ImageMessage.Image.GeoPoint, data.ImageMessage.Image.GeoPoint.Builder, data.ImageMessage.Image.GeoPointOrBuilder> geoLocationBuilder_;
       /**
-       * <code>optional .data.Image.Resolution original_size = 20;</code>
-       */
-      public boolean hasOriginalSize() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
-      }
-      /**
-       * <code>optional .data.Image.Resolution original_size = 20;</code>
-       */
-      public data.ImageMessage.Image.Resolution getOriginalSize() {
-        if (originalSizeBuilder_ == null) {
-          return originalSize_;
-        } else {
-          return originalSizeBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .data.Image.Resolution original_size = 20;</code>
-       */
-      public Builder setOriginalSize(data.ImageMessage.Image.Resolution value) {
-        if (originalSizeBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          originalSize_ = value;
-          onChanged();
-        } else {
-          originalSizeBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000200;
-        return this;
-      }
-      /**
-       * <code>optional .data.Image.Resolution original_size = 20;</code>
-       */
-      public Builder setOriginalSize(
-          data.ImageMessage.Image.Resolution.Builder builderForValue) {
-        if (originalSizeBuilder_ == null) {
-          originalSize_ = builderForValue.build();
-          onChanged();
-        } else {
-          originalSizeBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000200;
-        return this;
-      }
-      /**
-       * <code>optional .data.Image.Resolution original_size = 20;</code>
-       */
-      public Builder mergeOriginalSize(data.ImageMessage.Image.Resolution value) {
-        if (originalSizeBuilder_ == null) {
-          if (((bitField0_ & 0x00000200) == 0x00000200) &&
-              originalSize_ != data.ImageMessage.Image.Resolution.getDefaultInstance()) {
-            originalSize_ =
-              data.ImageMessage.Image.Resolution.newBuilder(originalSize_).mergeFrom(value).buildPartial();
-          } else {
-            originalSize_ = value;
-          }
-          onChanged();
-        } else {
-          originalSizeBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000200;
-        return this;
-      }
-      /**
-       * <code>optional .data.Image.Resolution original_size = 20;</code>
-       */
-      public Builder clearOriginalSize() {
-        if (originalSizeBuilder_ == null) {
-          originalSize_ = data.ImageMessage.Image.Resolution.getDefaultInstance();
-          onChanged();
-        } else {
-          originalSizeBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000200);
-        return this;
-      }
-      /**
-       * <code>optional .data.Image.Resolution original_size = 20;</code>
-       */
-      public data.ImageMessage.Image.Resolution.Builder getOriginalSizeBuilder() {
-        bitField0_ |= 0x00000200;
-        onChanged();
-        return getOriginalSizeFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .data.Image.Resolution original_size = 20;</code>
-       */
-      public data.ImageMessage.Image.ResolutionOrBuilder getOriginalSizeOrBuilder() {
-        if (originalSizeBuilder_ != null) {
-          return originalSizeBuilder_.getMessageOrBuilder();
-        } else {
-          return originalSize_;
-        }
-      }
-      /**
-       * <code>optional .data.Image.Resolution original_size = 20;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          data.ImageMessage.Image.Resolution, data.ImageMessage.Image.Resolution.Builder, data.ImageMessage.Image.ResolutionOrBuilder> 
-          getOriginalSizeFieldBuilder() {
-        if (originalSizeBuilder_ == null) {
-          originalSizeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              data.ImageMessage.Image.Resolution, data.ImageMessage.Image.Resolution.Builder, data.ImageMessage.Image.ResolutionOrBuilder>(
-                  originalSize_,
-                  getParentForChildren(),
-                  isClean());
-          originalSize_ = null;
-        }
-        return originalSizeBuilder_;
-      }
-
-      // optional .data.Image.GeoLocation geo_location = 21;
-      private data.ImageMessage.Image.GeoLocation geoLocation_ = data.ImageMessage.Image.GeoLocation.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          data.ImageMessage.Image.GeoLocation, data.ImageMessage.Image.GeoLocation.Builder, data.ImageMessage.Image.GeoLocationOrBuilder> geoLocationBuilder_;
-      /**
-       * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+       * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
       public boolean hasGeoLocation() {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+       * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
-      public data.ImageMessage.Image.GeoLocation getGeoLocation() {
+      public data.ImageMessage.Image.GeoPoint getGeoLocation() {
         if (geoLocationBuilder_ == null) {
           return geoLocation_;
         } else {
@@ -3130,9 +2874,9 @@ public final class ImageMessage {
         }
       }
       /**
-       * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+       * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
-      public Builder setGeoLocation(data.ImageMessage.Image.GeoLocation value) {
+      public Builder setGeoLocation(data.ImageMessage.Image.GeoPoint value) {
         if (geoLocationBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -3146,10 +2890,10 @@ public final class ImageMessage {
         return this;
       }
       /**
-       * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+       * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
       public Builder setGeoLocation(
-          data.ImageMessage.Image.GeoLocation.Builder builderForValue) {
+          data.ImageMessage.Image.GeoPoint.Builder builderForValue) {
         if (geoLocationBuilder_ == null) {
           geoLocation_ = builderForValue.build();
           onChanged();
@@ -3160,14 +2904,14 @@ public final class ImageMessage {
         return this;
       }
       /**
-       * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+       * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
-      public Builder mergeGeoLocation(data.ImageMessage.Image.GeoLocation value) {
+      public Builder mergeGeoLocation(data.ImageMessage.Image.GeoPoint value) {
         if (geoLocationBuilder_ == null) {
           if (((bitField0_ & 0x00000400) == 0x00000400) &&
-              geoLocation_ != data.ImageMessage.Image.GeoLocation.getDefaultInstance()) {
+              geoLocation_ != data.ImageMessage.Image.GeoPoint.getDefaultInstance()) {
             geoLocation_ =
-              data.ImageMessage.Image.GeoLocation.newBuilder(geoLocation_).mergeFrom(value).buildPartial();
+              data.ImageMessage.Image.GeoPoint.newBuilder(geoLocation_).mergeFrom(value).buildPartial();
           } else {
             geoLocation_ = value;
           }
@@ -3179,11 +2923,11 @@ public final class ImageMessage {
         return this;
       }
       /**
-       * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+       * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
       public Builder clearGeoLocation() {
         if (geoLocationBuilder_ == null) {
-          geoLocation_ = data.ImageMessage.Image.GeoLocation.getDefaultInstance();
+          geoLocation_ = data.ImageMessage.Image.GeoPoint.getDefaultInstance();
           onChanged();
         } else {
           geoLocationBuilder_.clear();
@@ -3192,17 +2936,17 @@ public final class ImageMessage {
         return this;
       }
       /**
-       * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+       * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
-      public data.ImageMessage.Image.GeoLocation.Builder getGeoLocationBuilder() {
+      public data.ImageMessage.Image.GeoPoint.Builder getGeoLocationBuilder() {
         bitField0_ |= 0x00000400;
         onChanged();
         return getGeoLocationFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+       * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
-      public data.ImageMessage.Image.GeoLocationOrBuilder getGeoLocationOrBuilder() {
+      public data.ImageMessage.Image.GeoPointOrBuilder getGeoLocationOrBuilder() {
         if (geoLocationBuilder_ != null) {
           return geoLocationBuilder_.getMessageOrBuilder();
         } else {
@@ -3210,14 +2954,14 @@ public final class ImageMessage {
         }
       }
       /**
-       * <code>optional .data.Image.GeoLocation geo_location = 21;</code>
+       * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
-          data.ImageMessage.Image.GeoLocation, data.ImageMessage.Image.GeoLocation.Builder, data.ImageMessage.Image.GeoLocationOrBuilder> 
+          data.ImageMessage.Image.GeoPoint, data.ImageMessage.Image.GeoPoint.Builder, data.ImageMessage.Image.GeoPointOrBuilder> 
           getGeoLocationFieldBuilder() {
         if (geoLocationBuilder_ == null) {
           geoLocationBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              data.ImageMessage.Image.GeoLocation, data.ImageMessage.Image.GeoLocation.Builder, data.ImageMessage.Image.GeoLocationOrBuilder>(
+              data.ImageMessage.Image.GeoPoint, data.ImageMessage.Image.GeoPoint.Builder, data.ImageMessage.Image.GeoPointOrBuilder>(
                   geoLocation_,
                   getParentForChildren(),
                   isClean());
@@ -3226,68 +2970,35 @@ public final class ImageMessage {
         return geoLocationBuilder_;
       }
 
-      // optional uint64 original_datetime = 22;
-      private long originalDatetime_ ;
+      // optional uint64 timestamp = 23;
+      private long timestamp_ ;
       /**
-       * <code>optional uint64 original_datetime = 22;</code>
+       * <code>optional uint64 timestamp = 23;</code>
        */
-      public boolean hasOriginalDatetime() {
+      public boolean hasTimestamp() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
-       * <code>optional uint64 original_datetime = 22;</code>
+       * <code>optional uint64 timestamp = 23;</code>
        */
-      public long getOriginalDatetime() {
-        return originalDatetime_;
+      public long getTimestamp() {
+        return timestamp_;
       }
       /**
-       * <code>optional uint64 original_datetime = 22;</code>
+       * <code>optional uint64 timestamp = 23;</code>
        */
-      public Builder setOriginalDatetime(long value) {
+      public Builder setTimestamp(long value) {
         bitField0_ |= 0x00000800;
-        originalDatetime_ = value;
+        timestamp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional uint64 original_datetime = 22;</code>
+       * <code>optional uint64 timestamp = 23;</code>
        */
-      public Builder clearOriginalDatetime() {
+      public Builder clearTimestamp() {
         bitField0_ = (bitField0_ & ~0x00000800);
-        originalDatetime_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      // optional uint64 upload_datetime = 23;
-      private long uploadDatetime_ ;
-      /**
-       * <code>optional uint64 upload_datetime = 23;</code>
-       */
-      public boolean hasUploadDatetime() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
-      }
-      /**
-       * <code>optional uint64 upload_datetime = 23;</code>
-       */
-      public long getUploadDatetime() {
-        return uploadDatetime_;
-      }
-      /**
-       * <code>optional uint64 upload_datetime = 23;</code>
-       */
-      public Builder setUploadDatetime(long value) {
-        bitField0_ |= 0x00001000;
-        uploadDatetime_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional uint64 upload_datetime = 23;</code>
-       */
-      public Builder clearUploadDatetime() {
-        bitField0_ = (bitField0_ & ~0x00001000);
-        uploadDatetime_ = 0L;
+        timestamp_ = 0L;
         onChanged();
         return this;
       }
@@ -3298,7 +3009,7 @@ public final class ImageMessage {
        * <code>optional bytes data = 255;</code>
        */
       public boolean hasData() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
        * <code>optional bytes data = 255;</code>
@@ -3313,7 +3024,7 @@ public final class ImageMessage {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00002000;
+  bitField0_ |= 0x00001000;
         data_ = value;
         onChanged();
         return this;
@@ -3322,7 +3033,7 @@ public final class ImageMessage {
        * <code>optional bytes data = 255;</code>
        */
       public Builder clearData() {
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         data_ = getDefaultInstance().getData();
         onChanged();
         return this;
@@ -3339,6 +3050,714 @@ public final class ImageMessage {
     // @@protoc_insertion_point(class_scope:data.Image)
   }
 
+  public interface ServerMessageOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required .data.ServerMessage.OperationType operation = 1;
+    /**
+     * <code>required .data.ServerMessage.OperationType operation = 1;</code>
+     */
+    boolean hasOperation();
+    /**
+     * <code>required .data.ServerMessage.OperationType operation = 1;</code>
+     */
+    data.ImageMessage.ServerMessage.OperationType getOperation();
+
+    // optional .data.Image image = 2;
+    /**
+     * <code>optional .data.Image image = 2;</code>
+     */
+    boolean hasImage();
+    /**
+     * <code>optional .data.Image image = 2;</code>
+     */
+    data.ImageMessage.Image getImage();
+    /**
+     * <code>optional .data.Image image = 2;</code>
+     */
+    data.ImageMessage.ImageOrBuilder getImageOrBuilder();
+  }
+  /**
+   * Protobuf type {@code data.ServerMessage}
+   */
+  public static final class ServerMessage extends
+      com.google.protobuf.GeneratedMessage
+      implements ServerMessageOrBuilder {
+    // Use ServerMessage.newBuilder() to construct.
+    private ServerMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private ServerMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final ServerMessage defaultInstance;
+    public static ServerMessage getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public ServerMessage getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ServerMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              data.ImageMessage.ServerMessage.OperationType value = data.ImageMessage.ServerMessage.OperationType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                operation_ = value;
+              }
+              break;
+            }
+            case 18: {
+              data.ImageMessage.Image.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = image_.toBuilder();
+              }
+              image_ = input.readMessage(data.ImageMessage.Image.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(image_);
+                image_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return data.ImageMessage.internal_static_data_ServerMessage_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return data.ImageMessage.internal_static_data_ServerMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              data.ImageMessage.ServerMessage.class, data.ImageMessage.ServerMessage.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<ServerMessage> PARSER =
+        new com.google.protobuf.AbstractParser<ServerMessage>() {
+      public ServerMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ServerMessage(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ServerMessage> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code data.ServerMessage.OperationType}
+     */
+    public enum OperationType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>ADD_IMAGE = 0;</code>
+       */
+      ADD_IMAGE(0, 0),
+      /**
+       * <code>GET_IMAGE = 1;</code>
+       */
+      GET_IMAGE(1, 1),
+      /**
+       * <code>RETURN_IMAGE = 2;</code>
+       */
+      RETURN_IMAGE(2, 2),
+      ;
+
+      /**
+       * <code>ADD_IMAGE = 0;</code>
+       */
+      public static final int ADD_IMAGE_VALUE = 0;
+      /**
+       * <code>GET_IMAGE = 1;</code>
+       */
+      public static final int GET_IMAGE_VALUE = 1;
+      /**
+       * <code>RETURN_IMAGE = 2;</code>
+       */
+      public static final int RETURN_IMAGE_VALUE = 2;
+
+
+      public final int getNumber() { return value; }
+
+      public static OperationType valueOf(int value) {
+        switch (value) {
+          case 0: return ADD_IMAGE;
+          case 1: return GET_IMAGE;
+          case 2: return RETURN_IMAGE;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<OperationType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<OperationType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<OperationType>() {
+              public OperationType findValueByNumber(int number) {
+                return OperationType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return data.ImageMessage.ServerMessage.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final OperationType[] VALUES = values();
+
+      public static OperationType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private OperationType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:data.ServerMessage.OperationType)
+    }
+
+    private int bitField0_;
+    // required .data.ServerMessage.OperationType operation = 1;
+    public static final int OPERATION_FIELD_NUMBER = 1;
+    private data.ImageMessage.ServerMessage.OperationType operation_;
+    /**
+     * <code>required .data.ServerMessage.OperationType operation = 1;</code>
+     */
+    public boolean hasOperation() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required .data.ServerMessage.OperationType operation = 1;</code>
+     */
+    public data.ImageMessage.ServerMessage.OperationType getOperation() {
+      return operation_;
+    }
+
+    // optional .data.Image image = 2;
+    public static final int IMAGE_FIELD_NUMBER = 2;
+    private data.ImageMessage.Image image_;
+    /**
+     * <code>optional .data.Image image = 2;</code>
+     */
+    public boolean hasImage() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .data.Image image = 2;</code>
+     */
+    public data.ImageMessage.Image getImage() {
+      return image_;
+    }
+    /**
+     * <code>optional .data.Image image = 2;</code>
+     */
+    public data.ImageMessage.ImageOrBuilder getImageOrBuilder() {
+      return image_;
+    }
+
+    private void initFields() {
+      operation_ = data.ImageMessage.ServerMessage.OperationType.ADD_IMAGE;
+      image_ = data.ImageMessage.Image.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasOperation()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (hasImage()) {
+        if (!getImage().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeEnum(1, operation_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeMessage(2, image_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, operation_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, image_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static data.ImageMessage.ServerMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static data.ImageMessage.ServerMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static data.ImageMessage.ServerMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static data.ImageMessage.ServerMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static data.ImageMessage.ServerMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static data.ImageMessage.ServerMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static data.ImageMessage.ServerMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static data.ImageMessage.ServerMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static data.ImageMessage.ServerMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static data.ImageMessage.ServerMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(data.ImageMessage.ServerMessage prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code data.ServerMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements data.ImageMessage.ServerMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return data.ImageMessage.internal_static_data_ServerMessage_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return data.ImageMessage.internal_static_data_ServerMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                data.ImageMessage.ServerMessage.class, data.ImageMessage.ServerMessage.Builder.class);
+      }
+
+      // Construct using data.ImageMessage.ServerMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getImageFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        operation_ = data.ImageMessage.ServerMessage.OperationType.ADD_IMAGE;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        if (imageBuilder_ == null) {
+          image_ = data.ImageMessage.Image.getDefaultInstance();
+        } else {
+          imageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return data.ImageMessage.internal_static_data_ServerMessage_descriptor;
+      }
+
+      public data.ImageMessage.ServerMessage getDefaultInstanceForType() {
+        return data.ImageMessage.ServerMessage.getDefaultInstance();
+      }
+
+      public data.ImageMessage.ServerMessage build() {
+        data.ImageMessage.ServerMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public data.ImageMessage.ServerMessage buildPartial() {
+        data.ImageMessage.ServerMessage result = new data.ImageMessage.ServerMessage(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.operation_ = operation_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        if (imageBuilder_ == null) {
+          result.image_ = image_;
+        } else {
+          result.image_ = imageBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof data.ImageMessage.ServerMessage) {
+          return mergeFrom((data.ImageMessage.ServerMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(data.ImageMessage.ServerMessage other) {
+        if (other == data.ImageMessage.ServerMessage.getDefaultInstance()) return this;
+        if (other.hasOperation()) {
+          setOperation(other.getOperation());
+        }
+        if (other.hasImage()) {
+          mergeImage(other.getImage());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasOperation()) {
+          
+          return false;
+        }
+        if (hasImage()) {
+          if (!getImage().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        data.ImageMessage.ServerMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (data.ImageMessage.ServerMessage) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required .data.ServerMessage.OperationType operation = 1;
+      private data.ImageMessage.ServerMessage.OperationType operation_ = data.ImageMessage.ServerMessage.OperationType.ADD_IMAGE;
+      /**
+       * <code>required .data.ServerMessage.OperationType operation = 1;</code>
+       */
+      public boolean hasOperation() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .data.ServerMessage.OperationType operation = 1;</code>
+       */
+      public data.ImageMessage.ServerMessage.OperationType getOperation() {
+        return operation_;
+      }
+      /**
+       * <code>required .data.ServerMessage.OperationType operation = 1;</code>
+       */
+      public Builder setOperation(data.ImageMessage.ServerMessage.OperationType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        operation_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .data.ServerMessage.OperationType operation = 1;</code>
+       */
+      public Builder clearOperation() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        operation_ = data.ImageMessage.ServerMessage.OperationType.ADD_IMAGE;
+        onChanged();
+        return this;
+      }
+
+      // optional .data.Image image = 2;
+      private data.ImageMessage.Image image_ = data.ImageMessage.Image.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          data.ImageMessage.Image, data.ImageMessage.Image.Builder, data.ImageMessage.ImageOrBuilder> imageBuilder_;
+      /**
+       * <code>optional .data.Image image = 2;</code>
+       */
+      public boolean hasImage() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional .data.Image image = 2;</code>
+       */
+      public data.ImageMessage.Image getImage() {
+        if (imageBuilder_ == null) {
+          return image_;
+        } else {
+          return imageBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .data.Image image = 2;</code>
+       */
+      public Builder setImage(data.ImageMessage.Image value) {
+        if (imageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          image_ = value;
+          onChanged();
+        } else {
+          imageBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>optional .data.Image image = 2;</code>
+       */
+      public Builder setImage(
+          data.ImageMessage.Image.Builder builderForValue) {
+        if (imageBuilder_ == null) {
+          image_ = builderForValue.build();
+          onChanged();
+        } else {
+          imageBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>optional .data.Image image = 2;</code>
+       */
+      public Builder mergeImage(data.ImageMessage.Image value) {
+        if (imageBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002) &&
+              image_ != data.ImageMessage.Image.getDefaultInstance()) {
+            image_ =
+              data.ImageMessage.Image.newBuilder(image_).mergeFrom(value).buildPartial();
+          } else {
+            image_ = value;
+          }
+          onChanged();
+        } else {
+          imageBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>optional .data.Image image = 2;</code>
+       */
+      public Builder clearImage() {
+        if (imageBuilder_ == null) {
+          image_ = data.ImageMessage.Image.getDefaultInstance();
+          onChanged();
+        } else {
+          imageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+      /**
+       * <code>optional .data.Image image = 2;</code>
+       */
+      public data.ImageMessage.Image.Builder getImageBuilder() {
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return getImageFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .data.Image image = 2;</code>
+       */
+      public data.ImageMessage.ImageOrBuilder getImageOrBuilder() {
+        if (imageBuilder_ != null) {
+          return imageBuilder_.getMessageOrBuilder();
+        } else {
+          return image_;
+        }
+      }
+      /**
+       * <code>optional .data.Image image = 2;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          data.ImageMessage.Image, data.ImageMessage.Image.Builder, data.ImageMessage.ImageOrBuilder> 
+          getImageFieldBuilder() {
+        if (imageBuilder_ == null) {
+          imageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              data.ImageMessage.Image, data.ImageMessage.Image.Builder, data.ImageMessage.ImageOrBuilder>(
+                  image_,
+                  getParentForChildren(),
+                  isClean());
+          image_ = null;
+        }
+        return imageBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:data.ServerMessage)
+    }
+
+    static {
+      defaultInstance = new ServerMessage(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:data.ServerMessage)
+  }
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_data_Image_descriptor;
   private static
@@ -3350,10 +3769,15 @@ public final class ImageMessage {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_data_Image_Resolution_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_data_Image_GeoLocation_descriptor;
+    internal_static_data_Image_GeoPoint_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_data_Image_GeoLocation_fieldAccessorTable;
+      internal_static_data_Image_GeoPoint_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_data_ServerMessage_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_data_ServerMessage_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -3363,18 +3787,20 @@ public final class ImageMessage {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013image.proto\022\004data\"\253\003\n\005Image\022\n\n\002id\030\001 \002(" +
+      "\n\013image.proto\022\004data\"\331\002\n\005Image\022\n\n\002id\030\001 \002(" +
       "\t\022\017\n\007node_id\030\002 \002(\r\022\017\n\007user_id\030\003 \002(\t\022\014\n\004n" +
-      "ame\030\n \002(\t\022\014\n\004mime\030\013 \002(\t\022\014\n\004desc\030\014 \002(\t\022\016\n" +
-      "\006length\030\r \002(\004\022\020\n\010datetime\030\016 \002(\004\022$\n\004size\030" +
-      "\017 \002(\0132\026.data.Image.Resolution\022-\n\rorigina" +
-      "l_size\030\024 \001(\0132\026.data.Image.Resolution\022-\n\014" +
-      "geo_location\030\025 \001(\0132\027.data.Image.GeoLocat" +
-      "ion\022\031\n\021original_datetime\030\026 \001(\004\022\027\n\017upload" +
-      "_datetime\030\027 \001(\004\022\r\n\004data\030\377\001 \001(\014\032+\n\nResolu" +
-      "tion\022\r\n\005width\030\001 \002(\r\022\016\n\006height\030\002 \002(\r\0324\n\013G",
-      "eoLocation\022\013\n\003lat\030\001 \002(\001\022\013\n\003lng\030\002 \002(\001\022\013\n\003" +
-      "alt\030\004 \001(\001B\020B\014ImageMessageH\001"
+      "ame\030\n \002(\t\022\014\n\004mime\030\013 \002(\t\022\016\n\006length\030\014 \002(\004\022" +
+      "\017\n\007created\030\022 \002(\004\022\020\n\010modified\030\023 \002(\004\022\014\n\004de" +
+      "sc\030\024 \001(\t\022$\n\004size\030\025 \001(\0132\026.data.Image.Reso" +
+      "lution\022*\n\014geo_location\030\026 \001(\0132\024.data.Imag" +
+      "e.GeoPoint\022\021\n\ttimestamp\030\027 \001(\004\022\r\n\004data\030\377\001" +
+      " \001(\014\032+\n\nResolution\022\r\n\005width\030\001 \002(\r\022\016\n\006hei" +
+      "ght\030\002 \002(\r\032$\n\010GeoPoint\022\013\n\003lat\030\001 \002(\001\022\013\n\003ln" +
+      "g\030\002 \002(\001\"\242\001\n\rServerMessage\0224\n\toperation\030\001",
+      " \002(\0162!.data.ServerMessage.OperationType\022" +
+      "\032\n\005image\030\002 \001(\0132\013.data.Image\"?\n\rOperation" +
+      "Type\022\r\n\tADD_IMAGE\020\000\022\r\n\tGET_IMAGE\020\001\022\020\n\014RE" +
+      "TURN_IMAGE\020\002B\026\n\004dataB\014ImageMessageH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3386,19 +3812,25 @@ public final class ImageMessage {
           internal_static_data_Image_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_data_Image_descriptor,
-              new java.lang.String[] { "Id", "NodeId", "UserId", "Name", "Mime", "Desc", "Length", "Datetime", "Size", "OriginalSize", "GeoLocation", "OriginalDatetime", "UploadDatetime", "Data", });
+              new java.lang.String[] { "Id", "NodeId", "UserId", "Name", "Mime", "Length", "Created", "Modified", "Desc", "Size", "GeoLocation", "Timestamp", "Data", });
           internal_static_data_Image_Resolution_descriptor =
             internal_static_data_Image_descriptor.getNestedTypes().get(0);
           internal_static_data_Image_Resolution_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_data_Image_Resolution_descriptor,
               new java.lang.String[] { "Width", "Height", });
-          internal_static_data_Image_GeoLocation_descriptor =
+          internal_static_data_Image_GeoPoint_descriptor =
             internal_static_data_Image_descriptor.getNestedTypes().get(1);
-          internal_static_data_Image_GeoLocation_fieldAccessorTable = new
+          internal_static_data_Image_GeoPoint_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_data_Image_GeoLocation_descriptor,
-              new java.lang.String[] { "Lat", "Lng", "Alt", });
+              internal_static_data_Image_GeoPoint_descriptor,
+              new java.lang.String[] { "Lat", "Lng", });
+          internal_static_data_ServerMessage_descriptor =
+            getDescriptor().getMessageTypes().get(1);
+          internal_static_data_ServerMessage_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_data_ServerMessage_descriptor,
+              new java.lang.String[] { "Operation", "Image", });
           return null;
         }
       };
