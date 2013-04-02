@@ -1,16 +1,23 @@
 package client;
 
+import com.google.common.net.MediaType;
+import com.google.protobuf.ByteString;
+import data.ImageMessage;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.*;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
+import org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder;
+import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
+import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
+import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetSocketAddress;
+import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 
 public class Client {
@@ -23,7 +30,19 @@ public class Client {
 		clientBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 			@Override
 			public ChannelPipeline getPipeline() throws Exception {
-				return Channels.pipeline(new ClientHandler());
+				ChannelPipeline channelPipeline = Channels.pipeline();
+
+				// Decoders
+				channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
+				channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ImageMessage.Image.getDefaultInstance()));
+
+				// Encoder
+				channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
+				channelPipeline.addLast("protobufEncoder", new ProtobufEncoder());
+
+				channelPipeline.addLast("ServerHandler", new ClientHandler());
+
+				return channelPipeline;
 			}
 		});
 		clientBootstrap.setOption("tcpNoDelay", true);
@@ -38,7 +57,7 @@ public class Client {
 			channelFuture.addListener(new ChannelFutureListener() {
 				@Override
 				public void operationComplete(ChannelFuture future) throws Exception {
-					System.out.println();
+					System.out.println("Connect operation completed.");
 				}
 			});
 
@@ -48,7 +67,7 @@ public class Client {
 				Throwable cause = channelFuture.getCause();
 
 				if (cause instanceof ConnectException) {
-					int delayedSeconds = 5;
+					int delayedSeconds = 1;
 					System.out.println("Connection failed. Retry after " + delayedSeconds + " seconds");
 
 					try {
@@ -79,9 +98,9 @@ class ClientHandler extends SimpleChannelHandler {
 
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-		Channel channel = e.getChannel();
+		System.out.println("Channel connected.");
 
-		System.out.println("Connected to server");
+		Channel channel = e.getChannel();
 
 		File file = new File("Meow.jpg");
 
@@ -90,22 +109,33 @@ class ClientHandler extends SimpleChannelHandler {
 			return;
 		}
 
-		try {
-			FileInputStream fileInputStream = new FileInputStream(file);
-			ChannelBuffer channelBuffer = ChannelBuffers.dynamicBuffer();
-			channelBuffer.writeBytes(fileInputStream, (int) file.length());
-			fileInputStream.close();
+		FileInputStream fileInputStream = new FileInputStream(file);
+		ByteString imageBytes = ByteString.readFrom(fileInputStream);
 
-			ChannelFuture channelFuture = channel.write(channelBuffer);
-			channelFuture.addListener(new ChannelFutureListener() {
-				@Override
-				public void operationComplete(ChannelFuture future) throws Exception {
-					System.out.println("The image has been sent.");
-				}
-			});
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+		ImageMessage.Image.Builder builder = ImageMessage.Image.newBuilder();
+		ImageMessage.Image image = builder
+				.setName("Test image")
+				.setId(UUID.randomUUID().toString())
+				.setNodeId(1)
+				.setUserId(UUID.randomUUID().toString())
+				.setMime(MediaType.ANY_IMAGE_TYPE.toString())
+				.setLength(file.length())
+				.setData(imageBytes)
+				.setCreated(new Date().getTime())
+				.setModified(new Date().getTime())
+				.build();
+
+		fileInputStream.close();
+
+		ChannelFuture channelFuture = channel.write(image);
+		channelFuture.addListener(new ChannelFutureListener() {
+			@Override
+			public void operationComplete(ChannelFuture future) throws Exception {
+				System.out.println("Send operation is completed.");
+				System.out.println("Successful: " + future.isSuccess());
+				future.getChannel().close();
+			}
+		});
 	}
 
 	@Override
@@ -115,7 +145,7 @@ class ClientHandler extends SimpleChannelHandler {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		while (channelBuffer.readable()) {
-			stringBuilder.append((char)channelBuffer.readByte());
+			stringBuilder.append((char) channelBuffer.readByte());
 		}
 
 		System.out.println("Message received from server: " + stringBuilder.toString());
@@ -125,7 +155,14 @@ class ClientHandler extends SimpleChannelHandler {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+		Throwable cause = e.getCause();
+
+		if (cause instanceof ConnectException) {
+			return;
+		}
+
 		System.out.println("Unepected exception occured in client handler.");
+
 		e.getCause().printStackTrace();
 		e.getChannel().close();
 	}

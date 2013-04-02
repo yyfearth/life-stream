@@ -1,10 +1,15 @@
 package server;
 
+import data.ImageMessage;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.*;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+import org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder;
+import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
+import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
+import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -19,7 +24,19 @@ public class Server {
 		serverBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 			@Override
 			public ChannelPipeline getPipeline() throws Exception {
-				return Channels.pipeline(new ServerHandler());
+				ChannelPipeline channelPipeline = Channels.pipeline();
+
+				// Decoders
+				channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
+				channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ImageMessage.Image.getDefaultInstance()));
+
+				// Encoder
+				channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
+				channelPipeline.addLast("protobufEncoder", new ProtobufEncoder());
+
+				channelPipeline.addLast("ServerHandler", new ServerHandler());
+
+				return channelPipeline;
 			}
 		});
 
@@ -62,31 +79,34 @@ class ServerHandler extends SimpleChannelHandler {
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-		ChannelBuffer inChannelBuffer = (ChannelBuffer) e.getMessage();
 
-		byte[] buffer = new byte[8192];
+		ImageMessage.Image image = (ImageMessage.Image) e.getMessage();
 
-		while (inChannelBuffer.readable()) {
-			System.out.println("Readable bytes: " + inChannelBuffer.readableBytes());
+		System.out.println(image.toString());
 
-			int numReadBytes = Math.min(buffer.length, inChannelBuffer.readableBytes());
-			inChannelBuffer.readBytes(buffer, 0, numReadBytes);
-			count += numReadBytes;
-		}
-
-		System.out.println(count + " bytes received");
+//		byte[] buffer = new byte[8192];
+//
+//		while (inChannelBuffer.readable()) {
+//			System.out.println("Readable bytes: " + inChannelBuffer.readableBytes());
+//
+//			int numReadBytes = Math.min(buffer.length, inChannelBuffer.readableBytes());
+//			inChannelBuffer.readBytes(buffer, 0, numReadBytes);
+//			count += numReadBytes;
+//		}
+//
+//		System.out.println(count + " bytes received");
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-		System.out.println("Unepected exception occured in server handler.");
-
 		Throwable cause = e.getCause();
 
 		if (cause instanceof IOException) {
 			System.out.println(ctx.getChannel().getRemoteAddress() + " is disconnected");
 			return;
 		}
+
+		System.out.println("Unepected exception occured in server handler.");
 
 		cause.printStackTrace();
 		e.getChannel().close();
