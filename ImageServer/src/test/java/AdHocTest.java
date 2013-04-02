@@ -1,6 +1,7 @@
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import server.ConnectionMonitor;
+import server.DistributedNode;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,7 +47,7 @@ public class AdHocTest {
 	}
 
 	@Test
-	public void testThread() throws Exception {
+	public void testMultipleMonitors() throws Exception {
 		ConnectionMonitor[] connectionMonitor = new ConnectionMonitor[3];
 		Thread[] threads = new Thread[connectionMonitor.length];
 
@@ -72,31 +73,27 @@ public class AdHocTest {
 			connectionMonitor[i].stop();
 		}
 	}
-}
 
-//class MockedMonitor extends ConnectionMonitor {
-//	@Override
-//	public void run() {
-//
-//		try {
-//			System.out.println("Monitor is started");
-//			connnect(new InetSocketAddress("localhost", 8080));
-//
-//			while (isStopping() == false) {
-//				Thread.sleep(100);
-//			}
-//
-//			disconnect();
-//			System.out.println("Monitor is stopped");
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//}
-//
-//class MockedMonitorHandler extends MonitorHandler {
-//	@Override
-//	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-//		super.messageReceived(ctx, e);
-//	}
-//}
+	@Test
+	public void testMultipleNodes() throws Exception {
+
+		Thread[] threads = new Thread[3];
+		DistributedNode[] distributedNodes = new DistributedNode[threads.length];
+
+		for (int i = 0; i < threads.length; i++) {
+			distributedNodes[i] = new DistributedNode(i);
+
+			Thread thread = new Thread(distributedNodes[i]);
+			thread.setName("Distribute node");
+			thread.start();
+		}
+
+		System.out.println("After 5 seconds, stop one thread earch 5 seconds.");
+		Thread.sleep(2000);
+
+		for (int i = 0; i < threads.length; i++) {
+			distributedNodes[i].stop();
+			Thread.sleep(5000);
+		}
+	}
+}

@@ -2,7 +2,10 @@ package server;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.channel.*;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelFactory;
+import org.jboss.netty.channel.ChannelFuture;
+import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
@@ -15,13 +18,24 @@ import java.util.concurrent.Executors;
 public class DistributedNode extends BasicThread {
 
 	public static void main(String[] args) throws InterruptedException {
-		DistributedNode distributedNode = new DistributedNode(0);
-		Thread thread = new Thread(distributedNode);
-		thread.start();
+		Thread[] threads = new Thread[3];
+		DistributedNode[] distributedNodes = new DistributedNode[threads.length];
 
-		System.out.println("Stop thread in 5 seconds.");
-		Thread.sleep(5000);
-		thread.interrupt();
+		for (int i = 0; i < threads.length; i++) {
+			distributedNodes[i] = new DistributedNode(i);
+
+			Thread thread = new Thread(distributedNodes[i]);
+			thread.setName("Distribute node");
+			thread.start();
+		}
+
+		System.out.println("After 5 seconds, stop one thread earch 5 seconds.");
+		Thread.sleep(2000);
+
+		for (int i = 0; i < threads.length; i++) {
+			Thread.sleep(10000);
+			distributedNodes[i].stop();
+		}
 	}
 
 	ServerBootstrap serverBootstrap;
@@ -39,8 +53,6 @@ public class DistributedNode extends BasicThread {
 
 	public DistributedNode(int nodeId) {
 		this.nodeId = nodeId;
-
-		configueBootstrap();
 	}
 
 	void configueBootstrap() {
@@ -63,24 +75,29 @@ public class DistributedNode extends BasicThread {
 	}
 
 	void connect() {
+		configueBootstrap();
 
-		int bindingPort = 8000 + nodeId;
-		System.out.println("Binding port " + bindingPort);
+		int bindingPort = 8090 + nodeId;
 		bindingChannel = serverBootstrap.bind(new InetSocketAddress(bindingPort));
 
-		InetSocketAddress[] otherNodeAddresses = generateOtherAddress(8000);
+		System.out.println("Node " + nodeId + " is binding port " + bindingPort);
+
+		InetSocketAddress[] otherNodeAddresses = generateOtherAddresses(8090);
 
 		connectorChannels = new Channel[otherNodeAddresses.length];
 
 		for (int i = 0; i < otherNodeAddresses.length; i++) {
-			InetSocketAddress inetSocketAddress = otherNodeAddresses[i];
-			ChannelFuture channelFuture = clientBootstrap.connect(inetSocketAddress);
+			InetSocketAddress otherNodeAddress = otherNodeAddresses[i];
+			ChannelFuture channelFuture = clientBootstrap.connect(otherNodeAddress);
+
+			System.out.println("Node " + nodeId + " is connecting to " + otherNodeAddress);
+
 			channelFuture.addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
 
 			channelFuture.awaitUninterruptibly();
 
 			if (channelFuture.isSuccess() == false) {
-				System.out.println("Fail to connect " + inetSocketAddress.toString());
+				System.out.println("Node " + nodeId + ": Fail to connect " + otherNodeAddress.toString());
 				continue;
 			}
 
@@ -89,37 +106,52 @@ public class DistributedNode extends BasicThread {
 	}
 
 	void disconnect() {
+
+		if (bindingChannel.isConnected()) {
+			bindingChannel.close().awaitUninterruptibly();
+		}
+
+		for (Channel c : connectorChannels) {
+			if (c != null && c.isConnected()) {
+				c.close().awaitUninterruptibly();
+			}
+		}
+
+		serverChannelFactory.releaseExternalResources();
+		clientChannelFactory.releaseExternalResources();
 	}
 
 	public void stop() {
 		isStopping = true;
 	}
 
-	InetSocketAddress[] generateOtherAddress(int basePort) {
-		InetSocketAddress[] inetSocketAddresses = new InetSocketAddress[2];
+	InetSocketAddress[] generateOtherAddresses(int basePort) {
+		InetSocketAddress[] otherAddresses = new InetSocketAddress[2];
 
-		int neighborNodeId = 0;
+		int addressIndex = 0;
 
-		for (int i = 0; i < inetSocketAddresses.length + 1; i++) {
+		for (int i = 0; i < otherAddresses.length + 1; i++) {
 			if (i != nodeId) {
-				inetSocketAddresses[i] = new InetSocketAddress("localhsot", basePort + i);
+				otherAddresses[addressIndex++] = new InetSocketAddress("localhost", basePort + i);
 			}
 		}
 
-		return inetSocketAddresses;
+		return otherAddresses;
 	}
 
 	Thread monitorThread;
+	ConnectionMonitor connectionMonitor;
 
 	@Override
 	public void run() {
-		ConnectionMonitor connectionMonitor = new ConnectionMonitor(8080 + nodeId, generateOtherAddress(8080));
+		connectionMonitor = new ConnectionMonitor(8080 + nodeId, generateOtherAddresses(8080));
 
 		monitorThread = new Thread(connectionMonitor);
 		monitorThread.setPriority(Thread.MIN_PRIORITY);
 		monitorThread.start();
 
 		connect();
+		System.out.println("Node " + nodeId + " is connected");
 
 		while (isStopping == false) {
 			try {
@@ -129,17 +161,12 @@ public class DistributedNode extends BasicThread {
 			}
 		}
 
+		if (connectionMonitor != null && connectionMonitor.isStopping == false) {
+			connectionMonitor.stop();
+		}
+
 		disconnect();
-
-		connectionMonitor.stop();
-
-		if (bindingChannel.isConnected()) {
-			bindingChannel.close().awaitUninterruptibly();
-		}
-
-		for (Channel c : connectorChannels) {
-			c.close().awaitUninterruptibly();
-		}
+		System.out.println("Node " + nodeId + " is disconnnected");
 	}
 }
 

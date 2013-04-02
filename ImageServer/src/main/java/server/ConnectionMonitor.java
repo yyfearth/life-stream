@@ -25,15 +25,12 @@ public class ConnectionMonitor extends BasicThread {
 	public ConnectionMonitor(int bindingPort, InetSocketAddress[] listeningAddresses) {
 		this.bindingPort = bindingPort;
 		this.listeningAddresses = listeningAddresses;
-
-		configueBootstrap();
 	}
 
 	@Override
 	public void run() {
 
 		try {
-			System.out.println("Monitor is started");
 			connnect();
 
 			while (isStopping == false) {
@@ -41,7 +38,6 @@ public class ConnectionMonitor extends BasicThread {
 			}
 
 			disconnect();
-			System.out.println("Monitor is stopped");
 		} catch (InterruptedException | ChannelException ex) {
 			ex.printStackTrace();
 		}
@@ -71,7 +67,9 @@ public class ConnectionMonitor extends BasicThread {
 
 	public void connnect() {
 
-		System.out.println("Binding " + bindingPort);
+		configueBootstrap();
+
+//		System.out.println("Binding " + bindingPort);
 		bindingChannel = serverBootstrap.bind(new InetSocketAddress(bindingPort));
 		connectorChannels = new Channel[listeningAddresses.length];
 
@@ -98,6 +96,7 @@ public class ConnectionMonitor extends BasicThread {
 			}
 		}
 
+		serverBootstrap.releaseExternalResources();
 		clientChannelFactory.releaseExternalResources();
 	}
 }

@@ -13,25 +13,31 @@ public class NodeChannelHandler extends SimpleChannelHandler {
 
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-		System.out.println("This: " + e.getChannel().getLocalAddress() + " Remote: " + e.getChannel().getRemoteAddress());
-		System.out.println("Channel connected.");
+//		System.out.println("This: " + e.getChannel().getLocalAddress() + " Remote: " + e.getChannel().getRemoteAddress());
+//		System.out.println("Channel connected.");
+	}
+
+	@Override
+	public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+//		System.out.println("This: " + e.getChannel().getLocalAddress() + " Remote: "  + e.getChannel().getRemoteAddress());
+//		System.out.println("Channel disconnected.");
 	}
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-		System.out.println("This: " + e.getChannel().getLocalAddress() + " Remote: " + e.getChannel().getRemoteAddress());
-		ImageMessage.ServerMessage serverMessage = (ImageMessage.ServerMessage) e.getMessage();
+//		System.out.println("This: " + e.getChannel().getLocalAddress() + " Remote: " + e.getChannel().getRemoteAddress());
+//		ImageMessage.ServerMessage serverMessage = (ImageMessage.ServerMessage) e.getMessage();
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-		System.out.println("This: " + e.getChannel().getLocalAddress() + " Remote: " + e.getChannel().getRemoteAddress());
 		Throwable cause = e.getCause();
 
 		if (cause instanceof ConnectException) {
 			return;
 		}
 
+		System.out.println("This: " + e.getChannel().getLocalAddress() + " Remote: " + e.getChannel().getRemoteAddress());
 		System.out.println("Unepected exception occured in client handler.");
 
 		e.getCause().printStackTrace();
