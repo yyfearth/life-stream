@@ -1,35 +1,59 @@
 package bean;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Leo
- * Date: 3/4/13
- * Time: 3:28 PM
- * To change this template use File | Settings | File Templates.
- */
-@javax.persistence.Table(name = "user", schema = "public", catalog = "lifestream")
+import javax.persistence.*;
+import java.util.Date;
+import java.util.UUID;
+
+@Table(name = "user", schema = "public", catalog = "lifestream")
 @Entity
 public class UserEntity {
-	private int id;
+
+	public UserEntity(UUID id) {
+		setId(id);
+		setCreatedDateTime(DateTime.now());
+		setModifiedDateTime(DateTime.now());
+	}
+
+	public UserEntity() {
+		this(UUID.randomUUID());
+	}
+
+	@Id
+	@Column(name = "id", unique = true, nullable = false)
+	@Type(type = "pg-uuid")
+	private UUID id;
+
+	@Column(name = "username", nullable = false)
+	@Basic
 	private String username;
+
+	@Column(name = "email", unique = true, nullable = false)
+	@Basic
 	private String email;
+
+	@Column(name = "password", nullable = false)
+	@Basic
 	private String password;
 
-	@javax.persistence.Id
-	@javax.persistence.Column(name = "id")
-	public int getId() {
+	@Column(name = "created_ts", nullable = false)
+	@Basic
+	private Date createdTimestamp;
+
+	@Column(name = "modified_ts", nullable = false)
+	@Basic
+	private Date modifiedTimestamp;
+
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
-	@javax.persistence.Column(name = "username")
-	@Basic
 	public String getUsername() {
 		return username;
 	}
@@ -38,8 +62,6 @@ public class UserEntity {
 		this.username = username;
 	}
 
-	@javax.persistence.Column(name = "email")
-	@Basic
 	public String getEmail() {
 		return email;
 	}
@@ -48,14 +70,28 @@ public class UserEntity {
 		this.email = email;
 	}
 
-	@javax.persistence.Column(name = "password")
-	@Basic
 	public String getPassword() {
 		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public DateTime getCreatedDateTime() {
+		return new DateTime(createdTimestamp);
+	}
+
+	public void setCreatedDateTime(DateTime createdTimestamp) {
+		this.createdTimestamp = createdTimestamp.toDate();
+	}
+
+	public DateTime getModifiedDateTime() {
+		return new DateTime(modifiedTimestamp);
+	}
+
+	public void setModifiedDateTime(DateTime modifiedTimestamp) {
+		this.modifiedTimestamp = modifiedTimestamp.toDate();
 	}
 
 	@Override
@@ -65,20 +101,36 @@ public class UserEntity {
 
 		UserEntity that = (UserEntity) o;
 
-		if (id != that.id) return false;
-		if (email != null ? !email.equals(that.email) : that.email != null) return false;
-		if (password != null ? !password.equals(that.password) : that.password != null) return false;
-		if (username != null ? !username.equals(that.username) : that.username != null) return false;
+		if (!createdTimestamp.equals(that.createdTimestamp)) return false;
+		if (!email.equals(that.email)) return false;
+		if (!id.equals(that.id)) return false;
+		if (!modifiedTimestamp.equals(that.modifiedTimestamp)) return false;
+		if (!password.equals(that.password)) return false;
+		if (!username.equals(that.username)) return false;
 
 		return true;
 	}
 
 	@Override
 	public int hashCode() {
-		int result = id;
-		result = 31 * result + (username != null ? username.hashCode() : 0);
-		result = 31 * result + (email != null ? email.hashCode() : 0);
-		result = 31 * result + (password != null ? password.hashCode() : 0);
+		int result = id.hashCode();
+		result = 31 * result + username.hashCode();
+		result = 31 * result + email.hashCode();
+		result = 31 * result + password.hashCode();
+		result = 31 * result + createdTimestamp.hashCode();
+		result = 31 * result + modifiedTimestamp.hashCode();
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "UserEntity{" +
+				"id=" + id +
+				", username='" + username + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", createdTimestamp=" + createdTimestamp +
+				", modifiedTimestamp=" + modifiedTimestamp +
+				'}';
 	}
 }

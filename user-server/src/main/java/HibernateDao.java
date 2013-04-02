@@ -10,11 +10,28 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
 
 public abstract class HibernateDao {
+	protected static Configuration conf;
+	protected static SessionFactory sessionFactory;
 	protected Session session = null;
 	protected Transaction transaction = null;
-	protected SessionFactory sessionFactory = null;
+
+	{
+		try {
+			conf = new Configuration();
+			conf.addResource("hibernate.cfg.xml");
+			conf.configure();
+
+			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(conf.getProperties()).buildServiceRegistry();
+			sessionFactory = conf.buildSessionFactory(serviceRegistry);
+		} catch (HibernateException ex) {
+			System.out.println("Hibernate exception during start.");
+		}
+	}
 
 	public Session getSession() {
 		return session;
