@@ -7,7 +7,7 @@
 *.ear
 
 ########## Intellij ##########
-*.iml
+# *.iml
 *.ipr
 *.iws
 .idea/
