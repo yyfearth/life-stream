@@ -120,8 +120,6 @@ class ClientHandler extends SimpleChannelHandler {
 		ImageMessage.Image image = builder
 				.setName("Test image")
 				.setId(UUID.randomUUID().toString())
-				.setNodeId(1)
-				.setUserId(UUID.randomUUID().toString())
 				.setMime(MediaType.ANY_IMAGE_TYPE.toString())
 				.setLength(file.length())
 				.setData(imageBytes)

@@ -10,17 +10,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class ConnectionMonitor implements Runnable {
-
-	public boolean isStopping() {
-		return isStopping;
-	}
-
-	public void setStopping(boolean stopping) {
-		isStopping = stopping;
-	}
-
-	boolean isStopping = false;
+public class ConnectionMonitor extends BasicThread {
 
 	int bindingPort;
 	InetSocketAddress[] listeningAddresses;
@@ -39,6 +29,24 @@ public class ConnectionMonitor implements Runnable {
 		configueBootstrap();
 	}
 
+	@Override
+	public void run() {
+
+		try {
+			System.out.println("Monitor is started");
+			connnect();
+
+			while (isStopping == false) {
+				Thread.sleep(100);
+			}
+
+			disconnect();
+			System.out.println("Monitor is stopped");
+		} catch (InterruptedException | ChannelException ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	void configueBootstrap() {
 		Executor bossPool = Executors.newCachedThreadPool();
 		Executor workerPool = Executors.newCachedThreadPool();
@@ -55,26 +63,6 @@ public class ConnectionMonitor implements Runnable {
 		serverBootstrap.setPipelineFactory(new MonitorPipelineFactory());
 		serverBootstrap.setOption("child.tcpNoDelay", true);
 		serverBootstrap.setOption("child.keepAlive", true);
-	}
-
-	@Override
-	public void run() {
-
-		try {
-			System.out.println("Monitor is started");
-			connnect();
-
-			while (isStopping == false) {
-				Thread.sleep(100);
-			}
-
-			disconnect();
-			System.out.println("Monitor is stopped");
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ChannelException ex) {
-			ex.printStackTrace();
-		}
 	}
 
 	public void stop() {
@@ -104,11 +92,9 @@ public class ConnectionMonitor implements Runnable {
 
 	public void disconnect() {
 
-		for (int i = 0; i < connectorChannels.length; i++) {
-			Channel channel = connectorChannels[i];
-
+		for (Channel channel : connectorChannels) {
 			if (channel.isConnected()) {
-				connectorChannels[i].close().awaitUninterruptibly();
+				channel.close().awaitUninterruptibly();
 			}
 		}
 
