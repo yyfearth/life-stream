@@ -35,3 +35,14 @@ message Image {
     }
 
 }
+
+message ServerMessage {
+	enum OperationType {
+		ADD_IMAGE = 0;
+		GET_IMAGE = 1;
+		RETURN_IMAGE = 2;
+	}
+	
+	required OperationType operation = 1;
+	optional Image image = 2;
+}
