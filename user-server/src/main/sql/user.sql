@@ -23,7 +23,7 @@ CREATE TABLE "user" (
   "id"          UUID         NOT NULL PRIMARY KEY,
   "username"    VARCHAR(256) NOT NULL,
   "email"       VARCHAR(256) NOT NULL UNIQUE,
-  "password"    VARCHAR(64)  NOT NULL,
+  "password"    CHAR(64)     NOT NULL,
   "created_ts"  TIMESTAMP(6) NOT NULL,
   "modified_ts" TIMESTAMP(6) NOT NULL
 )
