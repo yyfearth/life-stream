@@ -1,4 +1,4 @@
-package bean;
+package lifestream.user.bean;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;

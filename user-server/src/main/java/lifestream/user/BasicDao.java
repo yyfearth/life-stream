@@ -1,4 +1,4 @@
-/**
+package lifestream.user; /**
  * Created with IntelliJ IDEA.
  * User: Leo
  * Date: 4/2/13
@@ -14,7 +14,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
-public abstract class HibernateDao {
+public abstract class BasicDao {
 	protected static Configuration conf;
 	protected static SessionFactory sessionFactory;
 	protected Session session = null;

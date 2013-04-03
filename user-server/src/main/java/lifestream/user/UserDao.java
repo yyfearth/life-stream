@@ -1,4 +1,4 @@
-/**
+package lifestream.user; /**
  * Created with IntelliJ IDEA.
  * User: Leo
  * Date: 4/1/13
@@ -6,12 +6,12 @@
  * To change this template use File | Settings | File Templates.
  */
 
-import bean.UserEntity;
+import lifestream.user.bean.UserEntity;
 import org.hibernate.HibernateException;
 
 import java.util.UUID;
 
-public class UserDao extends HibernateDao {
+public class UserDao extends BasicDao {
 
 	public void create(UUID id, String username, String password, String email) {
 		try {

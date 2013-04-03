@@ -3,7 +3,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
-import bean.UserEntity;
+import lifestream.user.bean.UserEntity;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
