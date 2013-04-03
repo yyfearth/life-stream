@@ -12,8 +12,5 @@
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">validate</property>
         <mapping class="lifestream.user.bean.UserEntity"/>
-        <!--<mapping class="bean.UserIdSeqEntity"/>-->
-        <!-- DB schema will be updated if needed -->
-        <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>
 </hibernate-configuration>

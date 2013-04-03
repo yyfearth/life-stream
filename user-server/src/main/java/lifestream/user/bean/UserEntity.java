@@ -11,14 +11,29 @@ import java.util.UUID;
 @Entity
 public class UserEntity {
 
-	public UserEntity(UUID id) {
-		setId(id);
-		setCreatedDateTime(DateTime.now());
-		setModifiedDateTime(DateTime.now());
-	}
-
 	public UserEntity() {
 		this(UUID.randomUUID());
+	}
+
+	public UserEntity(UUID id) {
+		this(id, null, null, null, null, null);
+	}
+
+	public UserEntity(String username, String email, String password) {
+		this(UUID.randomUUID(), username, email, password, null, null);
+	}
+
+	public UserEntity(UUID id, String username, String email, String password) {
+		this(id, username, email, password, null, null);
+	}
+
+	public UserEntity(UUID id, String username, String email, String password, DateTime createdDateTime, DateTime modifiedDateTime) {
+		this.id = id == null ? UUID.randomUUID() : id;
+		this.username = username == null ? "" : username;
+		this.email = email == null ? "" : email;
+		this.password = password == null ? "" : password;
+		setCreatedDateTime(createdDateTime == null ? DateTime.now() : createdDateTime);
+		setModifiedDateTime(modifiedDateTime == null ? DateTime.now() : modifiedDateTime);
 	}
 
 	@Id
