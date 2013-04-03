@@ -1,6 +1,5 @@
 package server;
 
-import data.ImageMessage;
 import org.jboss.netty.channel.*;
 import org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder;
 import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
@@ -53,7 +52,7 @@ class DistributedNodePipelineFactory implements ChannelPipelineFactory {
 
 		// Decoders
 		channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
-		channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ImageMessage.ServerMessage.getDefaultInstance()));
+		channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ProtobufMessages.ServerMessage.getDefaultInstance()));
 
 		// Encoder
 		channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));

@@ -2,7 +2,6 @@ package client;
 
 import com.google.common.net.MediaType;
 import com.google.protobuf.ByteString;
-import data.ImageMessage;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.*;

@@ -5,8 +5,13 @@ import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.*;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+import org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder;
+import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
+import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
+import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 
 import java.net.InetSocketAddress;
+import java.util.Date;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -21,11 +26,16 @@ public class ConnectionMonitor extends BasicThread {
 
 	Channel bindingChannel;
 	Channel[] connectorChannels;
+	MonitorReport[] monitorReports;
 
 	public ConnectionMonitor(int bindingPort, InetSocketAddress[] listeningAddresses) {
 		this.bindingPort = bindingPort;
 		this.listeningAddresses = listeningAddresses;
+		this.monitorReports = MonitorReport.generateReports(listeningAddresses);
 	}
+
+	long nextReconnectionTick = 0;
+	final int reconnectDelaySeconds = 15;
 
 	@Override
 	public void run() {
@@ -35,12 +45,24 @@ public class ConnectionMonitor extends BasicThread {
 
 			while (isStopping == false) {
 				Thread.sleep(100);
+
+				long nowTick = (new Date()).getTime();
+
+				if (nowTick >= nextReconnectionTick) {
+					reconnect();
+					nextReconnectionTick += reconnectDelaySeconds * 1000;
+				}
 			}
 
 			disconnect();
 		} catch (InterruptedException | ChannelException ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	void reconnect() {
+		System.out.println("Reconnect...");
+		// TODO: loop each channel which is not connected and try to reconnect.
 	}
 
 	void configueBootstrap() {
@@ -69,7 +91,6 @@ public class ConnectionMonitor extends BasicThread {
 
 		configueBootstrap();
 
-//		System.out.println("Binding " + bindingPort);
 		bindingChannel = serverBootstrap.bind(new InetSocketAddress(bindingPort));
 		connectorChannels = new Channel[listeningAddresses.length];
 
@@ -105,19 +126,18 @@ class MonitorPipelineFactory implements ChannelPipelineFactory {
 
 	@Override
 	public ChannelPipeline getPipeline() throws Exception {
-//		ChannelPipeline channelPipeline = Channels.pipeline();
-//
-//		// Decoders
-//		channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
-//		channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ImageMessage.ServerMessage.getDefaultInstance()));
-//
-//		// Encoder
-//		channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
-//		channelPipeline.addLast("protobufEncoder", new ProtobufEncoder());
-//
-//		channelPipeline.addLast("ServerHandler", new MonitorHandler());
-//
-//		return channelPipeline;
-		return Channels.pipeline(new MonitorHandler());
+		ChannelPipeline channelPipeline = Channels.pipeline();
+
+		// Decoders
+		channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
+		channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ProtobufMessages.HeartBeat.getDefaultInstance()));
+
+		// Encoder
+		channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
+		channelPipeline.addLast("protobufEncoder", new ProtobufEncoder());
+
+		channelPipeline.addLast("ServerHandler", new MonitorHandler());
+
+		return channelPipeline;
 	}
 }

@@ -1,6 +1,5 @@
 package server;
 
-import data.ImageMessage;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
