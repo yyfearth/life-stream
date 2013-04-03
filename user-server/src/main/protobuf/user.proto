@@ -16,8 +16,9 @@ message User {
 }
 
 enum RequestType {
-	ADD_USER = 0;
+	HELLO = 0;
 	GET_USER = 1;
+	ADD_USER = 2;
 	UPDATE_USER = 3;
 	REMOVE_USER = 4;
 	// SEARCH_USER = 5;
@@ -28,6 +29,7 @@ message Request {
 	required RequestType request = 2;
 	optional string user_id = 4; // user uuid
 	optional User user = 8;
+	required uint64 timestamp = 16;
 }
 
 message Response {
@@ -40,4 +42,5 @@ message Response {
 	required ResultCode result = 3;
 	optional string message = 4;
 	optional User user = 8;
+	required uint64 timestamp = 16;
 }

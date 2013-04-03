@@ -3,6 +3,7 @@ package lifestream.user.client;
 import lifestream.user.bean.UserEntity;
 import lifestream.user.data.UserMessage;
 import org.jboss.netty.channel.*;
+import org.joda.time.DateTime;
 
 import java.util.UUID;
 import java.util.logging.Level;
@@ -31,6 +32,7 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 				.setId(UUID.randomUUID().toString())
 				.setRequest(type)
 				.setUserId(userId.toString())
+				.setTimestamp(DateTime.now().getMillis())
 				.build());
 	}
 
@@ -40,6 +42,15 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 				.setRequest(type)
 				.setUserId(user.getId())
 				.setUser(user)
+				.setTimestamp(DateTime.now().getMillis())
+				.build());
+	}
+
+	public UUID request() { // say hello
+		return request(UserMessage.Request.newBuilder()
+				.setId(UUID.randomUUID().toString())
+				.setRequest(UserMessage.RequestType.HELLO)
+				.setTimestamp(DateTime.now().getMillis())
 				.build());
 	}
 
