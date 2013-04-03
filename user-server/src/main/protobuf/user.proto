@@ -1,0 +1,43 @@
+package data;
+option optimize_for = SPEED;
+option java_package = "lifestream.user.data";
+option java_outer_classname = "UserMessage";
+
+message User {
+    required string id = 1;
+
+    required string username = 2;
+    required string email = 3;
+    required string password = 4;
+
+    required uint64 created_timestamp = 5;
+    required uint64 modified_timestamp = 6;
+
+}
+
+enum RequestType {
+	ADD_USER = 0;
+	GET_USER = 1;
+	UPDATE_USER = 3;
+	REMOVE_USER = 4;
+	// SEARCH_USER = 5;
+}
+
+message Request {
+	required string id = 1; // request uuid
+	required RequestType request = 2;
+	optional string user_id = 4; // user uuid
+	optional User user = 8;
+}
+
+message Response {
+	enum ResultCode {
+		OK = 0;
+		ERROR = 1;
+	}
+	required string id = 1; // request uuid, copy from request
+	optional RequestType request = 2; // copy from request
+	required ResultCode result = 3;
+	optional string message = 4;
+	optional User user = 8;
+}
