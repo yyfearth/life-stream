@@ -10,6 +10,7 @@ import org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder;
 import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
 import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
+import server.LifeStreamMessages;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,7 +40,7 @@ public class Client {
 
 				// Decoders
 				channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
-				channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ImageMessage.Image.getDefaultInstance()));
+				channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(LifeStreamMessages.Image.getDefaultInstance()));
 
 				// Encoder
 				channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
@@ -115,15 +116,16 @@ class ClientHandler extends SimpleChannelHandler {
 		FileInputStream fileInputStream = new FileInputStream(file);
 		ByteString imageBytes = ByteString.readFrom(fileInputStream);
 
-		ImageMessage.Image.Builder builder = ImageMessage.Image.newBuilder();
-		ImageMessage.Image image = builder
+		long nowTimestamp = (new Date()).getTime();
+		LifeStreamMessages.Image.Builder builder = LifeStreamMessages.Image.newBuilder();
+		LifeStreamMessages.Image image = builder
 				.setName("Test image")
 				.setId(UUID.randomUUID().toString())
 				.setMime(MediaType.ANY_IMAGE_TYPE.toString())
 				.setLength(file.length())
 				.setData(imageBytes)
-				.setCreated(new Date().getTime())
-				.setModified(new Date().getTime())
+				.setCreatedTimestamp(nowTimestamp)
+				.setModifiedTimestamp(nowTimestamp)
 				.build();
 
 		fileInputStream.close();

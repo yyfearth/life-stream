@@ -3,8 +3,8 @@
 
 package server;
 
-public final class ProtobufMessages {
-  private ProtobufMessages() {}
+public final class LifeStreamMessages {
+  private LifeStreamMessages() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
@@ -29,7 +29,7 @@ public final class ProtobufMessages {
      * required string user_id = 3;
      * </pre>
      */
-    String getId();
+    java.lang.String getId();
     /**
      * <code>required string id = 1;</code>
      *
@@ -49,7 +49,7 @@ public final class ProtobufMessages {
     /**
      * <code>required string name = 10;</code>
      */
-    String getName();
+    java.lang.String getName();
     /**
      * <code>required string name = 10;</code>
      */
@@ -64,7 +64,7 @@ public final class ProtobufMessages {
     /**
      * <code>required string mime = 11;</code>
      */
-    String getMime();
+    java.lang.String getMime();
     /**
      * <code>required string mime = 11;</code>
      */
@@ -125,7 +125,7 @@ public final class ProtobufMessages {
     /**
      * <code>optional string description = 20;</code>
      */
-    String getDescription();
+    java.lang.String getDescription();
     /**
      * <code>optional string description = 20;</code>
      */
@@ -140,11 +140,11 @@ public final class ProtobufMessages {
     /**
      * <code>optional .data.Image.Resolution size = 21;</code>
      */
-    server.ProtobufMessages.Image.Resolution getSize();
+    server.LifeStreamMessages.Image.Resolution getSize();
     /**
      * <code>optional .data.Image.Resolution size = 21;</code>
      */
-    server.ProtobufMessages.Image.ResolutionOrBuilder getSizeOrBuilder();
+    server.LifeStreamMessages.Image.ResolutionOrBuilder getSizeOrBuilder();
 
     // optional .data.Image.GeoPoint geo_location = 22;
     /**
@@ -154,11 +154,11 @@ public final class ProtobufMessages {
     /**
      * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
      */
-    server.ProtobufMessages.Image.GeoPoint getGeoLocation();
+    server.LifeStreamMessages.Image.GeoPoint getGeoLocation();
     /**
      * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
      */
-    server.ProtobufMessages.Image.GeoPointOrBuilder getGeoLocationOrBuilder();
+    server.LifeStreamMessages.Image.GeoPointOrBuilder getGeoLocationOrBuilder();
 
     // optional uint64 taken_timestamp = 23;
     /**
@@ -211,7 +211,7 @@ public final class ProtobufMessages {
     }
 
     private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
         getUnknownFields() {
       return this.unknownFields;
@@ -275,11 +275,11 @@ public final class ProtobufMessages {
               break;
             }
             case 170: {
-              server.ProtobufMessages.Image.Resolution.Builder subBuilder = null;
+              server.LifeStreamMessages.Image.Resolution.Builder subBuilder = null;
               if (((bitField0_ & 0x00000080) == 0x00000080)) {
                 subBuilder = size_.toBuilder();
               }
-              size_ = input.readMessage(server.ProtobufMessages.Image.Resolution.PARSER, extensionRegistry);
+              size_ = input.readMessage(server.LifeStreamMessages.Image.Resolution.PARSER, extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(size_);
                 size_ = subBuilder.buildPartial();
@@ -288,11 +288,11 @@ public final class ProtobufMessages {
               break;
             }
             case 178: {
-              server.ProtobufMessages.Image.GeoPoint.Builder subBuilder = null;
+              server.LifeStreamMessages.Image.GeoPoint.Builder subBuilder = null;
               if (((bitField0_ & 0x00000100) == 0x00000100)) {
                 subBuilder = geoLocation_.toBuilder();
               }
-              geoLocation_ = input.readMessage(server.ProtobufMessages.Image.GeoPoint.PARSER, extensionRegistry);
+              geoLocation_ = input.readMessage(server.LifeStreamMessages.Image.GeoPoint.PARSER, extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(geoLocation_);
                 geoLocation_ = subBuilder.buildPartial();
@@ -324,14 +324,14 @@ public final class ProtobufMessages {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return internal_static_data_Image_descriptor;
+      return server.LifeStreamMessages.internal_static_data_Image_descriptor;
     }
 
-    protected FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return internal_static_data_Image_fieldAccessorTable
+      return server.LifeStreamMessages.internal_static_data_Image_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-		          server.ProtobufMessages.Image.class, server.ProtobufMessages.Image.Builder.class);
+              server.LifeStreamMessages.Image.class, server.LifeStreamMessages.Image.Builder.class);
     }
 
     public static com.google.protobuf.Parser<Image> PARSER =
@@ -344,7 +344,7 @@ public final class ProtobufMessages {
       }
     };
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<Image> getParserForType() {
       return PARSER;
     }
@@ -395,7 +395,7 @@ public final class ProtobufMessages {
       }
 
       private final com.google.protobuf.UnknownFieldSet unknownFields;
-      @Override
+      @java.lang.Override
       public final com.google.protobuf.UnknownFieldSet
           getUnknownFields() {
         return this.unknownFields;
@@ -447,14 +447,14 @@ public final class ProtobufMessages {
       }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return internal_static_data_Image_Resolution_descriptor;
+        return server.LifeStreamMessages.internal_static_data_Image_Resolution_descriptor;
       }
 
-      protected FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return internal_static_data_Image_Resolution_fieldAccessorTable
+        return server.LifeStreamMessages.internal_static_data_Image_Resolution_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-		            server.ProtobufMessages.Image.Resolution.class, server.ProtobufMessages.Image.Resolution.Builder.class);
+                server.LifeStreamMessages.Image.Resolution.class, server.LifeStreamMessages.Image.Resolution.Builder.class);
       }
 
       public static com.google.protobuf.Parser<Resolution> PARSER =
@@ -467,7 +467,7 @@ public final class ProtobufMessages {
         }
       };
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Parser<Resolution> getParserForType() {
         return PARSER;
       }
@@ -558,59 +558,59 @@ public final class ProtobufMessages {
       }
 
       private static final long serialVersionUID = 0L;
-      @Override
-      protected Object writeReplace()
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
           throws java.io.ObjectStreamException {
         return super.writeReplace();
       }
 
-      public static server.ProtobufMessages.Image.Resolution parseFrom(
+      public static server.LifeStreamMessages.Image.Resolution parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static server.ProtobufMessages.Image.Resolution parseFrom(
+      public static server.LifeStreamMessages.Image.Resolution parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static server.ProtobufMessages.Image.Resolution parseFrom(byte[] data)
+      public static server.LifeStreamMessages.Image.Resolution parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static server.ProtobufMessages.Image.Resolution parseFrom(
+      public static server.LifeStreamMessages.Image.Resolution parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static server.ProtobufMessages.Image.Resolution parseFrom(java.io.InputStream input)
+      public static server.LifeStreamMessages.Image.Resolution parseFrom(java.io.InputStream input)
           throws java.io.IOException {
         return PARSER.parseFrom(input);
       }
-      public static server.ProtobufMessages.Image.Resolution parseFrom(
+      public static server.LifeStreamMessages.Image.Resolution parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return PARSER.parseFrom(input, extensionRegistry);
       }
-      public static server.ProtobufMessages.Image.Resolution parseDelimitedFrom(java.io.InputStream input)
+      public static server.LifeStreamMessages.Image.Resolution parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
         return PARSER.parseDelimitedFrom(input);
       }
-      public static server.ProtobufMessages.Image.Resolution parseDelimitedFrom(
+      public static server.LifeStreamMessages.Image.Resolution parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return PARSER.parseDelimitedFrom(input, extensionRegistry);
       }
-      public static server.ProtobufMessages.Image.Resolution parseFrom(
+      public static server.LifeStreamMessages.Image.Resolution parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return PARSER.parseFrom(input);
       }
-      public static server.ProtobufMessages.Image.Resolution parseFrom(
+      public static server.LifeStreamMessages.Image.Resolution parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -619,14 +619,14 @@ public final class ProtobufMessages {
 
       public static Builder newBuilder() { return Builder.create(); }
       public Builder newBuilderForType() { return newBuilder(); }
-      public static Builder newBuilder(server.ProtobufMessages.Image.Resolution prototype) {
+      public static Builder newBuilder(server.LifeStreamMessages.Image.Resolution prototype) {
         return newBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() { return newBuilder(this); }
 
-      @Override
+      @java.lang.Override
       protected Builder newBuilderForType(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         Builder builder = new Builder(parent);
         return builder;
       }
@@ -635,26 +635,26 @@ public final class ProtobufMessages {
        */
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements server.ProtobufMessages.Image.ResolutionOrBuilder {
+         implements server.LifeStreamMessages.Image.ResolutionOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
-          return internal_static_data_Image_Resolution_descriptor;
+          return server.LifeStreamMessages.internal_static_data_Image_Resolution_descriptor;
         }
 
-        protected FieldAccessorTable
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return internal_static_data_Image_Resolution_fieldAccessorTable
+          return server.LifeStreamMessages.internal_static_data_Image_Resolution_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-		              server.ProtobufMessages.Image.Resolution.class, server.ProtobufMessages.Image.Resolution.Builder.class);
+                  server.LifeStreamMessages.Image.Resolution.class, server.LifeStreamMessages.Image.Resolution.Builder.class);
         }
 
-        // Construct using server.ProtobufMessages.Image.Resolution.newBuilder()
+        // Construct using server.LifeStreamMessages.Image.Resolution.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
 
         private Builder(
-            BuilderParent parent) {
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
@@ -681,23 +681,23 @@ public final class ProtobufMessages {
 
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return internal_static_data_Image_Resolution_descriptor;
+          return server.LifeStreamMessages.internal_static_data_Image_Resolution_descriptor;
         }
 
-        public server.ProtobufMessages.Image.Resolution getDefaultInstanceForType() {
-          return getDefaultInstance();
+        public server.LifeStreamMessages.Image.Resolution getDefaultInstanceForType() {
+          return server.LifeStreamMessages.Image.Resolution.getDefaultInstance();
         }
 
-        public server.ProtobufMessages.Image.Resolution build() {
-          server.ProtobufMessages.Image.Resolution result = buildPartial();
+        public server.LifeStreamMessages.Image.Resolution build() {
+          server.LifeStreamMessages.Image.Resolution result = buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(result);
           }
           return result;
         }
 
-        public server.ProtobufMessages.Image.Resolution buildPartial() {
-          server.ProtobufMessages.Image.Resolution result = new server.ProtobufMessages.Image.Resolution(this);
+        public server.LifeStreamMessages.Image.Resolution buildPartial() {
+          server.LifeStreamMessages.Image.Resolution result = new server.LifeStreamMessages.Image.Resolution(this);
           int from_bitField0_ = bitField0_;
           int to_bitField0_ = 0;
           if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -714,16 +714,16 @@ public final class ProtobufMessages {
         }
 
         public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof server.ProtobufMessages.Image.Resolution) {
-            return mergeFrom((server.ProtobufMessages.Image.Resolution)other);
+          if (other instanceof server.LifeStreamMessages.Image.Resolution) {
+            return mergeFrom((server.LifeStreamMessages.Image.Resolution)other);
           } else {
             super.mergeFrom(other);
             return this;
           }
         }
 
-        public Builder mergeFrom(server.ProtobufMessages.Image.Resolution other) {
-          if (other == getDefaultInstance()) return this;
+        public Builder mergeFrom(server.LifeStreamMessages.Image.Resolution other) {
+          if (other == server.LifeStreamMessages.Image.Resolution.getDefaultInstance()) return this;
           if (other.hasWidth()) {
             setWidth(other.getWidth());
           }
@@ -750,11 +750,11 @@ public final class ProtobufMessages {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          server.ProtobufMessages.Image.Resolution parsedMessage = null;
+          server.LifeStreamMessages.Image.Resolution parsedMessage = null;
           try {
             parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (server.ProtobufMessages.Image.Resolution) e.getUnfinishedMessage();
+            parsedMessage = (server.LifeStreamMessages.Image.Resolution) e.getUnfinishedMessage();
             throw e;
           } finally {
             if (parsedMessage != null) {
@@ -898,7 +898,7 @@ public final class ProtobufMessages {
       }
 
       private final com.google.protobuf.UnknownFieldSet unknownFields;
-      @Override
+      @java.lang.Override
       public final com.google.protobuf.UnknownFieldSet
           getUnknownFields() {
         return this.unknownFields;
@@ -955,14 +955,14 @@ public final class ProtobufMessages {
       }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return internal_static_data_Image_GeoPoint_descriptor;
+        return server.LifeStreamMessages.internal_static_data_Image_GeoPoint_descriptor;
       }
 
-      protected FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return internal_static_data_Image_GeoPoint_fieldAccessorTable
+        return server.LifeStreamMessages.internal_static_data_Image_GeoPoint_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-		            server.ProtobufMessages.Image.GeoPoint.class, server.ProtobufMessages.Image.GeoPoint.Builder.class);
+                server.LifeStreamMessages.Image.GeoPoint.class, server.LifeStreamMessages.Image.GeoPoint.Builder.class);
       }
 
       public static com.google.protobuf.Parser<GeoPoint> PARSER =
@@ -975,7 +975,7 @@ public final class ProtobufMessages {
         }
       };
 
-      @Override
+      @java.lang.Override
       public com.google.protobuf.Parser<GeoPoint> getParserForType() {
         return PARSER;
       }
@@ -1090,59 +1090,59 @@ public final class ProtobufMessages {
       }
 
       private static final long serialVersionUID = 0L;
-      @Override
-      protected Object writeReplace()
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
           throws java.io.ObjectStreamException {
         return super.writeReplace();
       }
 
-      public static server.ProtobufMessages.Image.GeoPoint parseFrom(
+      public static server.LifeStreamMessages.Image.GeoPoint parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static server.ProtobufMessages.Image.GeoPoint parseFrom(
+      public static server.LifeStreamMessages.Image.GeoPoint parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static server.ProtobufMessages.Image.GeoPoint parseFrom(byte[] data)
+      public static server.LifeStreamMessages.Image.GeoPoint parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static server.ProtobufMessages.Image.GeoPoint parseFrom(
+      public static server.LifeStreamMessages.Image.GeoPoint parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static server.ProtobufMessages.Image.GeoPoint parseFrom(java.io.InputStream input)
+      public static server.LifeStreamMessages.Image.GeoPoint parseFrom(java.io.InputStream input)
           throws java.io.IOException {
         return PARSER.parseFrom(input);
       }
-      public static server.ProtobufMessages.Image.GeoPoint parseFrom(
+      public static server.LifeStreamMessages.Image.GeoPoint parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return PARSER.parseFrom(input, extensionRegistry);
       }
-      public static server.ProtobufMessages.Image.GeoPoint parseDelimitedFrom(java.io.InputStream input)
+      public static server.LifeStreamMessages.Image.GeoPoint parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
         return PARSER.parseDelimitedFrom(input);
       }
-      public static server.ProtobufMessages.Image.GeoPoint parseDelimitedFrom(
+      public static server.LifeStreamMessages.Image.GeoPoint parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return PARSER.parseDelimitedFrom(input, extensionRegistry);
       }
-      public static server.ProtobufMessages.Image.GeoPoint parseFrom(
+      public static server.LifeStreamMessages.Image.GeoPoint parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return PARSER.parseFrom(input);
       }
-      public static server.ProtobufMessages.Image.GeoPoint parseFrom(
+      public static server.LifeStreamMessages.Image.GeoPoint parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -1151,14 +1151,14 @@ public final class ProtobufMessages {
 
       public static Builder newBuilder() { return Builder.create(); }
       public Builder newBuilderForType() { return newBuilder(); }
-      public static Builder newBuilder(server.ProtobufMessages.Image.GeoPoint prototype) {
+      public static Builder newBuilder(server.LifeStreamMessages.Image.GeoPoint prototype) {
         return newBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() { return newBuilder(this); }
 
-      @Override
+      @java.lang.Override
       protected Builder newBuilderForType(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         Builder builder = new Builder(parent);
         return builder;
       }
@@ -1167,26 +1167,26 @@ public final class ProtobufMessages {
        */
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements server.ProtobufMessages.Image.GeoPointOrBuilder {
+         implements server.LifeStreamMessages.Image.GeoPointOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
-          return internal_static_data_Image_GeoPoint_descriptor;
+          return server.LifeStreamMessages.internal_static_data_Image_GeoPoint_descriptor;
         }
 
-        protected FieldAccessorTable
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return internal_static_data_Image_GeoPoint_fieldAccessorTable
+          return server.LifeStreamMessages.internal_static_data_Image_GeoPoint_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-		              server.ProtobufMessages.Image.GeoPoint.class, server.ProtobufMessages.Image.GeoPoint.Builder.class);
+                  server.LifeStreamMessages.Image.GeoPoint.class, server.LifeStreamMessages.Image.GeoPoint.Builder.class);
         }
 
-        // Construct using server.ProtobufMessages.Image.GeoPoint.newBuilder()
+        // Construct using server.LifeStreamMessages.Image.GeoPoint.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
 
         private Builder(
-            BuilderParent parent) {
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
@@ -1215,23 +1215,23 @@ public final class ProtobufMessages {
 
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return internal_static_data_Image_GeoPoint_descriptor;
+          return server.LifeStreamMessages.internal_static_data_Image_GeoPoint_descriptor;
         }
 
-        public server.ProtobufMessages.Image.GeoPoint getDefaultInstanceForType() {
-          return getDefaultInstance();
+        public server.LifeStreamMessages.Image.GeoPoint getDefaultInstanceForType() {
+          return server.LifeStreamMessages.Image.GeoPoint.getDefaultInstance();
         }
 
-        public server.ProtobufMessages.Image.GeoPoint build() {
-          server.ProtobufMessages.Image.GeoPoint result = buildPartial();
+        public server.LifeStreamMessages.Image.GeoPoint build() {
+          server.LifeStreamMessages.Image.GeoPoint result = buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(result);
           }
           return result;
         }
 
-        public server.ProtobufMessages.Image.GeoPoint buildPartial() {
-          server.ProtobufMessages.Image.GeoPoint result = new server.ProtobufMessages.Image.GeoPoint(this);
+        public server.LifeStreamMessages.Image.GeoPoint buildPartial() {
+          server.LifeStreamMessages.Image.GeoPoint result = new server.LifeStreamMessages.Image.GeoPoint(this);
           int from_bitField0_ = bitField0_;
           int to_bitField0_ = 0;
           if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -1252,16 +1252,16 @@ public final class ProtobufMessages {
         }
 
         public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof server.ProtobufMessages.Image.GeoPoint) {
-            return mergeFrom((server.ProtobufMessages.Image.GeoPoint)other);
+          if (other instanceof server.LifeStreamMessages.Image.GeoPoint) {
+            return mergeFrom((server.LifeStreamMessages.Image.GeoPoint)other);
           } else {
             super.mergeFrom(other);
             return this;
           }
         }
 
-        public Builder mergeFrom(server.ProtobufMessages.Image.GeoPoint other) {
-          if (other == getDefaultInstance()) return this;
+        public Builder mergeFrom(server.LifeStreamMessages.Image.GeoPoint other) {
+          if (other == server.LifeStreamMessages.Image.GeoPoint.getDefaultInstance()) return this;
           if (other.hasLat()) {
             setLat(other.getLat());
           }
@@ -1291,11 +1291,11 @@ public final class ProtobufMessages {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          server.ProtobufMessages.Image.GeoPoint parsedMessage = null;
+          server.LifeStreamMessages.Image.GeoPoint parsedMessage = null;
           try {
             parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (server.ProtobufMessages.Image.GeoPoint) e.getUnfinishedMessage();
+            parsedMessage = (server.LifeStreamMessages.Image.GeoPoint) e.getUnfinishedMessage();
             throw e;
           } finally {
             if (parsedMessage != null) {
@@ -1419,7 +1419,7 @@ public final class ProtobufMessages {
     private int bitField0_;
     // required string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
-    private Object id_;
+    private java.lang.Object id_;
     /**
      * <code>required string id = 1;</code>
      *
@@ -1439,14 +1439,14 @@ public final class ProtobufMessages {
      * required string user_id = 3;
      * </pre>
      */
-    public String getId() {
-      Object ref = id_;
-      if (ref instanceof String) {
-        return (String) ref;
+    public java.lang.String getId() {
+      java.lang.Object ref = id_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
           id_ = s;
         }
@@ -1463,11 +1463,11 @@ public final class ProtobufMessages {
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
-      Object ref = id_;
-      if (ref instanceof String) {
+      java.lang.Object ref = id_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         id_ = b;
         return b;
       } else {
@@ -1477,7 +1477,7 @@ public final class ProtobufMessages {
 
     // required string name = 10;
     public static final int NAME_FIELD_NUMBER = 10;
-    private Object name_;
+    private java.lang.Object name_;
     /**
      * <code>required string name = 10;</code>
      */
@@ -1487,14 +1487,14 @@ public final class ProtobufMessages {
     /**
      * <code>required string name = 10;</code>
      */
-    public String getName() {
-      Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
           name_ = s;
         }
@@ -1506,11 +1506,11 @@ public final class ProtobufMessages {
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
-      Object ref = name_;
-      if (ref instanceof String) {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         name_ = b;
         return b;
       } else {
@@ -1520,7 +1520,7 @@ public final class ProtobufMessages {
 
     // required string mime = 11;
     public static final int MIME_FIELD_NUMBER = 11;
-    private Object mime_;
+    private java.lang.Object mime_;
     /**
      * <code>required string mime = 11;</code>
      */
@@ -1530,14 +1530,14 @@ public final class ProtobufMessages {
     /**
      * <code>required string mime = 11;</code>
      */
-    public String getMime() {
-      Object ref = mime_;
-      if (ref instanceof String) {
-        return (String) ref;
+    public java.lang.String getMime() {
+      java.lang.Object ref = mime_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
           mime_ = s;
         }
@@ -1549,11 +1549,11 @@ public final class ProtobufMessages {
      */
     public com.google.protobuf.ByteString
         getMimeBytes() {
-      Object ref = mime_;
-      if (ref instanceof String) {
+      java.lang.Object ref = mime_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         mime_ = b;
         return b;
       } else {
@@ -1627,7 +1627,7 @@ public final class ProtobufMessages {
 
     // optional string description = 20;
     public static final int DESCRIPTION_FIELD_NUMBER = 20;
-    private Object description_;
+    private java.lang.Object description_;
     /**
      * <code>optional string description = 20;</code>
      */
@@ -1637,14 +1637,14 @@ public final class ProtobufMessages {
     /**
      * <code>optional string description = 20;</code>
      */
-    public String getDescription() {
-      Object ref = description_;
-      if (ref instanceof String) {
-        return (String) ref;
+    public java.lang.String getDescription() {
+      java.lang.Object ref = description_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
           description_ = s;
         }
@@ -1656,11 +1656,11 @@ public final class ProtobufMessages {
      */
     public com.google.protobuf.ByteString
         getDescriptionBytes() {
-      Object ref = description_;
-      if (ref instanceof String) {
+      java.lang.Object ref = description_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         description_ = b;
         return b;
       } else {
@@ -1670,7 +1670,7 @@ public final class ProtobufMessages {
 
     // optional .data.Image.Resolution size = 21;
     public static final int SIZE_FIELD_NUMBER = 21;
-    private server.ProtobufMessages.Image.Resolution size_;
+    private server.LifeStreamMessages.Image.Resolution size_;
     /**
      * <code>optional .data.Image.Resolution size = 21;</code>
      */
@@ -1680,19 +1680,19 @@ public final class ProtobufMessages {
     /**
      * <code>optional .data.Image.Resolution size = 21;</code>
      */
-    public server.ProtobufMessages.Image.Resolution getSize() {
+    public server.LifeStreamMessages.Image.Resolution getSize() {
       return size_;
     }
     /**
      * <code>optional .data.Image.Resolution size = 21;</code>
      */
-    public server.ProtobufMessages.Image.ResolutionOrBuilder getSizeOrBuilder() {
+    public server.LifeStreamMessages.Image.ResolutionOrBuilder getSizeOrBuilder() {
       return size_;
     }
 
     // optional .data.Image.GeoPoint geo_location = 22;
     public static final int GEO_LOCATION_FIELD_NUMBER = 22;
-    private server.ProtobufMessages.Image.GeoPoint geoLocation_;
+    private server.LifeStreamMessages.Image.GeoPoint geoLocation_;
     /**
      * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
      */
@@ -1702,13 +1702,13 @@ public final class ProtobufMessages {
     /**
      * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
      */
-    public server.ProtobufMessages.Image.GeoPoint getGeoLocation() {
+    public server.LifeStreamMessages.Image.GeoPoint getGeoLocation() {
       return geoLocation_;
     }
     /**
      * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
      */
-    public server.ProtobufMessages.Image.GeoPointOrBuilder getGeoLocationOrBuilder() {
+    public server.LifeStreamMessages.Image.GeoPointOrBuilder getGeoLocationOrBuilder() {
       return geoLocation_;
     }
 
@@ -1760,8 +1760,8 @@ public final class ProtobufMessages {
       createdTimestamp_ = 0L;
       modifiedTimestamp_ = 0L;
       description_ = "";
-      size_ = server.ProtobufMessages.Image.Resolution.getDefaultInstance();
-      geoLocation_ = server.ProtobufMessages.Image.GeoPoint.getDefaultInstance();
+      size_ = server.LifeStreamMessages.Image.Resolution.getDefaultInstance();
+      geoLocation_ = server.LifeStreamMessages.Image.GeoPoint.getDefaultInstance();
       takenTimestamp_ = 0L;
       data_ = com.google.protobuf.ByteString.EMPTY;
     }
@@ -1905,59 +1905,59 @@ public final class ProtobufMessages {
     }
 
     private static final long serialVersionUID = 0L;
-    @Override
-    protected Object writeReplace()
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
 
-    public static server.ProtobufMessages.Image parseFrom(
+    public static server.LifeStreamMessages.Image parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static server.ProtobufMessages.Image parseFrom(
+    public static server.LifeStreamMessages.Image parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static server.ProtobufMessages.Image parseFrom(byte[] data)
+    public static server.LifeStreamMessages.Image parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static server.ProtobufMessages.Image parseFrom(
+    public static server.LifeStreamMessages.Image parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static server.ProtobufMessages.Image parseFrom(java.io.InputStream input)
+    public static server.LifeStreamMessages.Image parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static server.ProtobufMessages.Image parseFrom(
+    public static server.LifeStreamMessages.Image parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static server.ProtobufMessages.Image parseDelimitedFrom(java.io.InputStream input)
+    public static server.LifeStreamMessages.Image parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static server.ProtobufMessages.Image parseDelimitedFrom(
+    public static server.LifeStreamMessages.Image parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static server.ProtobufMessages.Image parseFrom(
+    public static server.LifeStreamMessages.Image parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static server.ProtobufMessages.Image parseFrom(
+    public static server.LifeStreamMessages.Image parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1966,14 +1966,14 @@ public final class ProtobufMessages {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(server.ProtobufMessages.Image prototype) {
+    public static Builder newBuilder(server.LifeStreamMessages.Image prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -1982,26 +1982,26 @@ public final class ProtobufMessages {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements server.ProtobufMessages.ImageOrBuilder {
+       implements server.LifeStreamMessages.ImageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return internal_static_data_Image_descriptor;
+        return server.LifeStreamMessages.internal_static_data_Image_descriptor;
       }
 
-      protected FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return internal_static_data_Image_fieldAccessorTable
+        return server.LifeStreamMessages.internal_static_data_Image_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-		            server.ProtobufMessages.Image.class, server.ProtobufMessages.Image.Builder.class);
+                server.LifeStreamMessages.Image.class, server.LifeStreamMessages.Image.Builder.class);
       }
 
-      // Construct using server.ProtobufMessages.Image.newBuilder()
+      // Construct using server.LifeStreamMessages.Image.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
 
       private Builder(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -2032,13 +2032,13 @@ public final class ProtobufMessages {
         description_ = "";
         bitField0_ = (bitField0_ & ~0x00000040);
         if (sizeBuilder_ == null) {
-          size_ = server.ProtobufMessages.Image.Resolution.getDefaultInstance();
+          size_ = server.LifeStreamMessages.Image.Resolution.getDefaultInstance();
         } else {
           sizeBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000080);
         if (geoLocationBuilder_ == null) {
-          geoLocation_ = server.ProtobufMessages.Image.GeoPoint.getDefaultInstance();
+          geoLocation_ = server.LifeStreamMessages.Image.GeoPoint.getDefaultInstance();
         } else {
           geoLocationBuilder_.clear();
         }
@@ -2056,23 +2056,23 @@ public final class ProtobufMessages {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return internal_static_data_Image_descriptor;
+        return server.LifeStreamMessages.internal_static_data_Image_descriptor;
       }
 
-      public server.ProtobufMessages.Image getDefaultInstanceForType() {
-        return getDefaultInstance();
+      public server.LifeStreamMessages.Image getDefaultInstanceForType() {
+        return server.LifeStreamMessages.Image.getDefaultInstance();
       }
 
-      public server.ProtobufMessages.Image build() {
-        server.ProtobufMessages.Image result = buildPartial();
+      public server.LifeStreamMessages.Image build() {
+        server.LifeStreamMessages.Image result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public server.ProtobufMessages.Image buildPartial() {
-        server.ProtobufMessages.Image result = new server.ProtobufMessages.Image(this);
+      public server.LifeStreamMessages.Image buildPartial() {
+        server.LifeStreamMessages.Image result = new server.LifeStreamMessages.Image(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -2133,16 +2133,16 @@ public final class ProtobufMessages {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof server.ProtobufMessages.Image) {
-          return mergeFrom((server.ProtobufMessages.Image)other);
+        if (other instanceof server.LifeStreamMessages.Image) {
+          return mergeFrom((server.LifeStreamMessages.Image)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(server.ProtobufMessages.Image other) {
-        if (other == getDefaultInstance()) return this;
+      public Builder mergeFrom(server.LifeStreamMessages.Image other) {
+        if (other == server.LifeStreamMessages.Image.getDefaultInstance()) return this;
         if (other.hasId()) {
           bitField0_ |= 0x00000001;
           id_ = other.id_;
@@ -2232,11 +2232,11 @@ public final class ProtobufMessages {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        server.ProtobufMessages.Image parsedMessage = null;
+        server.LifeStreamMessages.Image parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (server.ProtobufMessages.Image) e.getUnfinishedMessage();
+          parsedMessage = (server.LifeStreamMessages.Image) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -2248,7 +2248,7 @@ public final class ProtobufMessages {
       private int bitField0_;
 
       // required string id = 1;
-      private Object id_ = "";
+      private java.lang.Object id_ = "";
       /**
        * <code>required string id = 1;</code>
        *
@@ -2268,15 +2268,15 @@ public final class ProtobufMessages {
        * required string user_id = 3;
        * </pre>
        */
-      public String getId() {
-        Object ref = id_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref)
+      public java.lang.String getId() {
+        java.lang.Object ref = id_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
           id_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -2289,11 +2289,11 @@ public final class ProtobufMessages {
        */
       public com.google.protobuf.ByteString
           getIdBytes() {
-        Object ref = id_;
+        java.lang.Object ref = id_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           id_ = b;
           return b;
         } else {
@@ -2309,7 +2309,7 @@ public final class ProtobufMessages {
        * </pre>
        */
       public Builder setId(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2352,7 +2352,7 @@ public final class ProtobufMessages {
       }
 
       // required string name = 10;
-      private Object name_ = "";
+      private java.lang.Object name_ = "";
       /**
        * <code>required string name = 10;</code>
        */
@@ -2362,15 +2362,15 @@ public final class ProtobufMessages {
       /**
        * <code>required string name = 10;</code>
        */
-      public String getName() {
-        Object ref = name_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref)
+      public java.lang.String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
           name_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -2378,11 +2378,11 @@ public final class ProtobufMessages {
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
-        Object ref = name_;
+        java.lang.Object ref = name_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           name_ = b;
           return b;
         } else {
@@ -2393,7 +2393,7 @@ public final class ProtobufMessages {
        * <code>required string name = 10;</code>
        */
       public Builder setName(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2426,7 +2426,7 @@ public final class ProtobufMessages {
       }
 
       // required string mime = 11;
-      private Object mime_ = "";
+      private java.lang.Object mime_ = "";
       /**
        * <code>required string mime = 11;</code>
        */
@@ -2436,15 +2436,15 @@ public final class ProtobufMessages {
       /**
        * <code>required string mime = 11;</code>
        */
-      public String getMime() {
-        Object ref = mime_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref)
+      public java.lang.String getMime() {
+        java.lang.Object ref = mime_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
           mime_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -2452,11 +2452,11 @@ public final class ProtobufMessages {
        */
       public com.google.protobuf.ByteString
           getMimeBytes() {
-        Object ref = mime_;
+        java.lang.Object ref = mime_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           mime_ = b;
           return b;
         } else {
@@ -2467,7 +2467,7 @@ public final class ProtobufMessages {
        * <code>required string mime = 11;</code>
        */
       public Builder setMime(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2631,7 +2631,7 @@ public final class ProtobufMessages {
       }
 
       // optional string description = 20;
-      private Object description_ = "";
+      private java.lang.Object description_ = "";
       /**
        * <code>optional string description = 20;</code>
        */
@@ -2641,15 +2641,15 @@ public final class ProtobufMessages {
       /**
        * <code>optional string description = 20;</code>
        */
-      public String getDescription() {
-        Object ref = description_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref)
+      public java.lang.String getDescription() {
+        java.lang.Object ref = description_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
           description_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -2657,11 +2657,11 @@ public final class ProtobufMessages {
        */
       public com.google.protobuf.ByteString
           getDescriptionBytes() {
-        Object ref = description_;
+        java.lang.Object ref = description_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           description_ = b;
           return b;
         } else {
@@ -2672,7 +2672,7 @@ public final class ProtobufMessages {
        * <code>optional string description = 20;</code>
        */
       public Builder setDescription(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2705,9 +2705,9 @@ public final class ProtobufMessages {
       }
 
       // optional .data.Image.Resolution size = 21;
-      private server.ProtobufMessages.Image.Resolution size_ = server.ProtobufMessages.Image.Resolution.getDefaultInstance();
+      private server.LifeStreamMessages.Image.Resolution size_ = server.LifeStreamMessages.Image.Resolution.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          server.ProtobufMessages.Image.Resolution, server.ProtobufMessages.Image.Resolution.Builder, server.ProtobufMessages.Image.ResolutionOrBuilder> sizeBuilder_;
+          server.LifeStreamMessages.Image.Resolution, server.LifeStreamMessages.Image.Resolution.Builder, server.LifeStreamMessages.Image.ResolutionOrBuilder> sizeBuilder_;
       /**
        * <code>optional .data.Image.Resolution size = 21;</code>
        */
@@ -2717,7 +2717,7 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image.Resolution size = 21;</code>
        */
-      public server.ProtobufMessages.Image.Resolution getSize() {
+      public server.LifeStreamMessages.Image.Resolution getSize() {
         if (sizeBuilder_ == null) {
           return size_;
         } else {
@@ -2727,7 +2727,7 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image.Resolution size = 21;</code>
        */
-      public Builder setSize(server.ProtobufMessages.Image.Resolution value) {
+      public Builder setSize(server.LifeStreamMessages.Image.Resolution value) {
         if (sizeBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -2744,7 +2744,7 @@ public final class ProtobufMessages {
        * <code>optional .data.Image.Resolution size = 21;</code>
        */
       public Builder setSize(
-          server.ProtobufMessages.Image.Resolution.Builder builderForValue) {
+          server.LifeStreamMessages.Image.Resolution.Builder builderForValue) {
         if (sizeBuilder_ == null) {
           size_ = builderForValue.build();
           onChanged();
@@ -2757,12 +2757,12 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image.Resolution size = 21;</code>
        */
-      public Builder mergeSize(server.ProtobufMessages.Image.Resolution value) {
+      public Builder mergeSize(server.LifeStreamMessages.Image.Resolution value) {
         if (sizeBuilder_ == null) {
           if (((bitField0_ & 0x00000080) == 0x00000080) &&
-              size_ != server.ProtobufMessages.Image.Resolution.getDefaultInstance()) {
+              size_ != server.LifeStreamMessages.Image.Resolution.getDefaultInstance()) {
             size_ =
-              server.ProtobufMessages.Image.Resolution.newBuilder(size_).mergeFrom(value).buildPartial();
+              server.LifeStreamMessages.Image.Resolution.newBuilder(size_).mergeFrom(value).buildPartial();
           } else {
             size_ = value;
           }
@@ -2778,7 +2778,7 @@ public final class ProtobufMessages {
        */
       public Builder clearSize() {
         if (sizeBuilder_ == null) {
-          size_ = server.ProtobufMessages.Image.Resolution.getDefaultInstance();
+          size_ = server.LifeStreamMessages.Image.Resolution.getDefaultInstance();
           onChanged();
         } else {
           sizeBuilder_.clear();
@@ -2789,7 +2789,7 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image.Resolution size = 21;</code>
        */
-      public server.ProtobufMessages.Image.Resolution.Builder getSizeBuilder() {
+      public server.LifeStreamMessages.Image.Resolution.Builder getSizeBuilder() {
         bitField0_ |= 0x00000080;
         onChanged();
         return getSizeFieldBuilder().getBuilder();
@@ -2797,7 +2797,7 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image.Resolution size = 21;</code>
        */
-      public server.ProtobufMessages.Image.ResolutionOrBuilder getSizeOrBuilder() {
+      public server.LifeStreamMessages.Image.ResolutionOrBuilder getSizeOrBuilder() {
         if (sizeBuilder_ != null) {
           return sizeBuilder_.getMessageOrBuilder();
         } else {
@@ -2808,11 +2808,11 @@ public final class ProtobufMessages {
        * <code>optional .data.Image.Resolution size = 21;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
-          server.ProtobufMessages.Image.Resolution, server.ProtobufMessages.Image.Resolution.Builder, server.ProtobufMessages.Image.ResolutionOrBuilder> 
+          server.LifeStreamMessages.Image.Resolution, server.LifeStreamMessages.Image.Resolution.Builder, server.LifeStreamMessages.Image.ResolutionOrBuilder> 
           getSizeFieldBuilder() {
         if (sizeBuilder_ == null) {
           sizeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              server.ProtobufMessages.Image.Resolution, server.ProtobufMessages.Image.Resolution.Builder, server.ProtobufMessages.Image.ResolutionOrBuilder>(
+              server.LifeStreamMessages.Image.Resolution, server.LifeStreamMessages.Image.Resolution.Builder, server.LifeStreamMessages.Image.ResolutionOrBuilder>(
                   size_,
                   getParentForChildren(),
                   isClean());
@@ -2822,9 +2822,9 @@ public final class ProtobufMessages {
       }
 
       // optional .data.Image.GeoPoint geo_location = 22;
-      private server.ProtobufMessages.Image.GeoPoint geoLocation_ = server.ProtobufMessages.Image.GeoPoint.getDefaultInstance();
+      private server.LifeStreamMessages.Image.GeoPoint geoLocation_ = server.LifeStreamMessages.Image.GeoPoint.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          server.ProtobufMessages.Image.GeoPoint, server.ProtobufMessages.Image.GeoPoint.Builder, server.ProtobufMessages.Image.GeoPointOrBuilder> geoLocationBuilder_;
+          server.LifeStreamMessages.Image.GeoPoint, server.LifeStreamMessages.Image.GeoPoint.Builder, server.LifeStreamMessages.Image.GeoPointOrBuilder> geoLocationBuilder_;
       /**
        * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
@@ -2834,7 +2834,7 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
-      public server.ProtobufMessages.Image.GeoPoint getGeoLocation() {
+      public server.LifeStreamMessages.Image.GeoPoint getGeoLocation() {
         if (geoLocationBuilder_ == null) {
           return geoLocation_;
         } else {
@@ -2844,7 +2844,7 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
-      public Builder setGeoLocation(server.ProtobufMessages.Image.GeoPoint value) {
+      public Builder setGeoLocation(server.LifeStreamMessages.Image.GeoPoint value) {
         if (geoLocationBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -2861,7 +2861,7 @@ public final class ProtobufMessages {
        * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
       public Builder setGeoLocation(
-          server.ProtobufMessages.Image.GeoPoint.Builder builderForValue) {
+          server.LifeStreamMessages.Image.GeoPoint.Builder builderForValue) {
         if (geoLocationBuilder_ == null) {
           geoLocation_ = builderForValue.build();
           onChanged();
@@ -2874,12 +2874,12 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
-      public Builder mergeGeoLocation(server.ProtobufMessages.Image.GeoPoint value) {
+      public Builder mergeGeoLocation(server.LifeStreamMessages.Image.GeoPoint value) {
         if (geoLocationBuilder_ == null) {
           if (((bitField0_ & 0x00000100) == 0x00000100) &&
-              geoLocation_ != server.ProtobufMessages.Image.GeoPoint.getDefaultInstance()) {
+              geoLocation_ != server.LifeStreamMessages.Image.GeoPoint.getDefaultInstance()) {
             geoLocation_ =
-              server.ProtobufMessages.Image.GeoPoint.newBuilder(geoLocation_).mergeFrom(value).buildPartial();
+              server.LifeStreamMessages.Image.GeoPoint.newBuilder(geoLocation_).mergeFrom(value).buildPartial();
           } else {
             geoLocation_ = value;
           }
@@ -2895,7 +2895,7 @@ public final class ProtobufMessages {
        */
       public Builder clearGeoLocation() {
         if (geoLocationBuilder_ == null) {
-          geoLocation_ = server.ProtobufMessages.Image.GeoPoint.getDefaultInstance();
+          geoLocation_ = server.LifeStreamMessages.Image.GeoPoint.getDefaultInstance();
           onChanged();
         } else {
           geoLocationBuilder_.clear();
@@ -2906,7 +2906,7 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
-      public server.ProtobufMessages.Image.GeoPoint.Builder getGeoLocationBuilder() {
+      public server.LifeStreamMessages.Image.GeoPoint.Builder getGeoLocationBuilder() {
         bitField0_ |= 0x00000100;
         onChanged();
         return getGeoLocationFieldBuilder().getBuilder();
@@ -2914,7 +2914,7 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
-      public server.ProtobufMessages.Image.GeoPointOrBuilder getGeoLocationOrBuilder() {
+      public server.LifeStreamMessages.Image.GeoPointOrBuilder getGeoLocationOrBuilder() {
         if (geoLocationBuilder_ != null) {
           return geoLocationBuilder_.getMessageOrBuilder();
         } else {
@@ -2925,11 +2925,11 @@ public final class ProtobufMessages {
        * <code>optional .data.Image.GeoPoint geo_location = 22;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
-          server.ProtobufMessages.Image.GeoPoint, server.ProtobufMessages.Image.GeoPoint.Builder, server.ProtobufMessages.Image.GeoPointOrBuilder> 
+          server.LifeStreamMessages.Image.GeoPoint, server.LifeStreamMessages.Image.GeoPoint.Builder, server.LifeStreamMessages.Image.GeoPointOrBuilder> 
           getGeoLocationFieldBuilder() {
         if (geoLocationBuilder_ == null) {
           geoLocationBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              server.ProtobufMessages.Image.GeoPoint, server.ProtobufMessages.Image.GeoPoint.Builder, server.ProtobufMessages.Image.GeoPointOrBuilder>(
+              server.LifeStreamMessages.Image.GeoPoint, server.LifeStreamMessages.Image.GeoPoint.Builder, server.LifeStreamMessages.Image.GeoPointOrBuilder>(
                   geoLocation_,
                   getParentForChildren(),
                   isClean());
@@ -3045,7 +3045,7 @@ public final class ProtobufMessages {
     /**
      * <code>required .data.ServerMessage.OperationType operation = 1;</code>
      */
-    server.ProtobufMessages.ServerMessage.OperationType getOperation();
+    server.LifeStreamMessages.ServerMessage.OperationType getOperation();
 
     // required uint32 node_id = 2;
     /**
@@ -3065,11 +3065,11 @@ public final class ProtobufMessages {
     /**
      * <code>optional .data.Image image = 4;</code>
      */
-    server.ProtobufMessages.Image getImage();
+    server.LifeStreamMessages.Image getImage();
     /**
      * <code>optional .data.Image image = 4;</code>
      */
-    server.ProtobufMessages.ImageOrBuilder getImageOrBuilder();
+    server.LifeStreamMessages.ImageOrBuilder getImageOrBuilder();
   }
   /**
    * Protobuf type {@code data.ServerMessage}
@@ -3094,7 +3094,7 @@ public final class ProtobufMessages {
     }
 
     private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
         getUnknownFields() {
       return this.unknownFields;
@@ -3124,7 +3124,7 @@ public final class ProtobufMessages {
             }
             case 8: {
               int rawValue = input.readEnum();
-              server.ProtobufMessages.ServerMessage.OperationType value = server.ProtobufMessages.ServerMessage.OperationType.valueOf(rawValue);
+              server.LifeStreamMessages.ServerMessage.OperationType value = server.LifeStreamMessages.ServerMessage.OperationType.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(1, rawValue);
               } else {
@@ -3139,11 +3139,11 @@ public final class ProtobufMessages {
               break;
             }
             case 34: {
-              server.ProtobufMessages.Image.Builder subBuilder = null;
+              server.LifeStreamMessages.Image.Builder subBuilder = null;
               if (((bitField0_ & 0x00000004) == 0x00000004)) {
                 subBuilder = image_.toBuilder();
               }
-              image_ = input.readMessage(server.ProtobufMessages.Image.PARSER, extensionRegistry);
+              image_ = input.readMessage(server.LifeStreamMessages.Image.PARSER, extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(image_);
                 image_ = subBuilder.buildPartial();
@@ -3165,14 +3165,14 @@ public final class ProtobufMessages {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return internal_static_data_ServerMessage_descriptor;
+      return server.LifeStreamMessages.internal_static_data_ServerMessage_descriptor;
     }
 
-    protected FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return internal_static_data_ServerMessage_fieldAccessorTable
+      return server.LifeStreamMessages.internal_static_data_ServerMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-		          server.ProtobufMessages.ServerMessage.class, server.ProtobufMessages.ServerMessage.Builder.class);
+              server.LifeStreamMessages.ServerMessage.class, server.LifeStreamMessages.ServerMessage.Builder.class);
     }
 
     public static com.google.protobuf.Parser<ServerMessage> PARSER =
@@ -3185,7 +3185,7 @@ public final class ProtobufMessages {
       }
     };
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<ServerMessage> getParserForType() {
       return PARSER;
     }
@@ -3283,7 +3283,7 @@ public final class ProtobufMessages {
       }
       public static final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptor() {
-        return server.ProtobufMessages.ServerMessage.getDescriptor().getEnumTypes().get(0);
+        return server.LifeStreamMessages.ServerMessage.getDescriptor().getEnumTypes().get(0);
       }
 
       private static final OperationType[] VALUES = values();
@@ -3291,7 +3291,7 @@ public final class ProtobufMessages {
       public static OperationType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
-          throw new IllegalArgumentException(
+          throw new java.lang.IllegalArgumentException(
             "EnumValueDescriptor is not for this type.");
         }
         return VALUES[desc.getIndex()];
@@ -3311,7 +3311,7 @@ public final class ProtobufMessages {
     private int bitField0_;
     // required .data.ServerMessage.OperationType operation = 1;
     public static final int OPERATION_FIELD_NUMBER = 1;
-    private server.ProtobufMessages.ServerMessage.OperationType operation_;
+    private server.LifeStreamMessages.ServerMessage.OperationType operation_;
     /**
      * <code>required .data.ServerMessage.OperationType operation = 1;</code>
      */
@@ -3321,7 +3321,7 @@ public final class ProtobufMessages {
     /**
      * <code>required .data.ServerMessage.OperationType operation = 1;</code>
      */
-    public server.ProtobufMessages.ServerMessage.OperationType getOperation() {
+    public server.LifeStreamMessages.ServerMessage.OperationType getOperation() {
       return operation_;
     }
 
@@ -3343,7 +3343,7 @@ public final class ProtobufMessages {
 
     // optional .data.Image image = 4;
     public static final int IMAGE_FIELD_NUMBER = 4;
-    private server.ProtobufMessages.Image image_;
+    private server.LifeStreamMessages.Image image_;
     /**
      * <code>optional .data.Image image = 4;</code>
      */
@@ -3353,20 +3353,20 @@ public final class ProtobufMessages {
     /**
      * <code>optional .data.Image image = 4;</code>
      */
-    public server.ProtobufMessages.Image getImage() {
+    public server.LifeStreamMessages.Image getImage() {
       return image_;
     }
     /**
      * <code>optional .data.Image image = 4;</code>
      */
-    public server.ProtobufMessages.ImageOrBuilder getImageOrBuilder() {
+    public server.LifeStreamMessages.ImageOrBuilder getImageOrBuilder() {
       return image_;
     }
 
     private void initFields() {
-      operation_ = server.ProtobufMessages.ServerMessage.OperationType.ADD_IMAGE;
+      operation_ = server.LifeStreamMessages.ServerMessage.OperationType.ADD_IMAGE;
       nodeId_ = 0;
-      image_ = server.ProtobufMessages.Image.getDefaultInstance();
+      image_ = server.LifeStreamMessages.Image.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3430,59 +3430,59 @@ public final class ProtobufMessages {
     }
 
     private static final long serialVersionUID = 0L;
-    @Override
-    protected Object writeReplace()
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
 
-    public static server.ProtobufMessages.ServerMessage parseFrom(
+    public static server.LifeStreamMessages.ServerMessage parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static server.ProtobufMessages.ServerMessage parseFrom(
+    public static server.LifeStreamMessages.ServerMessage parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static server.ProtobufMessages.ServerMessage parseFrom(byte[] data)
+    public static server.LifeStreamMessages.ServerMessage parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static server.ProtobufMessages.ServerMessage parseFrom(
+    public static server.LifeStreamMessages.ServerMessage parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static server.ProtobufMessages.ServerMessage parseFrom(java.io.InputStream input)
+    public static server.LifeStreamMessages.ServerMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static server.ProtobufMessages.ServerMessage parseFrom(
+    public static server.LifeStreamMessages.ServerMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static server.ProtobufMessages.ServerMessage parseDelimitedFrom(java.io.InputStream input)
+    public static server.LifeStreamMessages.ServerMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static server.ProtobufMessages.ServerMessage parseDelimitedFrom(
+    public static server.LifeStreamMessages.ServerMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static server.ProtobufMessages.ServerMessage parseFrom(
+    public static server.LifeStreamMessages.ServerMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static server.ProtobufMessages.ServerMessage parseFrom(
+    public static server.LifeStreamMessages.ServerMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -3491,14 +3491,14 @@ public final class ProtobufMessages {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(server.ProtobufMessages.ServerMessage prototype) {
+    public static Builder newBuilder(server.LifeStreamMessages.ServerMessage prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -3507,26 +3507,26 @@ public final class ProtobufMessages {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements server.ProtobufMessages.ServerMessageOrBuilder {
+       implements server.LifeStreamMessages.ServerMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return internal_static_data_ServerMessage_descriptor;
+        return server.LifeStreamMessages.internal_static_data_ServerMessage_descriptor;
       }
 
-      protected FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return internal_static_data_ServerMessage_fieldAccessorTable
+        return server.LifeStreamMessages.internal_static_data_ServerMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-		            server.ProtobufMessages.ServerMessage.class, server.ProtobufMessages.ServerMessage.Builder.class);
+                server.LifeStreamMessages.ServerMessage.class, server.LifeStreamMessages.ServerMessage.Builder.class);
       }
 
-      // Construct using server.ProtobufMessages.ServerMessage.newBuilder()
+      // Construct using server.LifeStreamMessages.ServerMessage.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
 
       private Builder(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -3541,12 +3541,12 @@ public final class ProtobufMessages {
 
       public Builder clear() {
         super.clear();
-        operation_ = server.ProtobufMessages.ServerMessage.OperationType.ADD_IMAGE;
+        operation_ = server.LifeStreamMessages.ServerMessage.OperationType.ADD_IMAGE;
         bitField0_ = (bitField0_ & ~0x00000001);
         nodeId_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
         if (imageBuilder_ == null) {
-          image_ = server.ProtobufMessages.Image.getDefaultInstance();
+          image_ = server.LifeStreamMessages.Image.getDefaultInstance();
         } else {
           imageBuilder_.clear();
         }
@@ -3560,23 +3560,23 @@ public final class ProtobufMessages {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return internal_static_data_ServerMessage_descriptor;
+        return server.LifeStreamMessages.internal_static_data_ServerMessage_descriptor;
       }
 
-      public server.ProtobufMessages.ServerMessage getDefaultInstanceForType() {
-        return getDefaultInstance();
+      public server.LifeStreamMessages.ServerMessage getDefaultInstanceForType() {
+        return server.LifeStreamMessages.ServerMessage.getDefaultInstance();
       }
 
-      public server.ProtobufMessages.ServerMessage build() {
-        server.ProtobufMessages.ServerMessage result = buildPartial();
+      public server.LifeStreamMessages.ServerMessage build() {
+        server.LifeStreamMessages.ServerMessage result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public server.ProtobufMessages.ServerMessage buildPartial() {
-        server.ProtobufMessages.ServerMessage result = new server.ProtobufMessages.ServerMessage(this);
+      public server.LifeStreamMessages.ServerMessage buildPartial() {
+        server.LifeStreamMessages.ServerMessage result = new server.LifeStreamMessages.ServerMessage(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -3601,16 +3601,16 @@ public final class ProtobufMessages {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof server.ProtobufMessages.ServerMessage) {
-          return mergeFrom((server.ProtobufMessages.ServerMessage)other);
+        if (other instanceof server.LifeStreamMessages.ServerMessage) {
+          return mergeFrom((server.LifeStreamMessages.ServerMessage)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(server.ProtobufMessages.ServerMessage other) {
-        if (other == getDefaultInstance()) return this;
+      public Builder mergeFrom(server.LifeStreamMessages.ServerMessage other) {
+        if (other == server.LifeStreamMessages.ServerMessage.getDefaultInstance()) return this;
         if (other.hasOperation()) {
           setOperation(other.getOperation());
         }
@@ -3646,11 +3646,11 @@ public final class ProtobufMessages {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        server.ProtobufMessages.ServerMessage parsedMessage = null;
+        server.LifeStreamMessages.ServerMessage parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (server.ProtobufMessages.ServerMessage) e.getUnfinishedMessage();
+          parsedMessage = (server.LifeStreamMessages.ServerMessage) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -3662,7 +3662,7 @@ public final class ProtobufMessages {
       private int bitField0_;
 
       // required .data.ServerMessage.OperationType operation = 1;
-      private server.ProtobufMessages.ServerMessage.OperationType operation_ = server.ProtobufMessages.ServerMessage.OperationType.ADD_IMAGE;
+      private server.LifeStreamMessages.ServerMessage.OperationType operation_ = server.LifeStreamMessages.ServerMessage.OperationType.ADD_IMAGE;
       /**
        * <code>required .data.ServerMessage.OperationType operation = 1;</code>
        */
@@ -3672,13 +3672,13 @@ public final class ProtobufMessages {
       /**
        * <code>required .data.ServerMessage.OperationType operation = 1;</code>
        */
-      public server.ProtobufMessages.ServerMessage.OperationType getOperation() {
+      public server.LifeStreamMessages.ServerMessage.OperationType getOperation() {
         return operation_;
       }
       /**
        * <code>required .data.ServerMessage.OperationType operation = 1;</code>
        */
-      public Builder setOperation(server.ProtobufMessages.ServerMessage.OperationType value) {
+      public Builder setOperation(server.LifeStreamMessages.ServerMessage.OperationType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -3692,7 +3692,7 @@ public final class ProtobufMessages {
        */
       public Builder clearOperation() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        operation_ = server.ProtobufMessages.ServerMessage.OperationType.ADD_IMAGE;
+        operation_ = server.LifeStreamMessages.ServerMessage.OperationType.ADD_IMAGE;
         onChanged();
         return this;
       }
@@ -3731,9 +3731,9 @@ public final class ProtobufMessages {
       }
 
       // optional .data.Image image = 4;
-      private server.ProtobufMessages.Image image_ = server.ProtobufMessages.Image.getDefaultInstance();
+      private server.LifeStreamMessages.Image image_ = server.LifeStreamMessages.Image.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          server.ProtobufMessages.Image, server.ProtobufMessages.Image.Builder, server.ProtobufMessages.ImageOrBuilder> imageBuilder_;
+          server.LifeStreamMessages.Image, server.LifeStreamMessages.Image.Builder, server.LifeStreamMessages.ImageOrBuilder> imageBuilder_;
       /**
        * <code>optional .data.Image image = 4;</code>
        */
@@ -3743,7 +3743,7 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image image = 4;</code>
        */
-      public server.ProtobufMessages.Image getImage() {
+      public server.LifeStreamMessages.Image getImage() {
         if (imageBuilder_ == null) {
           return image_;
         } else {
@@ -3753,7 +3753,7 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image image = 4;</code>
        */
-      public Builder setImage(server.ProtobufMessages.Image value) {
+      public Builder setImage(server.LifeStreamMessages.Image value) {
         if (imageBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -3770,7 +3770,7 @@ public final class ProtobufMessages {
        * <code>optional .data.Image image = 4;</code>
        */
       public Builder setImage(
-          server.ProtobufMessages.Image.Builder builderForValue) {
+          server.LifeStreamMessages.Image.Builder builderForValue) {
         if (imageBuilder_ == null) {
           image_ = builderForValue.build();
           onChanged();
@@ -3783,12 +3783,12 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image image = 4;</code>
        */
-      public Builder mergeImage(server.ProtobufMessages.Image value) {
+      public Builder mergeImage(server.LifeStreamMessages.Image value) {
         if (imageBuilder_ == null) {
           if (((bitField0_ & 0x00000004) == 0x00000004) &&
-              image_ != server.ProtobufMessages.Image.getDefaultInstance()) {
+              image_ != server.LifeStreamMessages.Image.getDefaultInstance()) {
             image_ =
-              server.ProtobufMessages.Image.newBuilder(image_).mergeFrom(value).buildPartial();
+              server.LifeStreamMessages.Image.newBuilder(image_).mergeFrom(value).buildPartial();
           } else {
             image_ = value;
           }
@@ -3804,7 +3804,7 @@ public final class ProtobufMessages {
        */
       public Builder clearImage() {
         if (imageBuilder_ == null) {
-          image_ = server.ProtobufMessages.Image.getDefaultInstance();
+          image_ = server.LifeStreamMessages.Image.getDefaultInstance();
           onChanged();
         } else {
           imageBuilder_.clear();
@@ -3815,7 +3815,7 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image image = 4;</code>
        */
-      public server.ProtobufMessages.Image.Builder getImageBuilder() {
+      public server.LifeStreamMessages.Image.Builder getImageBuilder() {
         bitField0_ |= 0x00000004;
         onChanged();
         return getImageFieldBuilder().getBuilder();
@@ -3823,7 +3823,7 @@ public final class ProtobufMessages {
       /**
        * <code>optional .data.Image image = 4;</code>
        */
-      public server.ProtobufMessages.ImageOrBuilder getImageOrBuilder() {
+      public server.LifeStreamMessages.ImageOrBuilder getImageOrBuilder() {
         if (imageBuilder_ != null) {
           return imageBuilder_.getMessageOrBuilder();
         } else {
@@ -3834,11 +3834,11 @@ public final class ProtobufMessages {
        * <code>optional .data.Image image = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
-          server.ProtobufMessages.Image, server.ProtobufMessages.Image.Builder, server.ProtobufMessages.ImageOrBuilder> 
+          server.LifeStreamMessages.Image, server.LifeStreamMessages.Image.Builder, server.LifeStreamMessages.ImageOrBuilder> 
           getImageFieldBuilder() {
         if (imageBuilder_ == null) {
           imageBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              server.ProtobufMessages.Image, server.ProtobufMessages.Image.Builder, server.ProtobufMessages.ImageOrBuilder>(
+              server.LifeStreamMessages.Image, server.LifeStreamMessages.Image.Builder, server.LifeStreamMessages.ImageOrBuilder>(
                   image_,
                   getParentForChildren(),
                   isClean());
@@ -3858,62 +3858,68 @@ public final class ProtobufMessages {
     // @@protoc_insertion_point(class_scope:data.ServerMessage)
   }
 
-  public interface HeartBeatOrBuilder
+  public interface HeartBeatMessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required uint32 node_id = 1;
+    // required .data.HeartBeatMessage.OperationType operation = 1;
     /**
-     * <code>required uint32 node_id = 1;</code>
+     * <code>required .data.HeartBeatMessage.OperationType operation = 1;</code>
+     */
+    boolean hasOperation();
+    /**
+     * <code>required .data.HeartBeatMessage.OperationType operation = 1;</code>
+     */
+    server.LifeStreamMessages.HeartBeatMessage.OperationType getOperation();
+
+    // required uint32 node_id = 2;
+    /**
+     * <code>required uint32 node_id = 2;</code>
      */
     boolean hasNodeId();
     /**
-     * <code>required uint32 node_id = 1;</code>
+     * <code>required uint32 node_id = 2;</code>
      */
     int getNodeId();
 
-    // repeated uint64 timestamp = 2;
+    // required uint64 timestamp = 3;
     /**
-     * <code>repeated uint64 timestamp = 2;</code>
+     * <code>required uint64 timestamp = 3;</code>
      */
-    java.util.List<Long> getTimestampList();
+    boolean hasTimestamp();
     /**
-     * <code>repeated uint64 timestamp = 2;</code>
+     * <code>required uint64 timestamp = 3;</code>
      */
-    int getTimestampCount();
-    /**
-     * <code>repeated uint64 timestamp = 2;</code>
-     */
-    long getTimestamp(int index);
+    long getTimestamp();
   }
   /**
-   * Protobuf type {@code data.HeartBeat}
+   * Protobuf type {@code data.HeartBeatMessage}
    */
-  public static final class HeartBeat extends
+  public static final class HeartBeatMessage extends
       com.google.protobuf.GeneratedMessage
-      implements HeartBeatOrBuilder {
-    // Use HeartBeat.newBuilder() to construct.
-    private HeartBeat(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      implements HeartBeatMessageOrBuilder {
+    // Use HeartBeatMessage.newBuilder() to construct.
+    private HeartBeatMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private HeartBeat(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private HeartBeatMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final HeartBeat defaultInstance;
-    public static HeartBeat getDefaultInstance() {
+    private static final HeartBeatMessage defaultInstance;
+    public static HeartBeatMessage getDefaultInstance() {
       return defaultInstance;
     }
 
-    public HeartBeat getDefaultInstanceForType() {
+    public HeartBeatMessage getDefaultInstanceForType() {
       return defaultInstance;
     }
 
     private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
         getUnknownFields() {
       return this.unknownFields;
     }
-    private HeartBeat(
+    private HeartBeatMessage(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -3937,29 +3943,24 @@ public final class ProtobufMessages {
               break;
             }
             case 8: {
-              bitField0_ |= 0x00000001;
-              nodeId_ = input.readUInt32();
+              int rawValue = input.readEnum();
+              server.LifeStreamMessages.HeartBeatMessage.OperationType value = server.LifeStreamMessages.HeartBeatMessage.OperationType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                operation_ = value;
+              }
               break;
             }
             case 16: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                timestamp_ = new java.util.ArrayList<Long>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              timestamp_.add(input.readUInt64());
+              bitField0_ |= 0x00000002;
+              nodeId_ = input.readUInt32();
               break;
             }
-            case 18: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002) && input.getBytesUntilLimit() > 0) {
-                timestamp_ = new java.util.ArrayList<Long>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                timestamp_.add(input.readUInt64());
-              }
-              input.popLimit(limit);
+            case 24: {
+              bitField0_ |= 0x00000004;
+              timestamp_ = input.readUInt64();
               break;
             }
           }
@@ -3970,90 +3971,178 @@ public final class ProtobufMessages {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          timestamp_ = java.util.Collections.unmodifiableList(timestamp_);
-        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return internal_static_data_HeartBeat_descriptor;
+      return server.LifeStreamMessages.internal_static_data_HeartBeatMessage_descriptor;
     }
 
-    protected FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return internal_static_data_HeartBeat_fieldAccessorTable
+      return server.LifeStreamMessages.internal_static_data_HeartBeatMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-		          server.ProtobufMessages.HeartBeat.class, server.ProtobufMessages.HeartBeat.Builder.class);
+              server.LifeStreamMessages.HeartBeatMessage.class, server.LifeStreamMessages.HeartBeatMessage.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<HeartBeat> PARSER =
-        new com.google.protobuf.AbstractParser<HeartBeat>() {
-      public HeartBeat parsePartialFrom(
+    public static com.google.protobuf.Parser<HeartBeatMessage> PARSER =
+        new com.google.protobuf.AbstractParser<HeartBeatMessage>() {
+      public HeartBeatMessage parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new HeartBeat(input, extensionRegistry);
+        return new HeartBeatMessage(input, extensionRegistry);
       }
     };
 
-    @Override
-    public com.google.protobuf.Parser<HeartBeat> getParserForType() {
+    @java.lang.Override
+    public com.google.protobuf.Parser<HeartBeatMessage> getParserForType() {
       return PARSER;
     }
 
-    private int bitField0_;
-    // required uint32 node_id = 1;
-    public static final int NODE_ID_FIELD_NUMBER = 1;
-    private int nodeId_;
     /**
-     * <code>required uint32 node_id = 1;</code>
+     * Protobuf enum {@code data.HeartBeatMessage.OperationType}
      */
-    public boolean hasNodeId() {
+    public enum OperationType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>PING = 0;</code>
+       */
+      PING(0, 0),
+      ;
+
+      /**
+       * <code>PING = 0;</code>
+       */
+      public static final int PING_VALUE = 0;
+
+
+      public final int getNumber() { return value; }
+
+      public static OperationType valueOf(int value) {
+        switch (value) {
+          case 0: return PING;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<OperationType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<OperationType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<OperationType>() {
+              public OperationType findValueByNumber(int number) {
+                return OperationType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return server.LifeStreamMessages.HeartBeatMessage.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final OperationType[] VALUES = values();
+
+      public static OperationType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private OperationType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:data.HeartBeatMessage.OperationType)
+    }
+
+    private int bitField0_;
+    // required .data.HeartBeatMessage.OperationType operation = 1;
+    public static final int OPERATION_FIELD_NUMBER = 1;
+    private server.LifeStreamMessages.HeartBeatMessage.OperationType operation_;
+    /**
+     * <code>required .data.HeartBeatMessage.OperationType operation = 1;</code>
+     */
+    public boolean hasOperation() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required uint32 node_id = 1;</code>
+     * <code>required .data.HeartBeatMessage.OperationType operation = 1;</code>
+     */
+    public server.LifeStreamMessages.HeartBeatMessage.OperationType getOperation() {
+      return operation_;
+    }
+
+    // required uint32 node_id = 2;
+    public static final int NODE_ID_FIELD_NUMBER = 2;
+    private int nodeId_;
+    /**
+     * <code>required uint32 node_id = 2;</code>
+     */
+    public boolean hasNodeId() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required uint32 node_id = 2;</code>
      */
     public int getNodeId() {
       return nodeId_;
     }
 
-    // repeated uint64 timestamp = 2;
-    public static final int TIMESTAMP_FIELD_NUMBER = 2;
-    private java.util.List<Long> timestamp_;
+    // required uint64 timestamp = 3;
+    public static final int TIMESTAMP_FIELD_NUMBER = 3;
+    private long timestamp_;
     /**
-     * <code>repeated uint64 timestamp = 2;</code>
+     * <code>required uint64 timestamp = 3;</code>
      */
-    public java.util.List<Long>
-        getTimestampList() {
+    public boolean hasTimestamp() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required uint64 timestamp = 3;</code>
+     */
+    public long getTimestamp() {
       return timestamp_;
-    }
-    /**
-     * <code>repeated uint64 timestamp = 2;</code>
-     */
-    public int getTimestampCount() {
-      return timestamp_.size();
-    }
-    /**
-     * <code>repeated uint64 timestamp = 2;</code>
-     */
-    public long getTimestamp(int index) {
-      return timestamp_.get(index);
     }
 
     private void initFields() {
+      operation_ = server.LifeStreamMessages.HeartBeatMessage.OperationType.PING;
       nodeId_ = 0;
-      timestamp_ = java.util.Collections.emptyList();
+      timestamp_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
+      if (!hasOperation()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       if (!hasNodeId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasTimestamp()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -4065,10 +4154,13 @@ public final class ProtobufMessages {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeUInt32(1, nodeId_);
+        output.writeEnum(1, operation_.getNumber());
       }
-      for (int i = 0; i < timestamp_.size(); i++) {
-        output.writeUInt64(2, timestamp_.get(i));
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeUInt32(2, nodeId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeUInt64(3, timestamp_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -4081,16 +4173,15 @@ public final class ProtobufMessages {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, nodeId_);
+          .computeEnumSize(1, operation_.getNumber());
       }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < timestamp_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeUInt64SizeNoTag(timestamp_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getTimestampList().size();
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(2, nodeId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(3, timestamp_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4098,59 +4189,59 @@ public final class ProtobufMessages {
     }
 
     private static final long serialVersionUID = 0L;
-    @Override
-    protected Object writeReplace()
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
 
-    public static server.ProtobufMessages.HeartBeat parseFrom(
+    public static server.LifeStreamMessages.HeartBeatMessage parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static server.ProtobufMessages.HeartBeat parseFrom(
+    public static server.LifeStreamMessages.HeartBeatMessage parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static server.ProtobufMessages.HeartBeat parseFrom(byte[] data)
+    public static server.LifeStreamMessages.HeartBeatMessage parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static server.ProtobufMessages.HeartBeat parseFrom(
+    public static server.LifeStreamMessages.HeartBeatMessage parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static server.ProtobufMessages.HeartBeat parseFrom(java.io.InputStream input)
+    public static server.LifeStreamMessages.HeartBeatMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static server.ProtobufMessages.HeartBeat parseFrom(
+    public static server.LifeStreamMessages.HeartBeatMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static server.ProtobufMessages.HeartBeat parseDelimitedFrom(java.io.InputStream input)
+    public static server.LifeStreamMessages.HeartBeatMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static server.ProtobufMessages.HeartBeat parseDelimitedFrom(
+    public static server.LifeStreamMessages.HeartBeatMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static server.ProtobufMessages.HeartBeat parseFrom(
+    public static server.LifeStreamMessages.HeartBeatMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static server.ProtobufMessages.HeartBeat parseFrom(
+    public static server.LifeStreamMessages.HeartBeatMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -4159,42 +4250,42 @@ public final class ProtobufMessages {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(server.ProtobufMessages.HeartBeat prototype) {
+    public static Builder newBuilder(server.LifeStreamMessages.HeartBeatMessage prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
-     * Protobuf type {@code data.HeartBeat}
+     * Protobuf type {@code data.HeartBeatMessage}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements server.ProtobufMessages.HeartBeatOrBuilder {
+       implements server.LifeStreamMessages.HeartBeatMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return internal_static_data_HeartBeat_descriptor;
+        return server.LifeStreamMessages.internal_static_data_HeartBeatMessage_descriptor;
       }
 
-      protected FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return internal_static_data_HeartBeat_fieldAccessorTable
+        return server.LifeStreamMessages.internal_static_data_HeartBeatMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-		            server.ProtobufMessages.HeartBeat.class, server.ProtobufMessages.HeartBeat.Builder.class);
+                server.LifeStreamMessages.HeartBeatMessage.class, server.LifeStreamMessages.HeartBeatMessage.Builder.class);
       }
 
-      // Construct using server.ProtobufMessages.HeartBeat.newBuilder()
+      // Construct using server.LifeStreamMessages.HeartBeatMessage.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
 
       private Builder(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -4208,10 +4299,12 @@ public final class ProtobufMessages {
 
       public Builder clear() {
         super.clear();
-        nodeId_ = 0;
+        operation_ = server.LifeStreamMessages.HeartBeatMessage.OperationType.PING;
         bitField0_ = (bitField0_ & ~0x00000001);
-        timestamp_ = java.util.Collections.emptyList();
+        nodeId_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
+        timestamp_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -4221,32 +4314,35 @@ public final class ProtobufMessages {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return internal_static_data_HeartBeat_descriptor;
+        return server.LifeStreamMessages.internal_static_data_HeartBeatMessage_descriptor;
       }
 
-      public server.ProtobufMessages.HeartBeat getDefaultInstanceForType() {
-        return getDefaultInstance();
+      public server.LifeStreamMessages.HeartBeatMessage getDefaultInstanceForType() {
+        return server.LifeStreamMessages.HeartBeatMessage.getDefaultInstance();
       }
 
-      public server.ProtobufMessages.HeartBeat build() {
-        server.ProtobufMessages.HeartBeat result = buildPartial();
+      public server.LifeStreamMessages.HeartBeatMessage build() {
+        server.LifeStreamMessages.HeartBeatMessage result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public server.ProtobufMessages.HeartBeat buildPartial() {
-        server.ProtobufMessages.HeartBeat result = new server.ProtobufMessages.HeartBeat(this);
+      public server.LifeStreamMessages.HeartBeatMessage buildPartial() {
+        server.LifeStreamMessages.HeartBeatMessage result = new server.LifeStreamMessages.HeartBeatMessage(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
+        result.operation_ = operation_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
         result.nodeId_ = nodeId_;
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          timestamp_ = java.util.Collections.unmodifiableList(timestamp_);
-          bitField0_ = (bitField0_ & ~0x00000002);
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
         }
         result.timestamp_ = timestamp_;
         result.bitField0_ = to_bitField0_;
@@ -4255,35 +4351,39 @@ public final class ProtobufMessages {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof server.ProtobufMessages.HeartBeat) {
-          return mergeFrom((server.ProtobufMessages.HeartBeat)other);
+        if (other instanceof server.LifeStreamMessages.HeartBeatMessage) {
+          return mergeFrom((server.LifeStreamMessages.HeartBeatMessage)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(server.ProtobufMessages.HeartBeat other) {
-        if (other == getDefaultInstance()) return this;
+      public Builder mergeFrom(server.LifeStreamMessages.HeartBeatMessage other) {
+        if (other == server.LifeStreamMessages.HeartBeatMessage.getDefaultInstance()) return this;
+        if (other.hasOperation()) {
+          setOperation(other.getOperation());
+        }
         if (other.hasNodeId()) {
           setNodeId(other.getNodeId());
         }
-        if (!other.timestamp_.isEmpty()) {
-          if (timestamp_.isEmpty()) {
-            timestamp_ = other.timestamp_;
-            bitField0_ = (bitField0_ & ~0x00000002);
-          } else {
-            ensureTimestampIsMutable();
-            timestamp_.addAll(other.timestamp_);
-          }
-          onChanged();
+        if (other.hasTimestamp()) {
+          setTimestamp(other.getTimestamp());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
+        if (!hasOperation()) {
+          
+          return false;
+        }
         if (!hasNodeId()) {
+          
+          return false;
+        }
+        if (!hasTimestamp()) {
           
           return false;
         }
@@ -4294,11 +4394,11 @@ public final class ProtobufMessages {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        server.ProtobufMessages.HeartBeat parsedMessage = null;
+        server.LifeStreamMessages.HeartBeatMessage parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (server.ProtobufMessages.HeartBeat) e.getUnfinishedMessage();
+          parsedMessage = (server.LifeStreamMessages.HeartBeatMessage) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -4309,114 +4409,117 @@ public final class ProtobufMessages {
       }
       private int bitField0_;
 
-      // required uint32 node_id = 1;
-      private int nodeId_ ;
+      // required .data.HeartBeatMessage.OperationType operation = 1;
+      private server.LifeStreamMessages.HeartBeatMessage.OperationType operation_ = server.LifeStreamMessages.HeartBeatMessage.OperationType.PING;
       /**
-       * <code>required uint32 node_id = 1;</code>
+       * <code>required .data.HeartBeatMessage.OperationType operation = 1;</code>
        */
-      public boolean hasNodeId() {
+      public boolean hasOperation() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required uint32 node_id = 1;</code>
+       * <code>required .data.HeartBeatMessage.OperationType operation = 1;</code>
+       */
+      public server.LifeStreamMessages.HeartBeatMessage.OperationType getOperation() {
+        return operation_;
+      }
+      /**
+       * <code>required .data.HeartBeatMessage.OperationType operation = 1;</code>
+       */
+      public Builder setOperation(server.LifeStreamMessages.HeartBeatMessage.OperationType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        operation_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .data.HeartBeatMessage.OperationType operation = 1;</code>
+       */
+      public Builder clearOperation() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        operation_ = server.LifeStreamMessages.HeartBeatMessage.OperationType.PING;
+        onChanged();
+        return this;
+      }
+
+      // required uint32 node_id = 2;
+      private int nodeId_ ;
+      /**
+       * <code>required uint32 node_id = 2;</code>
+       */
+      public boolean hasNodeId() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required uint32 node_id = 2;</code>
        */
       public int getNodeId() {
         return nodeId_;
       }
       /**
-       * <code>required uint32 node_id = 1;</code>
+       * <code>required uint32 node_id = 2;</code>
        */
       public Builder setNodeId(int value) {
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
         nodeId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required uint32 node_id = 1;</code>
+       * <code>required uint32 node_id = 2;</code>
        */
       public Builder clearNodeId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000002);
         nodeId_ = 0;
         onChanged();
         return this;
       }
 
-      // repeated uint64 timestamp = 2;
-      private java.util.List<Long> timestamp_ = java.util.Collections.emptyList();
-      private void ensureTimestampIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          timestamp_ = new java.util.ArrayList<Long>(timestamp_);
-          bitField0_ |= 0x00000002;
-         }
+      // required uint64 timestamp = 3;
+      private long timestamp_ ;
+      /**
+       * <code>required uint64 timestamp = 3;</code>
+       */
+      public boolean hasTimestamp() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>repeated uint64 timestamp = 2;</code>
+       * <code>required uint64 timestamp = 3;</code>
        */
-      public java.util.List<Long>
-          getTimestampList() {
-        return java.util.Collections.unmodifiableList(timestamp_);
+      public long getTimestamp() {
+        return timestamp_;
       }
       /**
-       * <code>repeated uint64 timestamp = 2;</code>
+       * <code>required uint64 timestamp = 3;</code>
        */
-      public int getTimestampCount() {
-        return timestamp_.size();
-      }
-      /**
-       * <code>repeated uint64 timestamp = 2;</code>
-       */
-      public long getTimestamp(int index) {
-        return timestamp_.get(index);
-      }
-      /**
-       * <code>repeated uint64 timestamp = 2;</code>
-       */
-      public Builder setTimestamp(
-          int index, long value) {
-        ensureTimestampIsMutable();
-        timestamp_.set(index, value);
+      public Builder setTimestamp(long value) {
+        bitField0_ |= 0x00000004;
+        timestamp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>repeated uint64 timestamp = 2;</code>
-       */
-      public Builder addTimestamp(long value) {
-        ensureTimestampIsMutable();
-        timestamp_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated uint64 timestamp = 2;</code>
-       */
-      public Builder addAllTimestamp(
-          Iterable<? extends Long> values) {
-        ensureTimestampIsMutable();
-        super.addAll(values, timestamp_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated uint64 timestamp = 2;</code>
+       * <code>required uint64 timestamp = 3;</code>
        */
       public Builder clearTimestamp() {
-        timestamp_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
+        timestamp_ = 0L;
         onChanged();
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:data.HeartBeat)
+      // @@protoc_insertion_point(builder_scope:data.HeartBeatMessage)
     }
 
     static {
-      defaultInstance = new HeartBeat(true);
+      defaultInstance = new HeartBeatMessage(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:data.HeartBeat)
+    // @@protoc_insertion_point(class_scope:data.HeartBeatMessage)
   }
 
   public interface SocketAddressOrBuilder
@@ -4430,7 +4533,7 @@ public final class ProtobufMessages {
     /**
      * <code>required string hostname = 1;</code>
      */
-    String getHostname();
+    java.lang.String getHostname();
     /**
      * <code>required string hostname = 1;</code>
      */
@@ -4470,7 +4573,7 @@ public final class ProtobufMessages {
     }
 
     private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @Override
+    @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
         getUnknownFields() {
       return this.unknownFields;
@@ -4522,14 +4625,14 @@ public final class ProtobufMessages {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return internal_static_data_SocketAddress_descriptor;
+      return server.LifeStreamMessages.internal_static_data_SocketAddress_descriptor;
     }
 
-    protected FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return internal_static_data_SocketAddress_fieldAccessorTable
+      return server.LifeStreamMessages.internal_static_data_SocketAddress_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-		          server.ProtobufMessages.SocketAddress.class, server.ProtobufMessages.SocketAddress.Builder.class);
+              server.LifeStreamMessages.SocketAddress.class, server.LifeStreamMessages.SocketAddress.Builder.class);
     }
 
     public static com.google.protobuf.Parser<SocketAddress> PARSER =
@@ -4542,7 +4645,7 @@ public final class ProtobufMessages {
       }
     };
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Parser<SocketAddress> getParserForType() {
       return PARSER;
     }
@@ -4550,7 +4653,7 @@ public final class ProtobufMessages {
     private int bitField0_;
     // required string hostname = 1;
     public static final int HOSTNAME_FIELD_NUMBER = 1;
-    private Object hostname_;
+    private java.lang.Object hostname_;
     /**
      * <code>required string hostname = 1;</code>
      */
@@ -4560,14 +4663,14 @@ public final class ProtobufMessages {
     /**
      * <code>required string hostname = 1;</code>
      */
-    public String getHostname() {
-      Object ref = hostname_;
-      if (ref instanceof String) {
-        return (String) ref;
+    public java.lang.String getHostname() {
+      java.lang.Object ref = hostname_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
           hostname_ = s;
         }
@@ -4579,11 +4682,11 @@ public final class ProtobufMessages {
      */
     public com.google.protobuf.ByteString
         getHostnameBytes() {
-      Object ref = hostname_;
-      if (ref instanceof String) {
+      java.lang.Object ref = hostname_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         hostname_ = b;
         return b;
       } else {
@@ -4660,59 +4763,59 @@ public final class ProtobufMessages {
     }
 
     private static final long serialVersionUID = 0L;
-    @Override
-    protected Object writeReplace()
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
 
-    public static server.ProtobufMessages.SocketAddress parseFrom(
+    public static server.LifeStreamMessages.SocketAddress parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static server.ProtobufMessages.SocketAddress parseFrom(
+    public static server.LifeStreamMessages.SocketAddress parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static server.ProtobufMessages.SocketAddress parseFrom(byte[] data)
+    public static server.LifeStreamMessages.SocketAddress parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static server.ProtobufMessages.SocketAddress parseFrom(
+    public static server.LifeStreamMessages.SocketAddress parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static server.ProtobufMessages.SocketAddress parseFrom(java.io.InputStream input)
+    public static server.LifeStreamMessages.SocketAddress parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static server.ProtobufMessages.SocketAddress parseFrom(
+    public static server.LifeStreamMessages.SocketAddress parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static server.ProtobufMessages.SocketAddress parseDelimitedFrom(java.io.InputStream input)
+    public static server.LifeStreamMessages.SocketAddress parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static server.ProtobufMessages.SocketAddress parseDelimitedFrom(
+    public static server.LifeStreamMessages.SocketAddress parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static server.ProtobufMessages.SocketAddress parseFrom(
+    public static server.LifeStreamMessages.SocketAddress parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static server.ProtobufMessages.SocketAddress parseFrom(
+    public static server.LifeStreamMessages.SocketAddress parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -4721,14 +4824,14 @@ public final class ProtobufMessages {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(server.ProtobufMessages.SocketAddress prototype) {
+    public static Builder newBuilder(server.LifeStreamMessages.SocketAddress prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
 
-    @Override
+    @java.lang.Override
     protected Builder newBuilderForType(
-        BuilderParent parent) {
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -4737,26 +4840,26 @@ public final class ProtobufMessages {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements server.ProtobufMessages.SocketAddressOrBuilder {
+       implements server.LifeStreamMessages.SocketAddressOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return internal_static_data_SocketAddress_descriptor;
+        return server.LifeStreamMessages.internal_static_data_SocketAddress_descriptor;
       }
 
-      protected FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return internal_static_data_SocketAddress_fieldAccessorTable
+        return server.LifeStreamMessages.internal_static_data_SocketAddress_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-		            server.ProtobufMessages.SocketAddress.class, server.ProtobufMessages.SocketAddress.Builder.class);
+                server.LifeStreamMessages.SocketAddress.class, server.LifeStreamMessages.SocketAddress.Builder.class);
       }
 
-      // Construct using server.ProtobufMessages.SocketAddress.newBuilder()
+      // Construct using server.LifeStreamMessages.SocketAddress.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
 
       private Builder(
-          BuilderParent parent) {
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -4783,23 +4886,23 @@ public final class ProtobufMessages {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return internal_static_data_SocketAddress_descriptor;
+        return server.LifeStreamMessages.internal_static_data_SocketAddress_descriptor;
       }
 
-      public server.ProtobufMessages.SocketAddress getDefaultInstanceForType() {
-        return getDefaultInstance();
+      public server.LifeStreamMessages.SocketAddress getDefaultInstanceForType() {
+        return server.LifeStreamMessages.SocketAddress.getDefaultInstance();
       }
 
-      public server.ProtobufMessages.SocketAddress build() {
-        server.ProtobufMessages.SocketAddress result = buildPartial();
+      public server.LifeStreamMessages.SocketAddress build() {
+        server.LifeStreamMessages.SocketAddress result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public server.ProtobufMessages.SocketAddress buildPartial() {
-        server.ProtobufMessages.SocketAddress result = new server.ProtobufMessages.SocketAddress(this);
+      public server.LifeStreamMessages.SocketAddress buildPartial() {
+        server.LifeStreamMessages.SocketAddress result = new server.LifeStreamMessages.SocketAddress(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -4816,16 +4919,16 @@ public final class ProtobufMessages {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof server.ProtobufMessages.SocketAddress) {
-          return mergeFrom((server.ProtobufMessages.SocketAddress)other);
+        if (other instanceof server.LifeStreamMessages.SocketAddress) {
+          return mergeFrom((server.LifeStreamMessages.SocketAddress)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(server.ProtobufMessages.SocketAddress other) {
-        if (other == getDefaultInstance()) return this;
+      public Builder mergeFrom(server.LifeStreamMessages.SocketAddress other) {
+        if (other == server.LifeStreamMessages.SocketAddress.getDefaultInstance()) return this;
         if (other.hasHostname()) {
           bitField0_ |= 0x00000001;
           hostname_ = other.hostname_;
@@ -4854,11 +4957,11 @@ public final class ProtobufMessages {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        server.ProtobufMessages.SocketAddress parsedMessage = null;
+        server.LifeStreamMessages.SocketAddress parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (server.ProtobufMessages.SocketAddress) e.getUnfinishedMessage();
+          parsedMessage = (server.LifeStreamMessages.SocketAddress) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -4870,7 +4973,7 @@ public final class ProtobufMessages {
       private int bitField0_;
 
       // required string hostname = 1;
-      private Object hostname_ = "";
+      private java.lang.Object hostname_ = "";
       /**
        * <code>required string hostname = 1;</code>
        */
@@ -4880,15 +4983,15 @@ public final class ProtobufMessages {
       /**
        * <code>required string hostname = 1;</code>
        */
-      public String getHostname() {
-        Object ref = hostname_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref)
+      public java.lang.String getHostname() {
+        java.lang.Object ref = hostname_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
           hostname_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
       /**
@@ -4896,11 +4999,11 @@ public final class ProtobufMessages {
        */
       public com.google.protobuf.ByteString
           getHostnameBytes() {
-        Object ref = hostname_;
+        java.lang.Object ref = hostname_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
+                  (java.lang.String) ref);
           hostname_ = b;
           return b;
         } else {
@@ -4911,7 +5014,7 @@ public final class ProtobufMessages {
        * <code>required string hostname = 1;</code>
        */
       public Builder setHostname(
-          String value) {
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -5008,10 +5111,10 @@ public final class ProtobufMessages {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_data_ServerMessage_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_data_HeartBeat_descriptor;
+    internal_static_data_HeartBeatMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_data_HeartBeat_fieldAccessorTable;
+      internal_static_data_HeartBeatMessage_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_data_SocketAddress_descriptor;
   private static
@@ -5025,7 +5128,7 @@ public final class ProtobufMessages {
   private static com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n\013image.proto\022\004data\"\345\002\n\005Image\022\n\n\002id\030\001 \002(" +
       "\t\022\014\n\004name\030\n \002(\t\022\014\n\004mime\030\013 \002(\t\022\016\n\006length\030" +
       "\014 \002(\004\022\031\n\021created_timestamp\030\022 \002(\004\022\032\n\022modi" +
@@ -5041,10 +5144,12 @@ public final class ProtobufMessages {
       "\001(\0132\013.data.Image\"o\n\rOperationType\022\r\n\tADD" +
       "_IMAGE\020\000\022\r\n\tGET_IMAGE\020\001\022\020\n\014RETURN_IMAGE\020" +
       "\002\022\014\n\010GET_META\020\003\022\017\n\013UPDATE_META\020\004\022\017\n\013RETU" +
-      "RN_META\020\005\"/\n\tHeartBeat\022\017\n\007node_id\030\001 \002(\r\022" +
-      "\021\n\ttimestamp\030\002 \003(\004\"/\n\rSocketAddress\022\020\n\010h" +
-      "ostname\030\001 \002(\t\022\014\n\004port\030\002 \002(\rB\034\n\006serverB\020P" +
-      "rotobufMessagesH\001"
+      "RN_META\020\005\"\212\001\n\020HeartBeatMessage\0227\n\toperat" +
+      "ion\030\001 \002(\0162$.data.HeartBeatMessage.Operat" +
+      "ionType\022\017\n\007node_id\030\002 \002(\r\022\021\n\ttimestamp\030\003 " +
+      "\002(\004\"\031\n\rOperationType\022\010\n\004PING\020\000\"/\n\rSocket" +
+      "Address\022\020\n\010hostname\030\001 \002(\t\022\014\n\004port\030\002 \002(\rB",
+      "\036\n\006serverB\022LifeStreamMessagesH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5056,37 +5161,37 @@ public final class ProtobufMessages {
           internal_static_data_Image_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_data_Image_descriptor,
-              new String[] { "Id", "Name", "Mime", "Length", "CreatedTimestamp", "ModifiedTimestamp", "Description", "Size", "GeoLocation", "TakenTimestamp", "Data", });
+              new java.lang.String[] { "Id", "Name", "Mime", "Length", "CreatedTimestamp", "ModifiedTimestamp", "Description", "Size", "GeoLocation", "TakenTimestamp", "Data", });
           internal_static_data_Image_Resolution_descriptor =
             internal_static_data_Image_descriptor.getNestedTypes().get(0);
           internal_static_data_Image_Resolution_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_data_Image_Resolution_descriptor,
-              new String[] { "Width", "Height", });
+              new java.lang.String[] { "Width", "Height", });
           internal_static_data_Image_GeoPoint_descriptor =
             internal_static_data_Image_descriptor.getNestedTypes().get(1);
           internal_static_data_Image_GeoPoint_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_data_Image_GeoPoint_descriptor,
-              new String[] { "Lat", "Lng", "Alt", });
+              new java.lang.String[] { "Lat", "Lng", "Alt", });
           internal_static_data_ServerMessage_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_data_ServerMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_data_ServerMessage_descriptor,
-              new String[] { "Operation", "NodeId", "Image", });
-          internal_static_data_HeartBeat_descriptor =
+              new java.lang.String[] { "Operation", "NodeId", "Image", });
+          internal_static_data_HeartBeatMessage_descriptor =
             getDescriptor().getMessageTypes().get(2);
-          internal_static_data_HeartBeat_fieldAccessorTable = new
+          internal_static_data_HeartBeatMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_data_HeartBeat_descriptor,
-              new String[] { "NodeId", "Timestamp", });
+              internal_static_data_HeartBeatMessage_descriptor,
+              new java.lang.String[] { "Operation", "NodeId", "Timestamp", });
           internal_static_data_SocketAddress_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_data_SocketAddress_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_data_SocketAddress_descriptor,
-              new String[] { "Hostname", "Port", });
+              new java.lang.String[] { "Hostname", "Port", });
           return null;
         }
       };
