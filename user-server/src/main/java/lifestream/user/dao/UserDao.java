@@ -128,7 +128,7 @@ public class UserDao extends HibernateDao {
 				user.setEmail(email);
 				user.setModifiedDateTime(DateTime.now());
 				session.update(user);
-				session.flush();
+				// session.flush();
 
 				logger.info("Updated user success " + user.toString());
 			}
@@ -152,7 +152,6 @@ public class UserDao extends HibernateDao {
 			session.delete(user);
 			// session.flush();
 			endTransaction();
-			// TODO: check not exists exception
 			System.out.println("Record deleted.");
 		} catch (HibernateException ex) {
 			logger.error("Delete user failed without rollback", ex);

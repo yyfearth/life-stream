@@ -1,5 +1,6 @@
 package lifestream.user.bean;
 
+import lifestream.user.data.UserMessage;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -34,6 +35,15 @@ public class UserEntity {
 		this.password = password == null ? "" : password;
 		setCreatedDateTime(createdDateTime == null ? DateTime.now() : createdDateTime);
 		setModifiedDateTime(modifiedDateTime == null ? DateTime.now() : modifiedDateTime);
+	}
+
+	public UserEntity(UserMessage.User user) {
+		id = UUID.fromString(user.getId());
+		username = user.getUsername();
+		email = user.getEmail();
+		password = user.getPassword();
+		createdTimestamp = new Date(user.getCreatedTimestamp());
+		modifiedTimestamp = new Date(user.getModifiedTimestamp());
 	}
 
 	@Id
@@ -149,5 +159,16 @@ public class UserEntity {
 				", createdTimestamp=" + createdTimestamp +
 				", modifiedTimestamp=" + modifiedTimestamp +
 				'}';
+	}
+
+	public UserMessage.User toProtobuf() {
+		return UserMessage.User.newBuilder()
+				.setId(this.getId().toString())
+				.setUsername(this.getUsername())
+				.setEmail(this.getEmail())
+				.setPassword(this.getPassword())
+				.setCreatedTimestamp(this.getCreatedDateTime().getMillis())
+				.setModifiedTimestamp(this.getModifiedDateTime().getMillis())
+				.build();
 	}
 }

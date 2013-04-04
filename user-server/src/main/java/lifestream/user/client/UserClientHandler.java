@@ -17,14 +17,7 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 	private volatile Channel channel;
 
 	public UUID request(UserMessage.RequestType type, UserEntity user) {
-		return request(type, UserMessage.User.newBuilder()
-				.setId(user.getId().toString())
-				.setUsername(user.getUsername())
-				.setEmail(user.getEmail())
-				.setPassword(user.getPassword())
-				.setCreatedTimestamp(user.getCreatedDateTime().getMillis())
-				.setModifiedTimestamp(user.getModifiedDateTime().getMillis())
-				.build());
+		return request(type, user.toProtobuf());
 	}
 
 	public UUID request(UserMessage.RequestType type, UUID userId) {
