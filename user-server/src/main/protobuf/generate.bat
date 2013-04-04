@@ -1,1 +1,1 @@
-protoc user.proto --java_out=.
+protoc user.proto --java_out=../java
