@@ -82,7 +82,7 @@ public class ConnectionMonitor extends BasicThread {
 	void sendHeartBeat() {
 		long nowTimesteamp = (new Date()).getTime();
 
-		for (Channel channel : connectorChannels) {
+		for (NodeConnection nodeConnection : nodeConnectionMap.values()) {
 			LifeStreamMessages.HeartBeatMessage.Builder builder = LifeStreamMessages.HeartBeatMessage.newBuilder();
 
 			LifeStreamMessages.HeartBeatMessage heartBeatMessage = builder
@@ -91,7 +91,7 @@ public class ConnectionMonitor extends BasicThread {
 					.setTimestamp(nowTimesteamp)
 					.build();
 
-			ChannelFuture channelFuture = channel.write(heartBeatMessage);
+			ChannelFuture channelFuture = nodeConnection.getChannel().write(heartBeatMessage);
 			channelFuture.addListener(new ChannelFutureListener() {
 				@Override
 				public void operationComplete(ChannelFuture future) throws Exception {

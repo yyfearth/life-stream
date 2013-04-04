@@ -2,6 +2,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import server.ConnectionMonitor;
 import server.DistributedNode;
+import server.NodeInfo;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,8 +57,10 @@ public class AdHocTest {
 			listeningAddresses[i] = new InetSocketAddress(8080 + i);
 		}
 
+		NodeInfo[] nodeInfos = new NodeInfo[2];
+
 		for (int i = 0; i < connectionMonitor.length; i++) {
-			connectionMonitor[i] = new ConnectionMonitor(8080 + i, listeningAddresses);
+			connectionMonitor[i] = new ConnectionMonitor(i, 8080 + i, nodeInfos);
 
 			Thread thread = new Thread(connectionMonitor[i], "Connection Monitor " + (i + 1));
 			thread.setPriority(Thread.MIN_PRIORITY);

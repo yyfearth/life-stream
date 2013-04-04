@@ -52,7 +52,7 @@ class DistributedNodePipelineFactory implements ChannelPipelineFactory {
 
 		// Decoders
 		channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
-		channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ProtobufMessages.ServerMessage.getDefaultInstance()));
+		channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(LifeStreamMessages.ServerMessage.getDefaultInstance()));
 
 		// Encoder
 		channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));

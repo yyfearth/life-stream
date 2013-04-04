@@ -82,12 +82,12 @@ public class DistributedNode extends BasicThread {
 
 		System.out.println("Node " + nodeId + " is binding port " + bindingPort);
 
-		InetSocketAddress[] otherNodeAddresses = generateOtherAddresses(8090);
+		NodeInfo[] nodeInfos = generateNodeInfos(8090);
 
-		connectorChannels = new Channel[otherNodeAddresses.length];
+		connectorChannels = new Channel[nodeInfos.length];
 
-		for (int i = 0; i < otherNodeAddresses.length; i++) {
-			InetSocketAddress otherNodeAddress = otherNodeAddresses[i];
+		for (int i = 0; i < nodeInfos.length; i++) {
+			InetSocketAddress otherNodeAddress = nodeInfos[i].getSocketAddress();
 			ChannelFuture channelFuture = clientBootstrap.connect(otherNodeAddress);
 
 			System.out.println("Node " + nodeId + " is connecting to " + otherNodeAddress);
@@ -125,18 +125,22 @@ public class DistributedNode extends BasicThread {
 		isStopping = true;
 	}
 
-	InetSocketAddress[] generateOtherAddresses(int basePort) {
-		InetSocketAddress[] otherAddresses = new InetSocketAddress[2];
+	NodeInfo[] generateNodeInfos(int basePort) {
+		NodeInfo[] nodeInfos = new NodeInfo[2];
 
 		int addressIndex = 0;
 
-		for (int i = 0; i < otherAddresses.length + 1; i++) {
+		for (int i = 0; i < nodeInfos.length + 1; i++) {
 			if (i != nodeId) {
-				otherAddresses[addressIndex++] = new InetSocketAddress("localhost", basePort + i);
+				NodeInfo nodeInfo = new NodeInfo();
+				nodeInfo.setNodeId(i);
+				nodeInfo.setSocketAddress(new InetSocketAddress("localhost", basePort + i));
+
+				nodeInfos[addressIndex++] = nodeInfo;
 			}
 		}
 
-		return otherAddresses;
+		return nodeInfos;
 	}
 
 	Thread monitorThread;
@@ -144,7 +148,7 @@ public class DistributedNode extends BasicThread {
 
 	@Override
 	public void run() {
-		connectionMonitor = new ConnectionMonitor(8080 + nodeId, generateOtherAddresses(8080));
+		connectionMonitor = new ConnectionMonitor(nodeId, 8080 + nodeId, generateNodeInfos(8080));
 
 		monitorThread = new Thread(connectionMonitor);
 		monitorThread.setPriority(Thread.MIN_PRIORITY);
