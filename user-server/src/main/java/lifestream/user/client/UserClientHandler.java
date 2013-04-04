@@ -42,7 +42,7 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 	public UUID request() { // say hello
 		return request(UserMessage.Request.newBuilder()
 				.setId(UUID.randomUUID().toString())
-				.setRequest(UserMessage.RequestType.HELLO)
+				.setRequest(UserMessage.RequestType.PING)
 				.setTimestamp(DateTime.now().getMillis())
 				.build());
 	}

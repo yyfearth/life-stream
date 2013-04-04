@@ -52,7 +52,7 @@ public class UserServer {
 			public ChannelPipeline getPipeline() throws Exception {
 				ChannelPipeline p = Channels.pipeline();
 				p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-				p.addLast("protobufDecoder", new ProtobufDecoder(UserMessage.Response.getDefaultInstance()));
+				p.addLast("protobufDecoder", new ProtobufDecoder(UserMessage.Request.getDefaultInstance()));
 
 				p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
 				p.addLast("protobufEncoder", new ProtobufEncoder());

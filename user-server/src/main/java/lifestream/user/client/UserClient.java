@@ -111,12 +111,14 @@ public class UserClient {
 
 	// should be override
 	public void receivedUser(UUID requestId, UserEntity user) {
-
+		System.out.println("Success: " + requestId);
+		System.out.println(user.toProtobuf());
 	}
 
 	// should be override
 	public void receivedError(UUID requestId, UserMessage.Response.ResultCode code, String message) {
-
+		System.out.println("Failed: " + requestId);
+		System.out.println(message);
 	}
 
 	public void run() { // sync
@@ -131,16 +133,28 @@ public class UserClient {
 		UserClientHandler handler = channel.getPipeline().get(UserClientHandler.class);
 
 		// Request and get the response.
-		// TODO: sent request and get response
+
+		int c = 100;
+		while (c-- > 0) {
+			getUser(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+			getUser(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+			getUser(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException ex) {
+				Thread.currentThread().interrupt();
+				channel.close();
+			}
+		}
 
 		// Close the connection.
-		channel.close().awaitUninterruptibly();
+//		channel.close(); //.awaitUninterruptibly();
 
 	}
 
 	public static void main(String[] args) throws Exception {
 		// Print usage if necessary.
-		if (args.length < 3) {
+		if (args.length != 2) {
 			System.err.println("Usage: " + UserClient.class.getSimpleName() + " <host> <port>");
 			System.err.println("Example: " + UserClient.class.getSimpleName() + " localhost 8888");
 			return;
