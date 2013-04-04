@@ -17,9 +17,9 @@ public final class UserMessage {
 	public enum RequestType
 			implements com.google.protobuf.ProtocolMessageEnum {
 		/**
-		 * <code>HELLO = 0;</code>
+		 * <code>PING = 0;</code>
 		 */
-		HELLO(0, 0),
+		PING(0, 0),
 		/**
 		 * <code>GET_USER = 1;</code>
 		 */
@@ -42,9 +42,9 @@ public final class UserMessage {
 		REMOVE_USER(4, 4),;
 
 		/**
-		 * <code>HELLO = 0;</code>
+		 * <code>PING = 0;</code>
 		 */
-		public static final int HELLO_VALUE = 0;
+		public static final int PING_VALUE = 0;
 		/**
 		 * <code>GET_USER = 1;</code>
 		 */
@@ -74,7 +74,7 @@ public final class UserMessage {
 		public static RequestType valueOf(int value) {
 			switch (value) {
 				case 0:
-					return HELLO;
+					return PING;
 				case 1:
 					return GET_USER;
 				case 2:
@@ -1806,7 +1806,7 @@ public final class UserMessage {
 
 		private void initFields() {
 			id_ = "";
-			request_ = lifestream.user.data.UserMessage.RequestType.HELLO;
+			request_ = lifestream.user.data.UserMessage.RequestType.PING;
 			userId_ = "";
 			user_ = lifestream.user.data.UserMessage.User.getDefaultInstance();
 			timestamp_ = 0L;
@@ -2029,7 +2029,7 @@ public final class UserMessage {
 				super.clear();
 				id_ = "";
 				bitField0_ = (bitField0_ & ~0x00000001);
-				request_ = lifestream.user.data.UserMessage.RequestType.HELLO;
+				request_ = lifestream.user.data.UserMessage.RequestType.PING;
 				bitField0_ = (bitField0_ & ~0x00000002);
 				userId_ = "";
 				bitField0_ = (bitField0_ & ~0x00000004);
@@ -2279,7 +2279,7 @@ public final class UserMessage {
 			}
 
 			// required .data.RequestType request = 2;
-			private lifestream.user.data.UserMessage.RequestType request_ = lifestream.user.data.UserMessage.RequestType.HELLO;
+			private lifestream.user.data.UserMessage.RequestType request_ = lifestream.user.data.UserMessage.RequestType.PING;
 
 			/**
 			 * <code>required .data.RequestType request = 2;</code>
@@ -2313,7 +2313,7 @@ public final class UserMessage {
 			 */
 			public Builder clearRequest() {
 				bitField0_ = (bitField0_ & ~0x00000002);
-				request_ = lifestream.user.data.UserMessage.RequestType.HELLO;
+				request_ = lifestream.user.data.UserMessage.RequestType.PING;
 				onChanged();
 				return this;
 			}
@@ -3139,7 +3139,7 @@ public final class UserMessage {
 
 		private void initFields() {
 			id_ = "";
-			request_ = lifestream.user.data.UserMessage.RequestType.HELLO;
+			request_ = lifestream.user.data.UserMessage.RequestType.PING;
 			result_ = lifestream.user.data.UserMessage.Response.ResultCode.OK;
 			message_ = "";
 			user_ = lifestream.user.data.UserMessage.User.getDefaultInstance();
@@ -3370,7 +3370,7 @@ public final class UserMessage {
 				super.clear();
 				id_ = "";
 				bitField0_ = (bitField0_ & ~0x00000001);
-				request_ = lifestream.user.data.UserMessage.RequestType.HELLO;
+				request_ = lifestream.user.data.UserMessage.RequestType.PING;
 				bitField0_ = (bitField0_ & ~0x00000002);
 				result_ = lifestream.user.data.UserMessage.Response.ResultCode.OK;
 				bitField0_ = (bitField0_ & ~0x00000004);
@@ -3629,7 +3629,7 @@ public final class UserMessage {
 			}
 
 			// optional .data.RequestType request = 2;
-			private lifestream.user.data.UserMessage.RequestType request_ = lifestream.user.data.UserMessage.RequestType.HELLO;
+			private lifestream.user.data.UserMessage.RequestType request_ = lifestream.user.data.UserMessage.RequestType.PING;
 
 			/**
 			 * <code>optional .data.RequestType request = 2;</code>
@@ -3679,7 +3679,7 @@ public final class UserMessage {
 			 */
 			public Builder clearRequest() {
 				bitField0_ = (bitField0_ & ~0x00000002);
-				request_ = lifestream.user.data.UserMessage.RequestType.HELLO;
+				request_ = lifestream.user.data.UserMessage.RequestType.PING;
 				onChanged();
 				return this;
 			}
@@ -4015,10 +4015,10 @@ public final class UserMessage {
 						"stType\022)\n\006result\030\003 \002(\0162\031.data.Response.R" +
 						"esultCode\022\017\n\007message\030\004 \001(\t\022\030\n\004user\030\010 \001(\013",
 				"2\n.data.User\022\021\n\ttimestamp\030\020 \002(\004\"\037\n\nResul" +
-						"tCode\022\006\n\002OK\020\000\022\t\n\005ERROR\020\001*V\n\013RequestType\022" +
-						"\t\n\005HELLO\020\000\022\014\n\010GET_USER\020\001\022\014\n\010ADD_USER\020\002\022\017" +
-						"\n\013UPDATE_USER\020\003\022\017\n\013REMOVE_USER\020\004B%\n\024life" +
-						"stream.user.dataB\013UserMessageH\001"
+						"tCode\022\006\n\002OK\020\000\022\t\n\005ERROR\020\001*U\n\013RequestType\022" +
+						"\010\n\004PING\020\000\022\014\n\010GET_USER\020\001\022\014\n\010ADD_USER\020\002\022\017\n" +
+						"\013UPDATE_USER\020\003\022\017\n\013REMOVE_USER\020\004B%\n\024lifes" +
+						"tream.user.dataB\013UserMessageH\001"
 		};
 		com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
 				new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

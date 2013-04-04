@@ -16,7 +16,7 @@ message User {
 }
 
 enum RequestType {
-	HELLO = 0;
+	PING = 0;
 	GET_USER = 1;
 	ADD_USER = 2;
 	UPDATE_USER = 3;
