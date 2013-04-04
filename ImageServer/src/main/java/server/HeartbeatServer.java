@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class ConnectionMonitor extends BasicThread {
+public class HeartbeatServer extends BasicThread {
 
 	public int getNodeId() {
 		return nodeId;
@@ -45,9 +45,14 @@ public class ConnectionMonitor extends BasicThread {
 
 	Channel bindingChannel;
 	NodeInfo[] nodeInfos;
-	Map<Integer, NodeConnection> nodeConnectionMap = new HashMap<>();
 
-	public ConnectionMonitor(int nodeId, int bindingPort, NodeInfo[] nodeInfos) {
+	public int getNumConnections() {
+		return heartbeatConnectionMap.size();
+	}
+
+	Map<Integer, HeartbeatConnection> heartbeatConnectionMap = new HashMap<>();
+
+	public HeartbeatServer(int nodeId, int bindingPort, NodeInfo[] nodeInfos) {
 		this.nodeId = nodeId;
 		this.bindingPort = bindingPort;
 		this.nodeInfos = nodeInfos;
@@ -82,7 +87,7 @@ public class ConnectionMonitor extends BasicThread {
 	void sendHeartBeat() {
 		long nowTimesteamp = (new Date()).getTime();
 
-		for (NodeConnection nodeConnection : nodeConnectionMap.values()) {
+		for (HeartbeatConnection heartbeatConnection : heartbeatConnectionMap.values()) {
 			LifeStreamMessages.HeartBeatMessage.Builder builder = LifeStreamMessages.HeartBeatMessage.newBuilder();
 
 			LifeStreamMessages.HeartBeatMessage heartBeatMessage = builder
@@ -91,7 +96,7 @@ public class ConnectionMonitor extends BasicThread {
 					.setTimestamp(nowTimesteamp)
 					.build();
 
-			ChannelFuture channelFuture = nodeConnection.getChannel().write(heartBeatMessage);
+			ChannelFuture channelFuture = heartbeatConnection.getChannel().write(heartBeatMessage);
 			channelFuture.addListener(new ChannelFutureListener() {
 				@Override
 				public void operationComplete(ChannelFuture future) throws Exception {
@@ -140,16 +145,35 @@ public class ConnectionMonitor extends BasicThread {
 		// Connect to other nodes.
 
 		for (NodeInfo nodeInfo : nodeInfos) {
-			NodeConnection nodeConnection = new NodeConnection(this, nodeInfo.getSocketAddress());
-			nodeConnection.connect();
-			nodeConnectionMap.put(nodeInfo.getNodeId(), nodeConnection);
+			HeartbeatConnection heartbeatConnection = new HeartbeatConnection(this, nodeInfo.getSocketAddress());
+			heartbeatConnection.connect();
+			heartbeatConnectionMap.put(nodeInfo.getNodeId(), heartbeatConnection);
 		}
+	}
+
+	public void addNode(int nodeId, InetSocketAddress socketAddress) {
+		HeartbeatConnection heartbeatConnection = new HeartbeatConnection(this, socketAddress);
+		heartbeatConnectionMap.put(nodeId, heartbeatConnection);
+
+		if (bindingChannel.isConnected()) {
+			heartbeatConnection.connect();
+		}
+	}
+
+	public boolean removeNode(int nodeId) {
+		HeartbeatConnection heartbeatConnection = heartbeatConnectionMap.remove(nodeId);
+
+		if (heartbeatConnection == null) {
+			return false;
+		}
+
+		return heartbeatConnection.disconnect();
 	}
 
 	public void disconnect() {
 
-		for (NodeConnection nodeConnection : nodeConnectionMap.values()) {
-			nodeConnection.disconnect();
+		for (HeartbeatConnection heartbeatConnection : heartbeatConnectionMap.values()) {
+			heartbeatConnection.disconnect();
 		}
 
 		long timeoutTick = (new Date()).getTime() + 10 * 1000;
@@ -162,8 +186,8 @@ public class ConnectionMonitor extends BasicThread {
 				break;
 			}
 
-			for (NodeConnection nodeConnection : nodeConnectionMap.values()) {
-				if (nodeConnection.isConnected() == true) {
+			for (HeartbeatConnection heartbeatConnection : heartbeatConnectionMap.values()) {
+				if (heartbeatConnection.isConnected()) {
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
@@ -171,8 +195,6 @@ public class ConnectionMonitor extends BasicThread {
 					}
 				}
 			}
-
-			break;
 		}
 
 		serverBootstrap.releaseExternalResources();

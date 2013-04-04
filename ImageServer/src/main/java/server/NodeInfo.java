@@ -21,4 +21,9 @@ public class NodeInfo {
 
 	int nodeId;
 	InetSocketAddress socketAddress;
+
+	public NodeInfo(int nodeId, InetSocketAddress socketAddress) {
+		this.nodeId = nodeId;
+		this.socketAddress = socketAddress;
+	}
 }

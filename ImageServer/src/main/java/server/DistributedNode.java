@@ -46,7 +46,7 @@ public class DistributedNode extends BasicThread {
 	Channel bindingChannel;
 	Channel[] connectorChannels;
 
-	List<ConnectionMonitor> connectionMonitorList = new ArrayList<>();
+	List<HeartbeatServer> heartbeatServerList = new ArrayList<>();
 	List<InetSocketAddress> nodeList = new ArrayList<>();
 
 	int nodeId = 0;
@@ -132,9 +132,7 @@ public class DistributedNode extends BasicThread {
 
 		for (int i = 0; i < nodeInfos.length + 1; i++) {
 			if (i != nodeId) {
-				NodeInfo nodeInfo = new NodeInfo();
-				nodeInfo.setNodeId(i);
-				nodeInfo.setSocketAddress(new InetSocketAddress("localhost", basePort + i));
+				NodeInfo nodeInfo = new NodeInfo(i, new InetSocketAddress("localhost", basePort + i));
 
 				nodeInfos[addressIndex++] = nodeInfo;
 			}
@@ -144,13 +142,13 @@ public class DistributedNode extends BasicThread {
 	}
 
 	Thread monitorThread;
-	ConnectionMonitor connectionMonitor;
+	HeartbeatServer heartbeatServer;
 
 	@Override
 	public void run() {
-		connectionMonitor = new ConnectionMonitor(nodeId, 8080 + nodeId, generateNodeInfos(8080));
+		heartbeatServer = new HeartbeatServer(nodeId, 8080 + nodeId, generateNodeInfos(8080));
 
-		monitorThread = new Thread(connectionMonitor);
+		monitorThread = new Thread(heartbeatServer);
 		monitorThread.setPriority(Thread.MIN_PRIORITY);
 		monitorThread.start();
 
@@ -165,8 +163,8 @@ public class DistributedNode extends BasicThread {
 			}
 		}
 
-		if (connectionMonitor != null && connectionMonitor.isStopping == false) {
-			connectionMonitor.stop();
+		if (heartbeatServer != null && heartbeatServer.isStopping == false) {
+			heartbeatServer.stop();
 		}
 
 		disconnect();
