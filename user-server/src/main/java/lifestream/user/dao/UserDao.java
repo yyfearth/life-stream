@@ -1,50 +1,61 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Leo
- * Date: 4/1/13
- * Time: 10:31 PM
- * To change this template use File | Settings | File Templates.
- */
+package lifestream.user.dao;
 
-import bean.UserEntity;
+import lifestream.user.bean.UserEntity;
 import org.hibernate.HibernateException;
+import org.hibernate.exception.ConstraintViolationException;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
 public class UserDao extends HibernateDao {
+	private static final Logger logger = LoggerFactory.getLogger(UserDao.class.getSimpleName());
 
 	public void create(UUID id, String username, String password, String email) {
+		create(new UserEntity(id, username, password, email));
+	}
+
+	public UserEntity create(String username, String password, String email) {
+		return create(new UserEntity(username, password, email));
+	}
+
+	public UserEntity create(UserEntity user) throws HibernateException {
 		try {
 			beginTransaction();
-
-			UserEntity user = new UserEntity(id);
-			user.setUsername(username);
-			user.setPassword(password);
-			user.setEmail(email);
-
 			session.save(user);
-			endTransaction(true);
+			endTransaction();
+			return user;
+		} catch (ConstraintViolationException ex) {
+			logger.error("Create user failed without rollback", ex);
+			throw ex;
 		} catch (HibernateException ex) {
 			rollback();
-			System.out.println("Hibernate exception during creating user.");
+			logger.error("Create user failed with rollback", ex);
+			throw ex;
 		} finally {
 			closeSession();
 		}
 	}
 
-	public UserEntity get(UUID id) {
-		UserEntity userEntity = null;
+	public UserEntity get(UUID id) throws HibernateException {
+		UserEntity user = null;
 		try {
 			beginTransaction();
-			userEntity = (UserEntity) session.get(UserEntity.class, id);
-			endTransaction(true);
+			user = (UserEntity) session.get(UserEntity.class, id);
+			endTransaction();
+			if (user == null) {
+				logger.warn("No such user with id " + id.toString());
+			} else {
+				logger.info("Get user success " + user.toString());
+			}
 		} catch (HibernateException ex) {
-			rollback();
-			System.out.println("Hibernate exception during searching via id.");
+			logger.error("Get user failed", ex);
+			throw ex;
 		} finally {
 			closeSession();
 		}
-		return userEntity;
+		return user;
 	}
 
 //	public void searchByName(String name) {
@@ -66,7 +77,7 @@ public class UserDao extends HibernateDao {
 //			} else {
 //				System.out.println("No matched record.");
 //			}
-//			endTransaction(true);
+//			endTransaction();
 //		} catch (HibernateException ex) {
 //			rollback();
 //			System.out.println("Hibernate exception during searching via name.");
@@ -89,7 +100,7 @@ public class UserDao extends HibernateDao {
 //				System.out.println("ID: " + user.getId() + ", " + user.getUsername() + " ( " + user.getPassword() + ") , " + user.getEmail());
 //			}
 //			System.out.println("---------------------------------------------------------------------");
-//			endTransaction(true);
+//			endTransaction();
 //		} catch (HibernateException ex) {
 //			rollback();
 //			System.out.println("Hibernate exception during listing all records.");
@@ -98,49 +109,53 @@ public class UserDao extends HibernateDao {
 //		}
 //	}
 
+	public UserEntity update(UserEntity user) throws HibernateException {
+		return update(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
+	}
 
-	public void update(UUID id, String username, String password, String email) {
+	public UserEntity update(UUID id, String username, String email, String password) throws HibernateException {
+		UserEntity user = get(id);
+
 		try {
+
 			beginTransaction();
 
-			UserEntity user = get(id);
-
 			if (user == null) {
-				System.out.println("no record");
+				logger.warn("Cannot update a not existing user with id " + id);
 			} else {
 				user.setUsername(username);
 				user.setPassword(password);
 				user.setEmail(email);
+				user.setModifiedDateTime(DateTime.now());
 				session.update(user);
 				// session.flush();
 
-				System.out.println("Record successful updated.");
-				System.out.println(user.toString());
+				logger.info("Updated user success " + user.toString());
 			}
-			endTransaction(true);
+			endTransaction();
 
-			System.out.println("---------------------------------------------------------------------");
+			return user;
 		} catch (HibernateException ex) {
 			rollback();
-			System.out.println("Hibernate exception during updating.");
+			logger.error("Update user failed with rollback", ex);
+			throw ex;
 		} finally {
 			closeSession();
 		}
 	}
 
 
-	public void delete(UUID id) {
+	public void delete(UUID id) throws HibernateException {
 		try {
 			beginTransaction();
 			UserEntity user = new UserEntity(id);
 			session.delete(user);
-			endTransaction(true);
-			// TODO: check not exists exception
+			// session.flush();
+			endTransaction();
 			System.out.println("Record deleted.");
-			System.out.println("---------------------------------------------------------------------");
 		} catch (HibernateException ex) {
-			// rollback();
-			System.out.println("Hibernate exception during deleting a record.");
+			logger.error("Delete user failed without rollback", ex);
+			throw ex;
 		} finally {
 			closeSession();
 		}
