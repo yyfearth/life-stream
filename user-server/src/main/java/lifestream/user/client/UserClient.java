@@ -9,7 +9,6 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
-import org.joda.time.DateTime;
 
 import java.net.InetSocketAddress;
 import java.util.UUID;
@@ -79,7 +78,6 @@ public class UserClient {
 	}
 
 	public UUID updateUser(UserEntity user) {
-		user.setModifiedDateTime(DateTime.now());
 		return requestUser(UserMessage.RequestType.UPDATE_USER, user);
 	}
 
@@ -100,13 +98,7 @@ public class UserClient {
 	}
 
 	private void receivedUser(UUID requestId, UserMessage.User user) {
-		UserEntity userEntity = new UserEntity(UUID.fromString(user.getId()));
-		userEntity.setEmail(user.getEmail());
-		userEntity.setUsername(user.getUsername());
-		userEntity.setPassword(user.getPassword());
-		userEntity.setCreatedDateTime(new DateTime(user.getCreatedTimestamp()));
-		userEntity.setModifiedDateTime(new DateTime(user.getModifiedTimestamp()));
-		receivedUser(requestId, userEntity);
+		receivedUser(requestId, new UserEntity(user));
 	}
 
 	// should be override

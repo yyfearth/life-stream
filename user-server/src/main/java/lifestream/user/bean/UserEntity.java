@@ -2,7 +2,6 @@ package lifestream.user.bean;
 
 import lifestream.user.data.UserMessage;
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -28,13 +27,13 @@ public class UserEntity {
 		this(id, username, email, password, null, null);
 	}
 
-	public UserEntity(UUID id, String username, String email, String password, DateTime createdDateTime, DateTime modifiedDateTime) {
+	public UserEntity(UUID id, String username, String email, String password, Date created, Date modified) {
 		this.id = id == null ? UUID.randomUUID() : id;
 		this.username = username == null ? "" : username;
 		this.email = email == null ? "" : email;
 		this.password = password == null ? "" : password;
-		setCreatedDateTime(createdDateTime == null ? DateTime.now() : createdDateTime);
-		setModifiedDateTime(modifiedDateTime == null ? DateTime.now() : modifiedDateTime);
+		this.createdTimestamp = created;
+		this.modifiedTimestamp = modified;
 	}
 
 	public UserEntity(UserMessage.User user) {
@@ -105,20 +104,28 @@ public class UserEntity {
 		this.password = password;
 	}
 
-	public DateTime getCreatedDateTime() {
-		return new DateTime(createdTimestamp);
+	public Date getCreatedTimestamp() {
+		return createdTimestamp;
 	}
 
-	public void setCreatedDateTime(DateTime createdTimestamp) {
-		this.createdTimestamp = createdTimestamp.toDate();
+	public void setCreatedTimestamp() {
+		this.createdTimestamp = new Date();
 	}
 
-	public DateTime getModifiedDateTime() {
-		return new DateTime(modifiedTimestamp);
+	public void setCreatedTimestamp(Date created) {
+		this.createdTimestamp = created;
 	}
 
-	public void setModifiedDateTime(DateTime modifiedTimestamp) {
-		this.modifiedTimestamp = modifiedTimestamp.toDate();
+	public Date getModifiedTimestamp() {
+		return modifiedTimestamp;
+	}
+
+	public void setModifiedTimestamp() {
+		this.modifiedTimestamp = new Date();
+	}
+
+	public void setModifiedTimestamp(Date modified) {
+		this.modifiedTimestamp = modified;
 	}
 
 	@Override
@@ -163,12 +170,12 @@ public class UserEntity {
 
 	public UserMessage.User toProtobuf() {
 		return UserMessage.User.newBuilder()
-				.setId(this.getId().toString())
-				.setUsername(this.getUsername())
-				.setEmail(this.getEmail())
-				.setPassword(this.getPassword())
-				.setCreatedTimestamp(this.getCreatedDateTime().getMillis())
-				.setModifiedTimestamp(this.getModifiedDateTime().getMillis())
+				.setId(id.toString())
+				.setUsername(username)
+				.setEmail(email)
+				.setPassword(password)
+				.setCreatedTimestamp(createdTimestamp.getTime())
+				.setModifiedTimestamp(modifiedTimestamp.getTime())
 				.build();
 	}
 }

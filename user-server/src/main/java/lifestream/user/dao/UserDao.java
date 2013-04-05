@@ -4,8 +4,8 @@ import lifestream.user.bean.UserEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +27,8 @@ public class UserDao extends HibernateDao {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
+			user.setCreatedTimestamp();
+			user.setModifiedTimestamp();
 			session.save(user);
 			transaction.commit();
 			return user;
@@ -85,7 +87,7 @@ public class UserDao extends HibernateDao {
 				user.setUsername(username);
 				user.setPassword(password);
 				user.setEmail(email);
-				user.setModifiedDateTime(DateTime.now());
+				user.setModifiedTimestamp();
 				session.update(user);
 				// session.flush();
 
