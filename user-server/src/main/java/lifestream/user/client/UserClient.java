@@ -13,8 +13,11 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepend
 import java.net.InetSocketAddress;
 import java.util.UUID;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 public class UserClient {
+	private static final Logger logger = Logger.getLogger(UserClient.class.getSimpleName());
+
 	protected final String host;
 	protected final int port;
 	protected final ClientBootstrap bootstrap;
@@ -48,8 +51,11 @@ public class UserClient {
 		clientHandler = new UserClientHandler() {
 			@Override
 			public void received(UserMessage.Response response) {
+				logger.info("Received: " + response.toString());
 				if (response.getResult() == UserMessage.Response.ResultCode.OK) {
-					receivedUser(UUID.fromString(response.getId()), response.getUser());
+					if (response.getRequest() != UserMessage.RequestType.PING) {
+						receivedUser(UUID.fromString(response.getId()), response.getUser());
+					} // ignore pong for now
 				} else {
 					receivedError(UUID.fromString(response.getId()), response.getResult(), response.getMessage());
 				}
@@ -63,6 +69,10 @@ public class UserClient {
 		bootstrap.releaseExternalResources();
 
 		super.finalize();
+	}
+
+	public UUID ping() {
+		return clientHandler.request();
 	}
 
 	public UUID getUser(UserEntity user) {
@@ -98,19 +108,17 @@ public class UserClient {
 	}
 
 	private void receivedUser(UUID requestId, UserMessage.User user) {
-		receivedUser(requestId, new UserEntity(user));
+		receivedUser(requestId, user == null ? null : new UserEntity(user));
 	}
 
 	// should be override
 	public void receivedUser(UUID requestId, UserEntity user) {
-		System.out.println("Success: " + requestId);
-		System.out.println(user.toProtobuf());
+		logger.info("Response - Success: " + requestId + "\n" + user + "\n");
 	}
 
 	// should be override
 	public void receivedError(UUID requestId, UserMessage.Response.ResultCode code, String message) {
-		System.out.println("Failed: " + requestId);
-		System.out.println(message);
+		logger.info("Response - Failed: " + requestId + "\n" + message + "\n");
 	}
 
 	public void run() { // sync
@@ -126,11 +134,13 @@ public class UserClient {
 
 		// Request and get the response.
 
-		int c = 100;
+		UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000000");
+		int c = 1;
 		while (c-- > 0) {
-			getUser(UUID.fromString("00000000-0000-0000-0000-000000000000"));
-			getUser(UUID.fromString("00000000-0000-0000-0000-000000000000"));
-			getUser(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+			ping();
+			getUser(userId);
+			getUser(UUID.randomUUID());
+			getUser(userId);
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException ex) {

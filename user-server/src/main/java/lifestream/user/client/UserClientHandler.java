@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class UserClientHandler extends SimpleChannelUpstreamHandler {
 
-	private static final Logger logger = Logger.getLogger(UserClientHandler.class.getName());
+	private static final Logger logger = Logger.getLogger(UserClientHandler.class.getSimpleName());
 
 	// Stateful properties
 	private volatile Channel channel;
@@ -38,7 +38,7 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 				.build());
 	}
 
-	public UUID request() { // say hello
+	public UUID request() { // ping
 		return request(UserMessage.Request.newBuilder()
 				.setId(UUID.randomUUID().toString())
 				.setRequest(UserMessage.RequestType.PING)
@@ -48,7 +48,7 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 
 	protected UUID request(UserMessage.Request request) {
 		if (channel == null) {
-			logger.warning("not connected yet");
+			logger.warning("Not connected yet");
 			return null;
 		}
 //		else if (request.getId() == null) {
@@ -56,7 +56,7 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 //			request = request.toBuilder().setId(UUID.randomUUID().toString()).build();
 //		}
 		channel.write(request);
-		logger.info("sent request: " + request);
+		logger.info("Sent request: " + request);
 		return UUID.fromString(request.getId());
 	}
 
