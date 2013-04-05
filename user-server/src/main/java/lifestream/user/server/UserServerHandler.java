@@ -11,6 +11,10 @@ public class UserServerHandler extends SimpleChannelUpstreamHandler {
 	private static final Logger logger = LoggerFactory.getLogger(UserServerHandler.class.getSimpleName());
 	private final UserServerProcessor processor = new UserServerProcessor();
 
+	public UserServerHandler() {
+		processor.start(); // only once
+	}
+
 	@Override
 	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e) throws Exception {
 		if (e instanceof ChannelStateEvent) {

@@ -3,7 +3,6 @@ package lifestream.user.dao;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
@@ -12,10 +11,9 @@ import org.slf4j.LoggerFactory;
 
 public abstract class HibernateDao {
 	private static final Logger logger = LoggerFactory.getLogger(HibernateDao.class.getSimpleName());
+	private static boolean hasFault = false;
 	protected static Configuration conf;
-	protected static SessionFactory sessionFactory;
-	protected Session session = null;
-	protected Transaction transaction = null;
+	protected static SessionFactory sessionFactory = null;
 
 	{
 		try {
@@ -27,54 +25,32 @@ public abstract class HibernateDao {
 			sessionFactory = conf.buildSessionFactory(serviceRegistry);
 		} catch (HibernateException ex) {
 			logger.error("Hibernate failed to init", ex);
+			hasFault = true;
 		}
 	}
 
-	// public Session getSession() {
-	// 	return session;
-	// }
-
-	// public Transaction getTransaction() {
-	// 	return transaction;
-	// }
-
-	public void beginTransaction() throws HibernateException {
-		session = sessionFactory.openSession();
-		transaction = session.beginTransaction();
+	public static boolean isAvailable() {
+		return !hasFault;
 	}
 
-	public void endTransaction() throws HibernateException {
-		endTransaction(true);
-	}
-
-	public void endTransaction(boolean commit) throws HibernateException {
-		if (commit) {
-			transaction.commit();
-		} else {
-			transaction.rollback();
-		}
-		transaction = null;
-		// closeSession();
-	}
-
-	public void rollback() {
-		if (null != transaction) {
-			try {
-				transaction.rollback();
-			} catch (HibernateException ex) {
-				logger.error("Hibernate failed to rollback", ex);
-			}
+	public Session openSession() throws HibernateException {
+		try {
+			return sessionFactory.openSession();
+		} catch (HibernateException ex) {
+			logger.error("Open session failed", ex);
+			throw ex;
 		}
 	}
 
-	public void closeSession() {
+	public void closeSession(Session session) {
 		try {
 			if (session != null) {
 				session.close();
-				session = null;
 			}
 		} catch (HibernateException ex) {
-			logger.error("Hibernate failed to close session", ex);
+			logger.error("Close session failed", ex);
 		}
 	}
+
+
 }

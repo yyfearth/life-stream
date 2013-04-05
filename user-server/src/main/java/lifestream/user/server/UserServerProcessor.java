@@ -19,17 +19,30 @@ public class UserServerProcessor {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserServerProcessor.class.getSimpleName());
 
-	// private static final int MAX_WORKER_COUNT = 255;
-	private final ExecutorService executor = Executors.newCachedThreadPool(); // newFixedThreadPool(MAX_WORKER_COUNT);
+	private static final int MAX_WORKER_COUNT = 255;
+	private final ExecutorService executor = Executors.newFixedThreadPool(MAX_WORKER_COUNT);
 
 	// private static final int QUEUE_ALERT_SIZE = 1024;
 	private final LinkedBlockingDeque<ChannelMessage<UserMessage.Request>> inbound = new LinkedBlockingDeque<>();
 	private final LinkedBlockingDeque<ChannelMessage<UserMessage.Response>> outbound = new LinkedBlockingDeque<>();
 
-	private static final int WORKER_DELAY = 30; // ms
+	private static final int WORKER_DELAY = 30, WORKER_RETRY = 1000; // ms
 	private ThreadGroup threadGroup = new ThreadGroup(UserServerProcessor.class.getSimpleName() + "-ThreadGroup-" + UUID.randomUUID().toString());
 	private InBoundWorker inBoundWorker = new InBoundWorker(threadGroup);
 	private OutBoundWorker outBoundWorker = new OutBoundWorker(threadGroup);
+
+	protected final UserDao userDao = new UserDao();
+
+	public boolean started() {
+		return inBoundWorker.isAlive();
+	}
+
+	public void start() {
+		if (!started()) {
+			inBoundWorker.start();
+			outBoundWorker.start();
+		}
+	}
 
 	// return true if enqueue successfully, false if reject
 	public boolean enqueue(MessageEvent e) {
@@ -48,7 +61,6 @@ public class UserServerProcessor {
 	}
 
 	class InBoundWorker extends Thread {
-		private boolean isDataSourceAvailable = true; // TODO: Circuit breaker
 
 		public InBoundWorker(ThreadGroup threadGroup) {
 			super(threadGroup, InBoundWorker.class.getSimpleName());
@@ -56,14 +68,20 @@ public class UserServerProcessor {
 
 		@Override
 		public void run() {
+			logger.info("inbound worker start");
 			while (true) {
 				try {
-					if (isDataSourceAvailable && !inbound.isEmpty()) {
-						executor.execute(new UserDataWorker());
-					} else {
+					if (inbound.isEmpty()) {
 						Thread.sleep(WORKER_DELAY);
+					} else if (!UserDao.isAvailable()) {
+						// Circuit breaker?
+						logger.warn("data source not available");
+						Thread.sleep(WORKER_RETRY);
+					} else {
+						executor.execute(new UserDataWorker());
 					}
 				} catch (InterruptedException e) {
+					logger.warn("inbound worker interrupted");
 					break;
 				}
 			}
@@ -78,6 +96,7 @@ public class UserServerProcessor {
 
 		@Override
 		public void run() {
+			logger.info("outbound worker start");
 			while (true) {
 				if (!outbound.isEmpty()) {
 					try {
@@ -95,6 +114,7 @@ public class UserServerProcessor {
 					try {
 						Thread.sleep(WORKER_DELAY);
 					} catch (InterruptedException e) {
+						logger.warn("outbound worker interrupted");
 						break;
 					}
 				}
@@ -103,8 +123,6 @@ public class UserServerProcessor {
 	}
 
 	class UserDataWorker implements Runnable {
-		private final UserDao userDao = new UserDao();
-
 		@Override
 		public void run() {
 			try {
