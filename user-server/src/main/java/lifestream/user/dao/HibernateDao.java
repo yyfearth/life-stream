@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 public abstract class HibernateDao {
 	private static final Logger logger = LoggerFactory.getLogger(HibernateDao.class.getSimpleName());
 	private static boolean hasFault = false;
+	public static final int BATCH_SIZE = 20; // in the cfg file
 	protected static Configuration conf;
 	protected static SessionFactory sessionFactory = null;
 
@@ -33,7 +34,7 @@ public abstract class HibernateDao {
 		return !hasFault;
 	}
 
-	public Session openSession() throws HibernateException {
+	public static Session openSession() throws HibernateException {
 		try {
 			return sessionFactory.openSession();
 		} catch (HibernateException ex) {
@@ -42,7 +43,7 @@ public abstract class HibernateDao {
 		}
 	}
 
-	public void closeSession(Session session) {
+	public static void closeSession(Session session) {
 		try {
 			if (session != null) {
 				session.close();

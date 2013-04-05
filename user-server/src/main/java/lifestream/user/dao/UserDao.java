@@ -9,7 +9,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.UUID;
+import java.util.*;
 
 public class UserDao extends HibernateDao {
 	private static final Logger logger = LoggerFactory.getLogger(UserDao.class.getSimpleName());
@@ -46,6 +46,35 @@ public class UserDao extends HibernateDao {
 		}
 	}
 
+	public List<UserEntity> create(List<UserEntity> users) throws HibernateException {
+		Session session = openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			int i = 0;
+			for (UserEntity user : users) {
+				user.setCreatedTimestamp();
+				user.setModifiedTimestamp();
+				session.save(user);
+				if (++i % BATCH_SIZE == 0) { // same as the JDBC batch size
+					// flush a batch of inserts and release memory
+					session.flush();
+					session.clear();
+				}
+			}
+			transaction.commit();
+			return users;
+		} catch (HibernateException ex) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			logger.error("Create users failed with rollback", ex);
+			throw ex;
+		} finally {
+			closeSession(session);
+		}
+	}
+
 	public UserEntity get(UUID id) throws HibernateException {
 		Session session = openSession();
 		Transaction transaction;
@@ -66,6 +95,27 @@ public class UserDao extends HibernateDao {
 			closeSession(session);
 		}
 		return user;
+	}
+
+	// not guarantee the order of return list
+	public List<UserEntity> get(List<UUID> ids) throws HibernateException {
+		Session session = openSession();
+		Transaction transaction;
+		List<UserEntity> users = new ArrayList<>(ids.size());
+		try {
+			transaction = session.beginTransaction();
+			List list = session.createCriteria(UserEntity.class).add(Restrictions.in("id", ids)).list();
+			for (Object u : list) {
+				users.add((UserEntity) u);
+			}
+			transaction.commit();
+		} catch (HibernateException ex) {
+			logger.error("Get user failed", ex);
+			throw ex;
+		} finally {
+			closeSession(session);
+		}
+		return users;
 	}
 
 	public UserEntity update(UserEntity user) throws HibernateException {
