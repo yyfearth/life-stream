@@ -26,7 +26,7 @@ public class Server {
 
 				// Decoders
 				channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
-				channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ImageMessage.Image.getDefaultInstance()));
+				channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(LifeStreamMessages.Image.getDefaultInstance()));
 
 				// Encoder
 				channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
@@ -78,7 +78,7 @@ class ServerHandler extends SimpleChannelHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 
-		ImageMessage.Image image = (ImageMessage.Image) e.getMessage();
+		LifeStreamMessages.Image image = (LifeStreamMessages.Image) e.getMessage();
 
 		System.out.println(image.toString());
 

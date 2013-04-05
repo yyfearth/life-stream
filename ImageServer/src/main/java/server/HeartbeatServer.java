@@ -12,26 +12,50 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 
 import java.net.InetSocketAddress;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class ConnectionMonitor extends BasicThread {
+public class HeartbeatServer extends BasicThread {
 
+	public int getNodeId() {
+		return nodeId;
+	}
+
+	public int getBindingPort() {
+		return bindingPort;
+	}
+
+	public ServerBootstrap getServerBootstrap() {
+		return serverBootstrap;
+	}
+
+	public ClientBootstrap getClientBootstrap() {
+		return clientBootstrap;
+	}
+
+	int nodeId = -1;
 	int bindingPort;
-	InetSocketAddress[] listeningAddresses;
 	ServerBootstrap serverBootstrap;
 	ClientBootstrap clientBootstrap;
+
 	ChannelFactory clientChannelFactory;
 	ChannelFactory serverChannelFactory;
 
 	Channel bindingChannel;
-	Channel[] connectorChannels;
-	MonitorReport[] monitorReports;
+	NodeInfo[] nodeInfos;
 
-	public ConnectionMonitor(int bindingPort, InetSocketAddress[] listeningAddresses) {
+	public int getNumConnections() {
+		return heartbeatConnectionMap.size();
+	}
+
+	Map<Integer, HeartbeatConnection> heartbeatConnectionMap = new HashMap<>();
+
+	public HeartbeatServer(int nodeId, int bindingPort, NodeInfo[] nodeInfos) {
+		this.nodeId = nodeId;
 		this.bindingPort = bindingPort;
-		this.listeningAddresses = listeningAddresses;
-		this.monitorReports = MonitorReport.generateReports(listeningAddresses);
+		this.nodeInfos = nodeInfos;
 	}
 
 	long nextReconnectionTick = 0;
@@ -57,6 +81,30 @@ public class ConnectionMonitor extends BasicThread {
 			disconnect();
 		} catch (InterruptedException | ChannelException ex) {
 			ex.printStackTrace();
+		}
+	}
+
+	void sendHeartBeat() {
+		long nowTimesteamp = (new Date()).getTime();
+
+		for (HeartbeatConnection heartbeatConnection : heartbeatConnectionMap.values()) {
+			LifeStreamMessages.HeartBeatMessage.Builder builder = LifeStreamMessages.HeartBeatMessage.newBuilder();
+
+			LifeStreamMessages.HeartBeatMessage heartBeatMessage = builder
+					.setOperation(LifeStreamMessages.HeartBeatMessage.OperationType.PING)
+					.setNodeId(this.nodeId)
+					.setTimestamp(nowTimesteamp)
+					.build();
+
+			ChannelFuture channelFuture = heartbeatConnection.getChannel().write(heartBeatMessage);
+			channelFuture.addListener(new ChannelFutureListener() {
+				@Override
+				public void operationComplete(ChannelFuture future) throws Exception {
+					if (future.isSuccess() == false) {
+
+					}
+				}
+			});
 		}
 	}
 
@@ -91,29 +139,61 @@ public class ConnectionMonitor extends BasicThread {
 
 		configueBootstrap();
 
+		// Listen as a server.
 		bindingChannel = serverBootstrap.bind(new InetSocketAddress(bindingPort));
-		connectorChannels = new Channel[listeningAddresses.length];
 
-		for (int i = 0; i < listeningAddresses.length; i++) {
-			InetSocketAddress inetSocketAddress = listeningAddresses[i];
-			ChannelFuture channelFuture = clientBootstrap.connect(inetSocketAddress);
-			channelFuture.addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+		// Connect to other nodes.
 
-			channelFuture.awaitUninterruptibly();
-
-			if (channelFuture.isSuccess() == false) {
-				System.out.println("Fail to connect " + inetSocketAddress.toString());
-			}
-
-			connectorChannels[i] = channelFuture.getChannel();
+		for (NodeInfo nodeInfo : nodeInfos) {
+			HeartbeatConnection heartbeatConnection = new HeartbeatConnection(this, nodeInfo.getSocketAddress());
+			heartbeatConnection.connect();
+			heartbeatConnectionMap.put(nodeInfo.getNodeId(), heartbeatConnection);
 		}
+	}
+
+	public void addNode(int nodeId, InetSocketAddress socketAddress) {
+		HeartbeatConnection heartbeatConnection = new HeartbeatConnection(this, socketAddress);
+		heartbeatConnectionMap.put(nodeId, heartbeatConnection);
+
+		if (bindingChannel.isConnected()) {
+			heartbeatConnection.connect();
+		}
+	}
+
+	public boolean removeNode(int nodeId) {
+		HeartbeatConnection heartbeatConnection = heartbeatConnectionMap.remove(nodeId);
+
+		if (heartbeatConnection == null) {
+			return false;
+		}
+
+		return heartbeatConnection.disconnect();
 	}
 
 	public void disconnect() {
 
-		for (Channel channel : connectorChannels) {
-			if (channel.isConnected()) {
-				channel.close().awaitUninterruptibly();
+		for (HeartbeatConnection heartbeatConnection : heartbeatConnectionMap.values()) {
+			heartbeatConnection.disconnect();
+		}
+
+		long timeoutTick = (new Date()).getTime() + 10 * 1000;
+
+		while (true) {
+
+			long nowTick = (new Date()).getTime();
+
+			if (nowTick >= timeoutTick) {
+				break;
+			}
+
+			for (HeartbeatConnection heartbeatConnection : heartbeatConnectionMap.values()) {
+				if (heartbeatConnection.isConnected()) {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 
@@ -130,7 +210,7 @@ class MonitorPipelineFactory implements ChannelPipelineFactory {
 
 		// Decoders
 		channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
-		channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ProtobufMessages.HeartBeat.getDefaultInstance()));
+		channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(LifeStreamMessages.HeartBeatMessage.getDefaultInstance()));
 
 		// Encoder
 		channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));

@@ -1,7 +1,7 @@
 package data;
 option optimize_for = SPEED;
 option java_package = "server";
-option java_outer_classname = "ProtobufMessages";
+option java_outer_classname = "LifeStreamMessages";
 
 message Image {
     required string id = 1;
@@ -53,9 +53,13 @@ message ServerMessage {
 
 }
 
-message HeartBeat {
-    required uint32 node_id = 1;
-    repeated uint64 timestamp = 2;
+message HeartBeatMessage {
+    enum OperationType {
+        PING = 0;
+    }
+    required OperationType operation = 1;
+    required uint32 node_id = 2;
+    required uint64 timestamp = 3;
 }
 
 message SocketAddress {
