@@ -38,6 +38,7 @@ public class HeartbeatServer extends BasicThread {
 	Channel serverChannel;
 
 	NodeInfo serverNodeInfo;
+	Map<Integer, HeartbeatConnection> heartbeatConnectionMap = new ConcurrentHashMap<>();
 
 	public HeartbeatServer(NodeInfo serverNodeInfo, NodeInfo[] clientNodeInfos) {
 		this.serverNodeInfo = serverNodeInfo;
@@ -154,8 +155,6 @@ public class HeartbeatServer extends BasicThread {
 	public int getNumConnections() {
 		return heartbeatConnectionMap.size();
 	}
-
-	Map<Integer, HeartbeatConnection> heartbeatConnectionMap = new ConcurrentHashMap<>();
 
 	HeartbeatConnection findConnectionByChannel(Channel channel) {
 		for (HeartbeatConnection heartbeatConnection : heartbeatConnectionMap.values()) {
