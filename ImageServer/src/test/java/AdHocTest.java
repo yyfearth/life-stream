@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class AdHocTest {
 	@Test
@@ -144,14 +145,38 @@ public class AdHocTest {
 			cm.stop();
 		}
 	}
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
 
-	@Test
-	public void testCurrentMethodName() throws Exception {
-		System.out.println(getMethodName());
-	}
+		HeartbeatServer heartbeatServer0 = new HeartbeatServer(new NodeInfo(0, 8090), new NodeInfo[]{
+				new NodeInfo(1, 8091),
+		});
+		new Thread(heartbeatServer0).start();
 
-	String getMethodName() {
-		final StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-		return stackTraceElements[2].getMethodName();
+		System.out.println("Node0 is added");
+		System.out.println("Press enter to add Node1");
+		scanner.nextLine();
+
+		HeartbeatServer heartbeatServer1 = new HeartbeatServer(new NodeInfo(1, 8091), new NodeInfo[]{
+				new NodeInfo(0, 8090),
+		});
+		new Thread(heartbeatServer1).start();
+
+		System.out.println("Node1 is added");
+		System.out.println("Press enter to add Node2");
+		scanner.nextLine();
+
+		HeartbeatServer heartbeatServer2 = new HeartbeatServer(new NodeInfo(2, 8092), new NodeInfo[]{
+				new NodeInfo(0, 8090),
+		});
+		new Thread(heartbeatServer2).start();
+
+		System.out.println("Node2 is added");
+		System.out.println("Press enter to kill Node1");
+		scanner.nextLine();
+
+		heartbeatServer1.stop();
+
+		System.out.println("Node1 is killed");
 	}
 }
