@@ -121,36 +121,21 @@ public class UserClient {
 		logger.info("Response - Failed: " + requestId + "\n" + message + "\n");
 	}
 
-	public void run() { // sync
+	public ChannelFuture connectAsync() {
+		return bootstrap.connect(new InetSocketAddress(host, port));
+	}
 
-		// Make a new connection.
-		ChannelFuture connectFuture = bootstrap.connect(new InetSocketAddress(host, port));
+	public void connect() {
+		connectAsync().awaitUninterruptibly();
+	}
 
-		// Wait until the connection is made successfully.
-		Channel channel = connectFuture.awaitUninterruptibly().getChannel();
+	public void close() {
+		clientHandler.close();
+	}
 
-		// Get the handler instance to initiate the request.
-		UserClientHandler handler = channel.getPipeline().get(UserClientHandler.class);
+	public void run() {
 
-		// Request and get the response.
-
-		UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000000");
-		int c = 1;
-		while (c-- > 0) {
-			ping();
-			getUser(userId);
-			getUser(UUID.randomUUID());
-			getUser(userId);
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
-				channel.close();
-			}
-		}
-
-		// Close the connection.
-//		channel.close(); //.awaitUninterruptibly();
+		connect();
 
 	}
 

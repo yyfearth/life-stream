@@ -69,6 +69,13 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 		return channel != null;
 	}
 
+	public void close() {
+		if (channel != null) {
+			channel.close();
+			channel = null;
+		}
+	}
+
 	@Override
 	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e) throws Exception {
 		if (e instanceof ChannelStateEvent) {
