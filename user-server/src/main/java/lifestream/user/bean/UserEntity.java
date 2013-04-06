@@ -1,7 +1,7 @@
-package bean;
+package lifestream.user.bean;
 
+import lifestream.user.data.UserMessage;
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,14 +11,38 @@ import java.util.UUID;
 @Entity
 public class UserEntity {
 
-	public UserEntity(UUID id) {
-		setId(id);
-		setCreatedDateTime(DateTime.now());
-		setModifiedDateTime(DateTime.now());
-	}
-
 	public UserEntity() {
 		this(UUID.randomUUID());
+	}
+
+	public UserEntity(UUID id) {
+		this(id, null, null, null, null, null);
+	}
+
+	public UserEntity(String username, String email, String password) {
+		this(UUID.randomUUID(), username, email, password, null, null);
+	}
+
+	public UserEntity(UUID id, String username, String email, String password) {
+		this(id, username, email, password, null, null);
+	}
+
+	public UserEntity(UUID id, String username, String email, String password, Date created, Date modified) {
+		this.id = id == null ? UUID.randomUUID() : id;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.createdTimestamp = created;
+		this.modifiedTimestamp = modified;
+	}
+
+	public UserEntity(UserMessage.User user) {
+		id = UUID.fromString(user.getId());
+		username = user.getUsername();
+		email = user.getEmail();
+		password = user.getPassword();
+		setCreatedTimestamp(user.getCreatedTimestamp());
+		setModifiedTimestamp(user.getModifiedTimestamp());
 	}
 
 	@Id
@@ -80,20 +104,47 @@ public class UserEntity {
 		this.password = password;
 	}
 
-	public DateTime getCreatedDateTime() {
-		return new DateTime(createdTimestamp);
+	public Date getCreatedTimestamp() {
+		return createdTimestamp;
 	}
 
-	public void setCreatedDateTime(DateTime createdTimestamp) {
-		this.createdTimestamp = createdTimestamp.toDate();
+	public void setCreatedTimestamp() {
+		this.createdTimestamp = new Date();
 	}
 
-	public DateTime getModifiedDateTime() {
-		return new DateTime(modifiedTimestamp);
+	public void setCreatedTimestamp(long created) {
+		this.createdTimestamp = created == 0 ? null : new Date(created);
 	}
 
-	public void setModifiedDateTime(DateTime modifiedTimestamp) {
-		this.modifiedTimestamp = modifiedTimestamp.toDate();
+	public void setCreatedTimestamp(Date created) {
+		this.createdTimestamp = created;
+	}
+
+	public Date getModifiedTimestamp() {
+		return modifiedTimestamp;
+	}
+
+	public void setModifiedTimestamp() {
+		this.modifiedTimestamp = new Date();
+	}
+
+	public void setModifiedTimestamp(long modified) {
+		this.modifiedTimestamp = modified == 0 ? null : new Date(modified);
+	}
+
+	public void setModifiedTimestamp(Date modified) {
+		this.modifiedTimestamp = modified;
+	}
+
+	public UserMessage.User toProtobuf() {
+		return UserMessage.User.newBuilder()
+				.setId(id.toString())
+				.setUsername(username == null ? "" : username)
+				.setEmail(email == null ? "" : email)
+				.setPassword(password == null ? "" : password)
+				.setCreatedTimestamp(createdTimestamp == null ? 0 : createdTimestamp.getTime())
+				.setModifiedTimestamp(modifiedTimestamp == null ? 0 : modifiedTimestamp.getTime())
+				.build();
 	}
 
 	@Override
