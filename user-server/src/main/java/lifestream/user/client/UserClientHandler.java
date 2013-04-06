@@ -3,21 +3,21 @@ package lifestream.user.client;
 import lifestream.user.bean.UserEntity;
 import lifestream.user.data.UserMessage;
 import org.jboss.netty.channel.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class UserClientHandler extends SimpleChannelUpstreamHandler {
 
-	private static final Logger logger = Logger.getLogger(UserClientHandler.class.getSimpleName());
+	private static final Logger logger = LoggerFactory.getLogger(UserClientHandler.class.getSimpleName());
 
 	// Stateful properties
 	private volatile Channel channel;
 
-	private final Map<String, RequestResponseHandler> handlerMap = new HashMap<>();
+	private final ConcurrentMap<String, RequestResponseHandler> handlerMap = new ConcurrentHashMap<>();
 
 	public UUID request(UserMessage.RequestType type, UserEntity user, RequestResponseHandler handler) {
 		return request(type, user.toProtobuf(), handler);
@@ -52,17 +52,17 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 
 	protected UUID request(UserMessage.Request request, RequestResponseHandler handler) {
 		if (channel == null) {
-			logger.warning("Not connected yet");
+			logger.warn("Not connected yet");
 			return null;
 		}
 		String id = request.getId();
 		if (id != null && (handler == null || handler.beforeSend(request))) {
-			channel.write(request);
 			logger.info("Sent request: " + request);
 			if (handler != null) {
-				handlerMap.put(id, handler);
+				handlerMap.put(request.getId(), handler);
 			}
-			return UUID.fromString(id);
+			channel.write(request);
+			return UUID.fromString(request.getId());
 		} else {
 			logger.info("Request canceled before send: " + request);
 			return null;
@@ -108,12 +108,14 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 		if (handler != null) {
 			handlerMap.remove(id);
 			handler.received(resp);
+		} else {
+			logger.warn("handler not found: " + id);
 		}
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-		logger.log(Level.WARNING, "Unexpected exception from downstream.", e.getCause());
+		logger.error("Unexpected exception from downstream.", e.getCause());
 		e.getChannel().close();
 	}
 

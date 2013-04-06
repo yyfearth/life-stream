@@ -23,17 +23,24 @@ public class ClientTest {
 	@Test
 	public void testPing() {
 		userClient.ping(new UserClient.ResultRequestResponseHandler() {
+			long ts;
+
+			@Override
+			public boolean beforeSend(UserMessage.Request req) {
+				ts = req.getTimestamp();
+				System.out.println("ping " + new Date(ts) + "\n");
+				return true;
+			}
 
 			@Override
 			public void receivedOK(Date timestamp) {
-				System.out.println("Passed: \n" + timestamp + "\n");
-				assert true;
+				System.out.println("pong " + timestamp + "\n");
+				System.out.println("Passed: ping delay " + (timestamp.getTime() - ts) + "ms\n");
 			}
 
 			@Override
 			public void receivedError(UserMessage.Response.ResultCode code, String message) {
-				System.out.println("Failed: \n" + message + "\n");
-				assert false;
+				System.out.println("Failed: " + message + "\n");
 			}
 		});
 		try {
@@ -58,14 +65,15 @@ public class ClientTest {
 
 					@Override
 					public void receivedUser(UserEntity user) {
-						assert id.equals(user.getId());
-						System.out.println("Passed: \n" + user + "\n");
+						if (id.equals(user.getId()))
+							System.out.println("Passed: \n" + user + "\n");
+						else
+							System.out.println("Failed: user id not matched\n" + user + "\n");
 					}
 
 					@Override
 					public void receivedError(UserMessage.Response.ResultCode code, String message) {
-						System.out.println("Failed: \n" + message + "\n");
-						assert false;
+						System.out.println("Failed: " + message + "\n");
 					}
 				});
 				delay = generator.nextInt(200);

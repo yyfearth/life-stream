@@ -14,10 +14,9 @@ import java.net.InetSocketAddress;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.Executors;
-import java.util.logging.Logger;
 
 public class UserClient {
-	private static final Logger logger = Logger.getLogger(UserClient.class.getSimpleName());
+	// private static final Logger logger = LoggerFactory.getLogger(UserClient.class.getSimpleName());
 
 	protected final String host;
 	protected final int port;
