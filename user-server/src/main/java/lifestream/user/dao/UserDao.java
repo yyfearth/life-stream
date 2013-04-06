@@ -15,15 +15,6 @@ import java.util.UUID;
 
 public class UserDao extends HibernateDao {
 	private static final Logger logger = LoggerFactory.getLogger(UserDao.class.getSimpleName());
-	private static UserDao instance = null;
-
-	// not force singletonn
-	public static UserDao getInstance() {
-		if (instance == null) {
-			instance = new UserDao();
-		}
-		return instance;
-	}
 
 	public void create(UUID id, String username, String password, String email) {
 		create(new UserEntity(id, username, password, email));
@@ -66,11 +57,14 @@ public class UserDao extends HibernateDao {
 			for (UserEntity user : users) {
 				user.setCreatedTimestamp();
 				user.setModifiedTimestamp();
+
 				session.save(user);
-				if (++i % BATCH_SIZE == 0) { // same as the JDBC batch size
+				if (++i % BATCH_FLUSH_SIZE == 0) { // same as the JDBC batch size
 					// flush a batch of inserts and release memory
-					session.flush();
-					session.clear();
+					if (session.isDirty()) {
+						session.flush();
+						session.clear();
+					}
 				}
 			}
 			transaction.commit();

@@ -17,7 +17,7 @@ public class BatchGetWorker implements Runnable {
 
 	private final HashMap<String, List<ChannelMessage<UserMessage.Request>>> userMap;
 	private final OutboundQueue outbound;
-	private final UserDao userDao = UserDao.getInstance();
+	private final UserDao userDao = new UserDao();
 
 	public BatchGetWorker(InboundQueue inbound, OutboundQueue outbound) {
 		this.outbound = outbound;

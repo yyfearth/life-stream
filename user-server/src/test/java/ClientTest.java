@@ -80,7 +80,7 @@ public class ClientTest {
 	public void test() {
 		try {
 			// batch add
-			int delay, userCount = generator.nextInt(100);
+			int delay, userCount = 1000; // generator.nextInt(100);
 
 			List<UUID> userIds = new ArrayList<>(userCount);
 			while (userCount-- > 0) {
@@ -91,37 +91,40 @@ public class ClientTest {
 
 					@Override
 					public void receivedUser(UserEntity user) {
-						if (id.equals(user.getId()))
-							System.out.println("Passed: \n" + user + "\n");
-						else
-							System.out.println("Failed: user id not matched\n" + user + "\n");
+						if (id.equals(user.getId())) {
+							System.out.println("Add Passed: \n" + user + "\n");
+						} else {
+							System.out.println("Add Failed: user id not matched\n" + user + "\n");
+						}
 					}
 
 					@Override
 					public void receivedError(UserMessage.Response.ResultCode code, String message) {
-						System.out.println("Failed: " + message + "\n");
+						System.out.println("Add Failed: " + message + "\n");
 					}
 				});
-				delay = generator.nextInt(200);
+				delay = generator.nextInt(111);
 				if (delay > 100) {
 					Thread.sleep(delay);
 				}
 			}
-			Thread.sleep(500);
+			Thread.sleep(1000);
 			// batch get
 			for (final UUID id : userIds) {
 				userClient.getUser(id, new UserClient.UserRequestResponseHandler() {
 
 					@Override
 					public void receivedUser(UserEntity user) {
-						assert id.equals(user.getId());
-						System.out.println("Passed: \n" + user + "\n");
+						if (id.equals(user.getId())) {
+							System.out.println("Get Passed: \n" + user + "\n");
+						} else {
+							System.out.println("Get Failed: user id not matched\n" + user + "\n");
+						}
 					}
 
 					@Override
 					public void receivedError(UserMessage.Response.ResultCode code, String message) {
-						System.out.println("Failed: \n" + message + "\n");
-						assert false;
+						System.out.println("Get Failed: " + message + "\n");
 					}
 				});
 				delay = generator.nextInt(111);
@@ -139,7 +142,7 @@ public class ClientTest {
 
 	private UserEntity genUser() {
 
-		String username = "test." + generator.nextInt(65535);
+		String username = "test." + UUID.randomUUID(); // generator.nextInt(65535);
 		UserEntity user = new UserEntity();
 		user.setEmail(username + "@ab.com");
 		user.setUsername(username);

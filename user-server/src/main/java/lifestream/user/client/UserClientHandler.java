@@ -57,11 +57,16 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 		}
 		String id = request.getId();
 		if (id != null && (handler == null || handler.beforeSend(request))) {
-			logger.info("Sent request: " + request);
+			// logger.info("Send request: " + request);
 			if (handler != null) {
 				handlerMap.put(request.getId(), handler);
 			}
-			channel.write(request);
+			if (channel.isWritable()) {
+				channel.write(request);
+			} else {
+				logger.warn("Request rejected since channel not writable: " + request);
+				return null;
+			}
 			return UUID.fromString(request.getId());
 		} else {
 			logger.info("Request canceled before send: " + request);
@@ -70,9 +75,9 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 	}
 
 	// could be override
-	public void received(UserMessage.Response response) {
-		logger.info("Received response: " + response);
-	}
+//	public void received(UserMessage.Response response) {
+//		logger.info("Received response: " + response);
+//	}
 
 	public boolean isReady() {
 		return channel != null;
@@ -103,7 +108,7 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 	public void messageReceived(ChannelHandlerContext ctx, final MessageEvent e) {
 		UserMessage.Response resp = (UserMessage.Response) e.getMessage();
 		String id = resp.getId();
-		received(resp);
+		// received(resp);
 		RequestResponseHandler handler = handlerMap.get(id);
 		if (handler != null) {
 			handlerMap.remove(id);
@@ -116,7 +121,7 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		logger.error("Unexpected exception from downstream.", e.getCause());
-		e.getChannel().close();
+		close();
 	}
 
 	public abstract static class RequestResponseHandler {

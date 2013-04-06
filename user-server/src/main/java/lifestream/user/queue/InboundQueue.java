@@ -13,7 +13,7 @@ public class InboundQueue implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(InboundQueue.class.getSimpleName());
 
 	private static final int WORKER_DELAY = 100; // ms
-	private static final int MAX_WORKER_COUNT = 255, WORKER_SLEEP_CIRCLES = 100;
+	private static final int MAX_WORKER_COUNT = 20, WORKER_SLEEP_CIRCLES = 100;
 
 	private final RequestQueue batchAddQueue = new RequestQueue();
 	private final RequestQueue batchGetQueue = new RequestQueue();
@@ -37,7 +37,7 @@ public class InboundQueue implements Runnable {
 	public void enqueue(ChannelMessage<UserMessage.Request> requestMessage) {
 		RequestQueue queue;
 		UserMessage.Request req = requestMessage.getMessage();
-		logger.info("received request: " + req.toString());
+		// logger.info("received request: " + req.toString());
 		try {
 			switch (req.getRequest()) {
 				case PING:

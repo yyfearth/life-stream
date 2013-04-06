@@ -31,7 +31,11 @@ public class OutboundQueue implements Runnable {
 
 	protected void startWorker() {
 		if (!worker.isAlive()) {
-			worker.start();
+			try {
+				worker.start();
+			} catch (IllegalThreadStateException e) {
+				logger.warn("start a thread with illegal state: " + worker.getState());
+			}
 		}
 	}
 

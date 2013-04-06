@@ -4,6 +4,7 @@ import lifestream.user.bean.UserEntity;
 import lifestream.user.dao.UserDao;
 import lifestream.user.data.UserMessage;
 import org.hibernate.HibernateException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,11 +14,12 @@ import java.util.List;
 
 public class BatchAddWorker implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(BatchAddWorker.class.getSimpleName());
+	private static final int BATCH_SIZE = 15;
 
 	private final HashMap<String, ChannelMessage<UserMessage.Request>> userMap;
 	private final InboundQueue inbound;
 	private final OutboundQueue outbound;
-	private final UserDao userDao = UserDao.getInstance();
+	private final UserDao userDao = new UserDao();
 
 	public BatchAddWorker(InboundQueue inbound, OutboundQueue outbound) {
 		this.inbound = inbound;
@@ -56,16 +58,19 @@ public class BatchAddWorker implements Runnable {
 		for (ChannelMessage<UserMessage.Request> req : userMap.values()) {
 			userList.add(new UserEntity(req.getMessage().getUser()));
 		}
-		int step = UserDao.BATCH_SIZE / 2; // for safe
 		int max = userList.size();
-		for (int i = 0; i < max; i += step) {
-			List<UserEntity> users = userList.subList(i, Math.min(i + step, max));
+		for (int i = 0; i < max; i += BATCH_SIZE) {
+			List<UserEntity> users = userList.subList(i, Math.min(i + BATCH_SIZE, max));
 			try {
 				userDao.create(users);
 				logger.info("Batch added users: " + users.size());
 			} catch (HibernateException ex) {
 				// fallback
-				logger.error("Batch add users failed, use fallback", ex);
+				if (ex instanceof ConstraintViolationException) {
+					logger.warn("Batch add users failed since keys duplicated, use fallback");
+				} else {
+					logger.error("Batch add users failed, use fallback", ex);
+				}
 				for (UserEntity user : users) {
 					inbound.put(userMap.get(user.getId().toString()));
 				}

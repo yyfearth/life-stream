@@ -14,7 +14,7 @@ public class MessageProcessWorker implements Runnable {
 	private ChannelMessage<UserMessage.Request> requestMessage = null;
 
 	private final OutboundQueue outbound;
-	private final UserDao userDao = UserDao.getInstance();
+	private final UserDao userDao = new UserDao();
 
 	public MessageProcessWorker(InboundQueue inbound, OutboundQueue outbound) {
 		this.outbound = outbound;
