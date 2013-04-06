@@ -19,7 +19,7 @@ public class UserServerProcessor {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserServerProcessor.class.getSimpleName());
 
-	private static final int MAX_WORKER_COUNT = 255;
+	private static final int MAX_WORKER_COUNT = 255, WORKER_SLEEP_CIRCLES = 100;
 	private final ExecutorService executor = Executors.newFixedThreadPool(MAX_WORKER_COUNT);
 
 	// private static final int QUEUE_ALERT_SIZE = 1024;
@@ -37,12 +37,18 @@ public class UserServerProcessor {
 	protected final UserDao userDao = new UserDao();
 
 	public boolean started() {
-		return inBoundWorker.isAlive();
+		return inBoundWorker.isAlive() || outBoundWorker.isAlive();
 	}
 
 	public void start() {
-		if (!started()) {
+		if (!inBoundWorker.isAlive()) {
 			inBoundWorker.start();
+		}
+		startOutBoundWorker();
+	}
+
+	public void startOutBoundWorker() {
+		if (!outBoundWorker.isAlive()) {
 			outBoundWorker.start();
 		}
 	}
@@ -57,6 +63,7 @@ public class UserServerProcessor {
 			switch (req.getRequest()) {
 				case PING:
 					pong(e.getChannel(), req); // faster
+					startOutBoundWorker();
 					return true;
 				case ADD_USER:
 					queue = inboundAdd; // for batch add
@@ -69,6 +76,7 @@ public class UserServerProcessor {
 					break;
 			}
 			queue.put(new ChannelMessage<>(e.getChannel(), req));
+			start();
 			return true;
 		} catch (InterruptedException ex) {
 			logger.error("message not enqueued for processing", ex);
@@ -96,30 +104,38 @@ public class UserServerProcessor {
 		@Override
 		public void run() {
 			logger.info("inbound worker start");
-			while (true) {
+			int sleepCircle = 0;
+			while (sleepCircle < WORKER_SLEEP_CIRCLES) {
 				try {
-					if (UserDao.isAvailable()) {
-						if (!inboundAdd.isEmpty()) {
-							executor.execute(new BatchAddUserWorker());
-						}
-						if (!inboundGet.isEmpty()) {
-							executor.execute(new BatchGetUserWorker());
-						}
-						int count = inbound.size();
-						while (count-- > 0) {
-							executor.execute(new UserDataWorker());
-						}
+					if (inbound.isEmpty() && inboundAdd.isEmpty() && inboundGet.isEmpty()) {
 						Thread.sleep(WORKER_DELAY);
+						sleepCircle++; // count
 					} else {
-						// Circuit breaker?
-						logger.warn("data source not available");
-						Thread.sleep(WORKER_RETRY);
+						sleepCircle = 0; // reset
+						if (UserDao.isAvailable()) {
+							if (!inboundAdd.isEmpty()) {
+								executor.execute(new BatchAddUserWorker());
+							}
+							if (!inboundGet.isEmpty()) {
+								executor.execute(new BatchGetUserWorker());
+							}
+							int count = inbound.size();
+							while (count-- > 0) {
+								executor.execute(new UserDataWorker());
+							}
+							Thread.sleep(WORKER_DELAY);
+						} else {
+							// Circuit breaker?
+							logger.warn("data source not available");
+							Thread.sleep(WORKER_RETRY);
+						}
 					}
 				} catch (InterruptedException e) {
 					logger.warn("inbound worker interrupted");
 					break;
 				}
 			}
+			logger.info("inbound worker stopped");
 		}
 	}
 
@@ -132,28 +148,34 @@ public class UserServerProcessor {
 		@Override
 		public void run() {
 			logger.info("outbound worker start");
-			while (true) {
-				if (!outbound.isEmpty()) {
-					try {
-						ChannelMessage<UserMessage.Response> responseMessage = outbound.take();
-						Channel channel = responseMessage.getChannel();
-						if (channel.isWritable()) {
-							channel.write(responseMessage.getMessage());
-						} else {
-							outbound.putFirst(responseMessage);
-						}
-					} catch (InterruptedException e) {
-						logger.error("message not dequeued for processing", e);
-					}
+			int sleepCircle = 0;
+			while (sleepCircle < WORKER_SLEEP_CIRCLES) {
+				if (outbound.isEmpty() && !inBoundWorker.isAlive()) {
+					sleepCircle++;
 				} else {
-					try {
-						Thread.sleep(WORKER_DELAY);
-					} catch (InterruptedException e) {
-						logger.warn("outbound worker interrupted");
-						break;
+					sleepCircle = 0;
+					while (!outbound.isEmpty()) {
+						try {
+							ChannelMessage<UserMessage.Response> responseMessage = outbound.take();
+							Channel channel = responseMessage.getChannel();
+							if (channel.isWritable()) {
+								channel.write(responseMessage.getMessage());
+							} else {
+								outbound.putFirst(responseMessage);
+							}
+						} catch (InterruptedException e) {
+							logger.error("message not dequeued for processing", e);
+						}
 					}
 				}
+				try {
+					Thread.sleep(WORKER_DELAY);
+				} catch (InterruptedException e) {
+					logger.warn("outbound worker interrupted");
+					break;
+				}
 			}
+			logger.info("outbound worker stopped");
 		}
 	}
 
