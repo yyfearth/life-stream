@@ -9,6 +9,7 @@ import java.util.List;
 public class HeartbeatServerTest {
 
 	List<HeartbeatServer> heartbeatServers = new ArrayList<>();
+	List<Thread> threadList = new ArrayList<>();
 
 	@Test(groups = {"Connect"})
 	public void testConnect() throws Exception {
@@ -22,30 +23,32 @@ public class HeartbeatServerTest {
 		});
 		heartbeatServers.add(heartbeatServer);
 
-		for (HeartbeatServer cm : heartbeatServers) {
-			cm.connnect();
-			Assert.assertTrue(cm.isBound());
+		for (HeartbeatServer server : heartbeatServers) {
+			Thread thread = new Thread(server);
+			thread.start();
+			threadList.add(thread);
 		}
 
 		Thread.sleep(1000);
 
-		System.out.println("==========");
-
-
-		Assert.assertTrue(heartbeatServer.isBound());
+		for (HeartbeatServer server : heartbeatServers) {
+			Assert.assertTrue(server.isBound());
+		}
 	}
 
 	@Test(groups = {"AddNode"}, dependsOnGroups = {"Connect"})
 	public void testAddNode() throws Exception {
-
 		HeartbeatServer heartbeatServer2 = new HeartbeatServer(new NodeInfo(2, 8092), new NodeInfo[]{});
-		heartbeatServer2.connnect();
 		heartbeatServers.add(heartbeatServer2);
 
-		HeartbeatServer heartbeatServer0 = heartbeatServers.get(0);
-		heartbeatServer0.addNode(new NodeInfo(2, 8092));
+		Thread thread = new Thread(heartbeatServer2);
+		thread.start();
+		threadList.add(thread);
 
-		heartbeatServer2.addNode(new NodeInfo(0, 8090));
+		HeartbeatServer heartbeatServer0 = heartbeatServers.get(0);
+		heartbeatServer0.addNode(heartbeatServer2.serverNodeInfo);
+
+		heartbeatServer2.addNode(heartbeatServer0.serverNodeInfo);
 
 		Assert.assertEquals(heartbeatServer0.getNumConnections(), 2);
 		Assert.assertEquals(heartbeatServer2.getNumConnections(), 1);
@@ -78,6 +81,10 @@ public class HeartbeatServerTest {
 			public void onDisconnected(Object caller, HeatBeatServerEventArgs eventArgs) {
 				disconnectedNodeId = eventArgs.nodeInfo.nodeId;
 			}
+
+			@Override
+			public void onClosed(Object caller, HeatBeatServerEventArgs eventArgs) {
+			}
 		}
 
 		HeartbeatServer heartbeatServer0 = heartbeatServers.get(0);
@@ -94,9 +101,51 @@ public class HeartbeatServerTest {
 
 	@Test(groups = {"Disonnect"}, dependsOnGroups = {"RemoveNode"}, priority = 200)
 	public void testDisconnect() throws Exception {
-		for (HeartbeatServer cm : heartbeatServers) {
-			cm.disconnect();
-			Assert.assertFalse(cm.isBound());
+		class CustomHeatBeatServerEventListener implements HeatBeatServerEventListener {
+			HeartbeatServer heartbeatServer;
+			boolean isClosed = false;
+
+			CustomHeatBeatServerEventListener(HeartbeatServer heartbeatServer) {
+				this.heartbeatServer = heartbeatServer;
+			}
+
+			@Override
+			public void onConnected(Object caller, HeatBeatServerEventArgs eventArgs) {
+			}
+
+			@Override
+			public void onDisconnected(Object caller, HeatBeatServerEventArgs eventArgs) {
+			}
+
+			@Override
+			public void onClosed(Object caller, HeatBeatServerEventArgs eventArgs) {
+				isClosed = true;
+				System.out.println(heartbeatServer.serverNodeInfo + " is closed.");
+			}
+		}
+
+		List<CustomHeatBeatServerEventListener> customHeatBeatServerEventListenerList = new ArrayList<>();
+
+		for (HeartbeatServer server : heartbeatServers) {
+			CustomHeatBeatServerEventListener customHeatBeatServerEventListener = new CustomHeatBeatServerEventListener(server);
+			customHeatBeatServerEventListenerList.add(customHeatBeatServerEventListener);
+			server.addEventListener(customHeatBeatServerEventListener);
+			server.stop();
+		}
+
+		while (customHeatBeatServerEventListenerList.size() > 0) {
+			Thread.sleep(500);
+
+			for (int i = 0; i < customHeatBeatServerEventListenerList.size(); ) {
+				CustomHeatBeatServerEventListener listener = customHeatBeatServerEventListenerList.get(i);
+
+				if (listener.isClosed) {
+					customHeatBeatServerEventListenerList.remove(i);
+				} else {
+					System.out.println("Wait node" + listener.heartbeatServer.serverNodeInfo.nodeId + "...");
+					i++;
+				}
+			}
 		}
 	}
 }
