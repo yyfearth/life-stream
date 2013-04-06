@@ -53,45 +53,44 @@ public class UserClient {
 
 	@Override
 	public void finalize() throws Throwable {
-		// Shut down all thread pools to exit.
+		close();
 		bootstrap.releaseExternalResources();
-
 		super.finalize();
 	}
 
-	public UUID ping(ResultRequestResponseHandler handler) {
+	public ChannelFuture ping(ResultRequestResponseHandler handler) {
 		return clientHandler.request(handler);
 	}
 
-	public UUID getUser(UserEntity user, UserRequestResponseHandler handler) {
+	public ChannelFuture getUser(UserEntity user, UserRequestResponseHandler handler) {
 		return getUser(user.getId(), handler);
 	}
 
-	public UUID getUser(UUID userId, UserRequestResponseHandler handler) {
+	public ChannelFuture getUser(UUID userId, UserRequestResponseHandler handler) {
 		return requestUser(UserMessage.RequestType.GET_USER, userId, handler);
 	}
 
-	public UUID addUser(UserEntity user, UserRequestResponseHandler handler) {
+	public ChannelFuture addUser(UserEntity user, UserRequestResponseHandler handler) {
 		return requestUser(UserMessage.RequestType.ADD_USER, user, handler);
 	}
 
-	public UUID updateUser(UserEntity user, UserRequestResponseHandler handler) {
+	public ChannelFuture updateUser(UserEntity user, UserRequestResponseHandler handler) {
 		return requestUser(UserMessage.RequestType.UPDATE_USER, user, handler);
 	}
 
-	public UUID removeUser(UserEntity user, ResultRequestResponseHandler handler) {
+	public ChannelFuture removeUser(UserEntity user, ResultRequestResponseHandler handler) {
 		return removeUser(user.getId(), handler);
 	}
 
-	public UUID removeUser(UUID userId, ResultRequestResponseHandler handler) {
+	public ChannelFuture removeUser(UUID userId, ResultRequestResponseHandler handler) {
 		return requestUser(UserMessage.RequestType.UPDATE_USER, userId, handler);
 	}
 
-	public UUID requestUser(UserMessage.RequestType type, UserEntity user, UserClientHandler.RequestResponseHandler handler) {
+	public ChannelFuture requestUser(UserMessage.RequestType type, UserEntity user, UserClientHandler.RequestResponseHandler handler) {
 		return clientHandler.request(type, user, handler);
 	}
 
-	public UUID requestUser(UserMessage.RequestType type, UUID userId, UserClientHandler.RequestResponseHandler handler) {
+	public ChannelFuture requestUser(UserMessage.RequestType type, UUID userId, UserClientHandler.RequestResponseHandler handler) {
 		return clientHandler.request(type, userId, handler);
 	}
 

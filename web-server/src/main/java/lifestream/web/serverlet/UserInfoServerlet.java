@@ -13,23 +13,23 @@ import java.io.PrintWriter;
 import java.util.UUID;
 
 public class UserInfoServerlet extends HttpServlet {
+	final UserClient userClient = UserClient.getInstance();
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("id");
 		if (id == null || id.trim().equals("")) {
 			throw new ServletException("id is required");
 		}
-		UserClient userClient = UserClient.getInstance();
 		userClient.connect();
-		userClient.getUser(UUID.fromString(id.trim()), new ResponseHandler(response));
-
-		try {
-			Thread.sleep(1000); // 1s timeout
-		} catch (InterruptedException e) {
-			System.out.println("Interrupted");
-		} finally {
-			userClient.close();
+		userClient.getUser(UUID.fromString(id.trim()), new ResponseHandler(response)).awaitUninterruptibly();
+		synchronized (userClient) {
+			try {
+				userClient.wait(1000); // timeout
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
+		userClient.close();
 	}
 
 	class ResponseHandler extends UserClient.UserRequestResponseHandler {
@@ -50,6 +50,12 @@ public class UserInfoServerlet extends HttpServlet {
 		}
 	}
 
+	private void notifyClient() {
+		synchronized (userClient) {
+			userClient.notifyAll();
+		}
+	}
+
 	public void succeed(UserEntity user, HttpServletResponse response) {
 		try {
 			PrintWriter out = response.getWriter();
@@ -57,6 +63,7 @@ public class UserInfoServerlet extends HttpServlet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		notifyClient();
 	}
 
 	public void failed(String message, HttpServletResponse response) {
@@ -66,7 +73,7 @@ public class UserInfoServerlet extends HttpServlet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		notifyClient();
 	}
 
 }

@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.security.MessageDigest;
 
 public class SignUpServerlet extends HttpServlet {
+	final UserClient userClient = UserClient.getInstance();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String email = request.getParameter("email");
@@ -25,18 +26,16 @@ public class SignUpServerlet extends HttpServlet {
 
 		UserEntity user = new UserEntity(username.trim(), email.trim(), sha256(password.trim()));
 
-		UserClient userClient = UserClient.getInstance();
 		userClient.connect();
-		userClient.addUser(user, new ResponseHandler(response));
-
-		try {
-			Thread.sleep(1000); // 1s timeout
-		} catch (InterruptedException e) {
-			System.out.println("Interrupted");
-		} finally {
-			userClient.close();
+		userClient.addUser(user, new ResponseHandler(response)).awaitUninterruptibly();
+		synchronized (userClient) {
+			try {
+				userClient.wait(1000); // timeout
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
-
+		userClient.close();
 	}
 
 	class ResponseHandler extends UserClient.UserRequestResponseHandler {
@@ -63,6 +62,7 @@ public class SignUpServerlet extends HttpServlet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		notifyClient();
 	}
 
 	public void failed(String message, HttpServletResponse response) {
@@ -72,7 +72,13 @@ public class SignUpServerlet extends HttpServlet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		notifyClient();
+	}
 
+	private void notifyClient() {
+		synchronized (userClient) {
+			userClient.notifyAll();
+		}
 	}
 
 	public static String sha256(String base) {

@@ -19,11 +19,11 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 
 	private final Map<String, RequestResponseHandler> handlerMap = new ConcurrentHashMap<>();
 
-	public UUID request(UserMessage.RequestType type, UserEntity user, RequestResponseHandler handler) {
+	public ChannelFuture request(UserMessage.RequestType type, UserEntity user, RequestResponseHandler handler) {
 		return request(type, user.toProtobuf(), handler);
 	}
 
-	public UUID request(UserMessage.RequestType type, UUID userId, RequestResponseHandler handler) {
+	public ChannelFuture request(UserMessage.RequestType type, UUID userId, RequestResponseHandler handler) {
 		return request(UserMessage.Request.newBuilder()
 				.setId(UUID.randomUUID().toString())
 				.setRequest(type)
@@ -32,7 +32,7 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 				.build(), handler);
 	}
 
-	public UUID request(UserMessage.RequestType type, UserMessage.User user, RequestResponseHandler handler) {
+	public ChannelFuture request(UserMessage.RequestType type, UserMessage.User user, RequestResponseHandler handler) {
 		return request(UserMessage.Request.newBuilder()
 				.setId(UUID.randomUUID().toString())
 				.setRequest(type)
@@ -42,7 +42,7 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 				.build(), handler);
 	}
 
-	public UUID request(RequestResponseHandler handler) { // ping
+	public ChannelFuture request(RequestResponseHandler handler) { // ping
 		return request(UserMessage.Request.newBuilder()
 				.setId(UUID.randomUUID().toString())
 				.setRequest(UserMessage.RequestType.PING)
@@ -50,7 +50,7 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 				.build(), handler);
 	}
 
-	protected UUID request(UserMessage.Request request, RequestResponseHandler handler) {
+	protected ChannelFuture request(UserMessage.Request request, RequestResponseHandler handler) {
 		if (channel == null) {
 			logger.warn("Not connected yet");
 			return null;
@@ -62,12 +62,11 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 				handlerMap.put(request.getId(), handler);
 			}
 			if (channel.isWritable()) {
-				channel.write(request);
+				return channel.write(request);
 			} else {
 				logger.warn("Request rejected since channel not writable: " + request);
 				return null;
 			}
-			return UUID.fromString(request.getId());
 		} else {
 			logger.info("Request canceled before send: " + request);
 			return null;
@@ -85,7 +84,8 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 
 	public void close() {
 		if (channel != null) {
-			channel.close();
+			// channel.getCloseFuture().awaitUninterruptibly();
+			channel.close().awaitUninterruptibly();
 			channel = null;
 		}
 	}
