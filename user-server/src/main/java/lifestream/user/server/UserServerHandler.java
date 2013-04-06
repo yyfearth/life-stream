@@ -1,5 +1,7 @@
 package lifestream.user.server;
 
+import lifestream.user.queue.InboundQueue;
+import lifestream.user.queue.OutboundQueue;
 import org.jboss.netty.channel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +11,9 @@ import java.nio.channels.ClosedChannelException;
 public class UserServerHandler extends SimpleChannelUpstreamHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserServerHandler.class.getSimpleName());
-	private final UserServerProcessor processor = new UserServerProcessor();
+
+	private final OutboundQueue outbound = new OutboundQueue();
+	private final InboundQueue inbound = new InboundQueue(outbound);
 
 	@Override
 	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e) throws Exception {
@@ -21,7 +25,7 @@ public class UserServerHandler extends SimpleChannelUpstreamHandler {
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
-		processor.enqueue(e);
+		inbound.enqueue(e);
 	}
 
 	@Override

@@ -9,10 +9,21 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class UserDao extends HibernateDao {
 	private static final Logger logger = LoggerFactory.getLogger(UserDao.class.getSimpleName());
+	private static UserDao instance = null;
+
+	// not force singletonn
+	public static UserDao getInstance() {
+		if (instance == null) {
+			instance = new UserDao();
+		}
+		return instance;
+	}
 
 	public void create(UUID id, String username, String password, String email) {
 		create(new UserEntity(id, username, password, email));
