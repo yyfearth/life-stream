@@ -1,9 +1,9 @@
 package server;
 
 public interface HeatBeatServerEventListener {
-	void onConnected(Object caller, HeatBeatServerEventArgs eventArgs);
+	void onConnected(HeartbeatServer server, HeatBeatServerEventArgs eventArgs);
 
-	void onDisconnected(Object caller, HeatBeatServerEventArgs eventArgs);
+	void onDisconnected(HeartbeatServer server, HeatBeatServerEventArgs eventArgs);
 
-	void onClosed(Object caller, HeatBeatServerEventArgs eventArgs);
+	void onClosed(HeartbeatServer server, HeatBeatServerEventArgs eventArgs);
 }

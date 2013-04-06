@@ -10,6 +10,7 @@ import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
 import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 
+import java.net.ConnectException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -21,7 +22,11 @@ public class HeartbeatServer extends BasicThread {
 	final static Logger LOGGER = Logger.getLogger(HeartbeatServer.class.getName());
 
 	public boolean isBound() {
-		return serverChannel.isBound();
+		return (serverChannel != null) && serverChannel.isBound();
+	}
+
+	public NodeInfo getServerNodeInfo() {
+		return new NodeInfo(serverNodeInfo);
 	}
 
 	ServerBootstrap serverBootstrap;
@@ -31,6 +36,7 @@ public class HeartbeatServer extends BasicThread {
 	ChannelFactory serverChannelFactory;
 
 	Channel serverChannel;
+
 	NodeInfo serverNodeInfo;
 
 	public HeartbeatServer(NodeInfo serverNodeInfo, NodeInfo[] clientNodeInfos) {
@@ -57,7 +63,6 @@ public class HeartbeatServer extends BasicThread {
 
 	@Override
 	public void run() {
-
 		try {
 			connnect();
 
@@ -104,7 +109,7 @@ public class HeartbeatServer extends BasicThread {
 		Executor workerPool = Executors.newCachedThreadPool();
 		clientChannelFactory = new NioClientSocketChannelFactory(bossPool, workerPool);
 		clientBootstrap = new ClientBootstrap(clientChannelFactory);
-		clientBootstrap.setPipelineFactory(new HeartbeatClientPipelineFactory(serverNodeInfo));
+		clientBootstrap.setPipelineFactory(new HeartbeatClientPipelineFactory(this));
 		clientBootstrap.setOption("tcpNoDelay", true);
 		clientBootstrap.setOption("keepAlive", true);
 
@@ -112,7 +117,7 @@ public class HeartbeatServer extends BasicThread {
 		workerPool = Executors.newCachedThreadPool();
 		serverChannelFactory = new NioServerSocketChannelFactory(bossPool, workerPool);
 		serverBootstrap = new ServerBootstrap(serverChannelFactory);
-		serverBootstrap.setPipelineFactory(new HeartbeatServerPipelineFactory(serverNodeInfo));
+		serverBootstrap.setPipelineFactory(new HeartbeatServerPipelineFactory(this));
 		serverBootstrap.setOption("child.tcpNoDelay", true);
 		serverBootstrap.setOption("child.keepAlive", true);
 	}
@@ -121,13 +126,13 @@ public class HeartbeatServer extends BasicThread {
 		for (HeartbeatConnection heartbeatConnection : heartbeatConnectionMap.values()) {
 			Channel channel = heartbeatConnection.getChannel();
 
-			if (channel == null) {
+			if (channel == null || channel.isConnected() == false) {
 				continue;
 			}
 
 			HeartbeatMessage.HeartbeatRequest.Builder builder = HeartbeatMessage.HeartbeatRequest.newBuilder();
 			HeartbeatMessage.HeartbeatRequest heartbeatRequest = builder
-					.setNodeId(heartbeatConnection.nodeInfo.nodeId)
+					.setNodeId(serverNodeInfo.nodeId)
 					.setTimestamp((new Date()).getTime())
 					.build();
 
@@ -152,6 +157,16 @@ public class HeartbeatServer extends BasicThread {
 
 	Map<Integer, HeartbeatConnection> heartbeatConnectionMap = new ConcurrentHashMap<>();
 
+	HeartbeatConnection findConnectionByChannel(Channel channel) {
+		for (HeartbeatConnection heartbeatConnection : heartbeatConnectionMap.values()) {
+			if (heartbeatConnection.getChannel() == channel) {
+				return heartbeatConnection;
+			}
+		}
+
+		return null;
+	}
+
 	class ConnectCompleteHandler implements ChannelFutureListener {
 		NodeInfo nodeInfo;
 
@@ -165,7 +180,7 @@ public class HeartbeatServer extends BasicThread {
 				HeartbeatConnection heartbeatConnection = heartbeatConnectionMap.get(nodeInfo.nodeId);
 				heartbeatConnection.setChannel(future.getChannel());
 
-				eventQueue.add(new HearbeatEvent(nodeInfo, HeartbeatEventType.Connect));
+				eventQueue.add(new HeartbeatEvent(nodeInfo, HeartbeatEventType.Connect));
 			}
 		}
 	}
@@ -183,10 +198,8 @@ public class HeartbeatServer extends BasicThread {
 				return;
 			}
 
-			// TODO: disconnect the corresponding channel and queue an event.
 			heartbeatConnection.getChannel().disconnect();
-
-			eventQueue.add(new HearbeatEvent(heartbeatConnection.nodeInfo, HeartbeatEventType.Disconnect));
+			eventQueue.add(new HeartbeatEvent(heartbeatConnection.nodeInfo, HeartbeatEventType.Disconnect));
 		}
 	}
 
@@ -232,23 +245,7 @@ public class HeartbeatServer extends BasicThread {
 	 * Listener
 	 */
 
-	enum HeartbeatEventType {
-		Connect,
-		Disconnect,
-		Close,
-	}
-
-	class HearbeatEvent {
-		NodeInfo nodeInfo;
-		HeartbeatEventType type;
-
-		HearbeatEvent(NodeInfo nodeInfo, HeartbeatEventType type) {
-			this.nodeInfo = nodeInfo;
-			this.type = type;
-		}
-	}
-
-	Queue<HearbeatEvent> eventQueue = new ConcurrentLinkedDeque<>();
+	Queue<HeartbeatEvent> eventQueue = new ConcurrentLinkedDeque<>();
 	List<HeatBeatServerEventListener> listenerList = new ArrayList<>();
 
 	public void addEventListener(HeatBeatServerEventListener listener) {
@@ -261,7 +258,7 @@ public class HeartbeatServer extends BasicThread {
 
 	void triggerEvents() {
 		while (eventQueue.isEmpty() == false) {
-			HearbeatEvent event = eventQueue.remove();
+			HeartbeatEvent event = eventQueue.remove();
 
 			for (HeatBeatServerEventListener listener : listenerList) {
 				if (event.type == HeartbeatEventType.Connect) {
@@ -276,37 +273,27 @@ public class HeartbeatServer extends BasicThread {
 	}
 }
 
-class HeartbeatServerPipelineFactory implements ChannelPipelineFactory {
-	NodeInfo serverNodeInfo;
+enum HeartbeatEventType {
+	Connect,
+	Disconnect,
+	Close,
+}
 
-	HeartbeatServerPipelineFactory(NodeInfo serverNodeInfo) {
-		this.serverNodeInfo = serverNodeInfo;
-	}
+class HeartbeatEvent {
+	NodeInfo nodeInfo;
+	HeartbeatEventType type;
 
-	@Override
-	public ChannelPipeline getPipeline() throws Exception {
-		ChannelPipeline channelPipeline = Channels.pipeline();
-
-		// Decoders
-		channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
-		channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(HeartbeatMessage.HeartbeatResponse.getDefaultInstance()));
-
-		// Encoder
-		channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
-		channelPipeline.addLast("protobufEncoder", new ProtobufEncoder());
-
-		channelPipeline.addLast("ServerHandler", new ServerChannelHandler(serverNodeInfo));
-
-		return channelPipeline;
+	HeartbeatEvent(NodeInfo nodeInfo, HeartbeatEventType type) {
+		this.nodeInfo = nodeInfo;
+		this.type = type;
 	}
 }
 
-class HeartbeatClientPipelineFactory implements ChannelPipelineFactory {
+class HeartbeatServerPipelineFactory implements ChannelPipelineFactory {
+	HeartbeatServer heartbeatServer;
 
-	NodeInfo serverNodeInfo;
-
-	HeartbeatClientPipelineFactory(NodeInfo serverNodeInfo) {
-		this.serverNodeInfo = serverNodeInfo;
+	HeartbeatServerPipelineFactory(HeartbeatServer heartbeatServer) {
+		this.heartbeatServer = heartbeatServer;
 	}
 
 	@Override
@@ -321,61 +308,125 @@ class HeartbeatClientPipelineFactory implements ChannelPipelineFactory {
 		channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
 		channelPipeline.addLast("protobufEncoder", new ProtobufEncoder());
 
-		channelPipeline.addLast("ClientHandler", new ClientChannelHandler(serverNodeInfo));
+		channelPipeline.addLast("ServerHandler", new ServerChannelHandler(heartbeatServer));
 
 		return channelPipeline;
 	}
 }
 
-class ServerChannelHandler extends LiteralChannelHandler {
+class HeartbeatClientPipelineFactory implements ChannelPipelineFactory {
+	HeartbeatServer heartbeatServer;
 
-	ServerChannelHandler(NodeInfo serverNodeInfo) {
-		super(serverNodeInfo);
+	HeartbeatClientPipelineFactory(HeartbeatServer heartbeatServer) {
+		this.heartbeatServer = heartbeatServer;
+	}
+
+	@Override
+	public ChannelPipeline getPipeline() throws Exception {
+		ChannelPipeline channelPipeline = Channels.pipeline();
+
+		// Decoders
+		channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
+		channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(HeartbeatMessage.HeartbeatResponse.getDefaultInstance()));
+
+		// Encoder
+		channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
+		channelPipeline.addLast("protobufEncoder", new ProtobufEncoder());
+
+		channelPipeline.addLast("ClientHandler", new ClientChannelHandler(heartbeatServer));
+
+		return channelPipeline;
 	}
 }
 
-class ClientChannelHandler extends LiteralChannelHandler {
+class ServerChannelHandler extends SimpleChannelHandler {
+	HeartbeatServer heartbeatServer;
 
-	ClientChannelHandler(NodeInfo serverNodeInfo) {
-		super(serverNodeInfo);
+	ServerChannelHandler(HeartbeatServer heartbeatServer) {
+		this.heartbeatServer = heartbeatServer;
 	}
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+		HeartbeatMessage.HeartbeatRequest request = (HeartbeatMessage.HeartbeatRequest) e.getMessage();
+//		System.out.println("Node" + heartbeatServer.serverNodeInfo.nodeId + " receives request " + request);
 
-		HeartbeatMessage.HeartbeatRequest.Builder builder = HeartbeatMessage.HeartbeatRequest.newBuilder();
-		HeartbeatMessage.HeartbeatRequest heartbeatRequest = builder
-				.setNodeId(serverNodeInfo.nodeId)
+		HeartbeatMessage.HeartbeatResponse.Builder builder = HeartbeatMessage.HeartbeatResponse.newBuilder();
+		HeartbeatMessage.HeartbeatResponse heartbeatResponse = builder
+				.setNodeId(heartbeatServer.serverNodeInfo.nodeId)
 				.setTimestamp((new Date()).getTime())
 				.build();
 
-		// TODO: Reply a response back.
-		logEvent(e);
-		super.messageReceived(ctx, e);
+//		System.out.println("Node" + heartbeatServer.serverNodeInfo.nodeId + " sends " + heartbeatResponse);
+
+		e.getChannel().write(heartbeatResponse);
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-		// TODO: search the nodeInfo and add an event to the queue.
-		logEvent(e);
-		super.exceptionCaught(ctx, e);
+		e.getCause().printStackTrace();
+	}
+}
+
+class ClientChannelHandler extends SimpleChannelHandler {
+	HeartbeatServer heartbeatServer;
+
+	ClientChannelHandler(HeartbeatServer heartbeatServer) {
+		this.heartbeatServer = heartbeatServer;
 	}
 
 	@Override
+	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+		HeartbeatMessage.HeartbeatResponse response = (HeartbeatMessage.HeartbeatResponse) e.getMessage();
+//		System.out.println("Node" + heartbeatServer.serverNodeInfo.nodeId + " receives response " + response);
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+		if (e.getCause() instanceof ConnectException) {
+			Channel channel = e.getChannel();
+			HeartbeatConnection targetHeartbeatConnection = heartbeatServer.findConnectionByChannel(channel);
+
+			if (targetHeartbeatConnection == null) {
+				return;
+			}
+
+			heartbeatServer.eventQueue.add(new HeartbeatEvent(targetHeartbeatConnection.nodeInfo, HeartbeatEventType.Disconnect));
+
+			if (e.getChannel().isConnected()) {
+				e.getChannel().close();
+			}
+		} else {
+			e.getCause().printStackTrace();
+		}
+	}
+
+
+	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-		// TODO: search the nodeInfo and add an event to the queue.
-		logEvent(e);
-		super.channelConnected(ctx, e);
+		Channel channel = e.getChannel();
+		HeartbeatConnection targetHeartbeatConnection = heartbeatServer.findConnectionByChannel(channel);
+		heartbeatServer.eventQueue.add(new HeartbeatEvent(targetHeartbeatConnection.nodeInfo, HeartbeatEventType.Connect));
 	}
 
 	@Override
 	public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-		// TODO: search the nodeInfo and add an event to the queue.
-		logEvent(e);
-		super.channelDisconnected(ctx, e);
+		Channel channel = e.getChannel();
+		HeartbeatConnection heartbeatConnection = heartbeatServer.findConnectionByChannel(channel);
+
+		if (heartbeatConnection == null) {
+			System.out.println("Cannot determine the connection");
+			return;
+		}
+
+		HeartbeatEvent heartbeatEvent = new HeartbeatEvent(heartbeatConnection.nodeInfo, HeartbeatEventType.Disconnect);
+		heartbeatServer.eventQueue.add(heartbeatEvent);
 	}
 }
 
+/**
+ * This is a channel handler simply print the method name it reaches. It's for debugging purpose.
+ */
 class LiteralChannelHandler extends SimpleChannelHandler {
 
 	final static Logger LOGGER = Logger.getLogger(HeartbeatServer.class.getName());

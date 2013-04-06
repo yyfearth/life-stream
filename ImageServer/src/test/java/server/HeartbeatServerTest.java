@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class HeartbeatServerTest {
@@ -36,14 +37,20 @@ public class HeartbeatServerTest {
 		}
 	}
 
-	@Test(groups = {"AddNode"}, dependsOnGroups = {"Connect"})
+	@Test(groups = {"AddNode"}, dependsOnGroups = {"Connect"}, priority = 100)
 	public void testAddNode() throws Exception {
 		HeartbeatServer heartbeatServer2 = new HeartbeatServer(new NodeInfo(2, 8092), new NodeInfo[]{});
 		heartbeatServers.add(heartbeatServer2);
 
 		Thread thread = new Thread(heartbeatServer2);
+		thread.setName("Node2");
 		thread.start();
 		threadList.add(thread);
+
+		while (heartbeatServer2.isBound() == false) {
+			System.out.println("Wait Node2");
+			Thread.sleep(1000);
+		}
 
 		HeartbeatServer heartbeatServer0 = heartbeatServers.get(0);
 		heartbeatServer0.addNode(heartbeatServer2.serverNodeInfo);
@@ -54,7 +61,7 @@ public class HeartbeatServerTest {
 		Assert.assertEquals(heartbeatServer2.getNumConnections(), 1);
 	}
 
-	@Test(groups = {"RemoveNode"}, dependsOnGroups = {"AddNode"})
+	@Test(groups = {"RemoveNode"}, dependsOnGroups = {"AddNode"}, priority = 100)
 	public void testRemoveNode() throws Exception {
 		HeartbeatServer heartbeatServer0 = heartbeatServers.get(0);
 		HeartbeatServer heartbeatServer1 = heartbeatServers.get(1);
@@ -73,17 +80,17 @@ public class HeartbeatServerTest {
 			Integer disconnectedNodeId;
 
 			@Override
-			public void onConnected(Object caller, HeatBeatServerEventArgs eventArgs) {
+			public void onConnected(HeartbeatServer server, HeatBeatServerEventArgs eventArgs) {
 				connectedNodeId = eventArgs.nodeInfo.nodeId;
 			}
 
 			@Override
-			public void onDisconnected(Object caller, HeatBeatServerEventArgs eventArgs) {
+			public void onDisconnected(HeartbeatServer server, HeatBeatServerEventArgs eventArgs) {
 				disconnectedNodeId = eventArgs.nodeInfo.nodeId;
 			}
 
 			@Override
-			public void onClosed(Object caller, HeatBeatServerEventArgs eventArgs) {
+			public void onClosed(HeartbeatServer server, HeatBeatServerEventArgs eventArgs) {
 			}
 		}
 
@@ -93,13 +100,22 @@ public class HeartbeatServerTest {
 		heartbeatServer0.addEventListener(listener);
 
 		HeartbeatServer heartbeatServer2 = heartbeatServers.get(2);
-		heartbeatServer2.disconnect();
+		heartbeatServer2.stop();
 
-		Assert.assertNotNull(listener.disconnectedNodeId);
+		while (heartbeatServer2.isBound()) {
+			System.out.println("Wait node2 to close...");
+			Thread.sleep(1000);
+		}
+
+		while (listener.disconnectedNodeId == null) {
+			System.out.println("Wait for event triggered...");
+			Thread.sleep(1000);
+		}
+
 		Assert.assertEquals(listener.disconnectedNodeId.intValue(), 2);
 	}
 
-	@Test(groups = {"Disonnect"}, dependsOnGroups = {"RemoveNode"}, priority = 200)
+	@Test(groups = {"Connect"}, dependsOnGroups = {"RemoveNode"}, priority = 200)
 	public void testDisconnect() throws Exception {
 		class CustomHeatBeatServerEventListener implements HeatBeatServerEventListener {
 			HeartbeatServer heartbeatServer;
@@ -110,15 +126,15 @@ public class HeartbeatServerTest {
 			}
 
 			@Override
-			public void onConnected(Object caller, HeatBeatServerEventArgs eventArgs) {
+			public void onConnected(HeartbeatServer server, HeatBeatServerEventArgs eventArgs) {
 			}
 
 			@Override
-			public void onDisconnected(Object caller, HeatBeatServerEventArgs eventArgs) {
+			public void onDisconnected(HeartbeatServer server, HeatBeatServerEventArgs eventArgs) {
 			}
 
 			@Override
-			public void onClosed(Object caller, HeatBeatServerEventArgs eventArgs) {
+			public void onClosed(HeartbeatServer server, HeatBeatServerEventArgs eventArgs) {
 				isClosed = true;
 				System.out.println(heartbeatServer.serverNodeInfo + " is closed.");
 			}
@@ -133,7 +149,14 @@ public class HeartbeatServerTest {
 			server.stop();
 		}
 
+		long timeoutTick = (new Date()).getTime() + 20 * 1000;
+
 		while (customHeatBeatServerEventListenerList.size() > 0) {
+			if ((new Date()).getTime() >= timeoutTick) {
+				Assert.fail("Timeout");
+				return;
+			}
+
 			Thread.sleep(500);
 
 			for (int i = 0; i < customHeatBeatServerEventListenerList.size(); ) {
