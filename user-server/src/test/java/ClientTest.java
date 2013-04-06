@@ -44,8 +44,34 @@ public class ClientTest {
 			}
 		});
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+	}
+
+	@Test
+	public void testAdd() {
+		try {
+			final UserEntity user = genUser();
+			final UUID id = user.getId();
+			userClient.addUser(genUser(), new UserClient.UserRequestResponseHandler() {
+
+				@Override
+				public void receivedUser(UserEntity user) {
+					if (id.equals(user.getId()))
+						System.out.println("Passed: \n" + user + "\n");
+					else
+						System.out.println("Failed: user id not matched\n" + user + "\n");
+				}
+
+				@Override
+				public void receivedError(UserMessage.Response.ResultCode code, String message) {
+					System.out.println("Failed: " + message + "\n");
+				}
+			});
+			Thread.sleep(1000);
+		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
 	}

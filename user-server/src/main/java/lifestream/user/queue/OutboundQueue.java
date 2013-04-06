@@ -5,7 +5,7 @@ import org.jboss.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class OutboundQueue implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(OutboundQueue.class.getSimpleName());
@@ -50,8 +50,10 @@ public class OutboundQueue implements Runnable {
 						Channel channel = responseMessage.getChannel();
 						if (channel.isWritable()) {
 							channel.write(responseMessage.getMessage());
+						} else if (channel.isConnected()) {
+							outbound.put(responseMessage);
 						} else {
-							outbound.putFirst(responseMessage);
+							logger.warn("discard message since channel has closed: " + responseMessage.getMessage());
 						}
 					} catch (InterruptedException e) {
 						logger.error("message not dequeued for processing", e);
@@ -68,7 +70,7 @@ public class OutboundQueue implements Runnable {
 		logger.info("outbound worker stopped");
 	}
 
-	public class ResponseQueue extends LinkedBlockingDeque<ChannelMessage<UserMessage.Response>> {
+	public class ResponseQueue extends LinkedBlockingQueue<ChannelMessage<UserMessage.Response>> {
 		// just a alias for now
 	}
 

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class InboundQueue implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(InboundQueue.class.getSimpleName());
@@ -35,7 +35,7 @@ public class InboundQueue implements Runnable {
 	}
 
 	public void enqueue(ChannelMessage<UserMessage.Request> requestMessage) {
-		LinkedBlockingDeque<ChannelMessage<UserMessage.Request>> queue;
+		RequestQueue queue;
 		UserMessage.Request req = requestMessage.getMessage();
 		logger.info("received request: " + req.toString());
 		try {
@@ -135,10 +135,9 @@ public class InboundQueue implements Runnable {
 			}
 		}
 		logger.info("inbound worker stopped");
-
 	}
 
-	public static class RequestQueue extends LinkedBlockingDeque<ChannelMessage<UserMessage.Request>> {
+	public static class RequestQueue extends LinkedBlockingQueue<ChannelMessage<UserMessage.Request>> {
 		// just a alias for now
 	}
 }
