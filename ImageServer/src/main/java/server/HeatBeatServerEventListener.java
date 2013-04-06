@@ -4,4 +4,6 @@ public interface HeatBeatServerEventListener {
 	void onConnected(Object caller, HeatBeatServerEventArgs eventArgs);
 
 	void onDisconnected(Object caller, HeatBeatServerEventArgs eventArgs);
+
+	void onClosed(Object caller, HeatBeatServerEventArgs eventArgs);
 }

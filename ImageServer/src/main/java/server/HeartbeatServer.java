@@ -32,11 +32,6 @@ public class HeartbeatServer extends BasicThread {
 
 	Channel serverChannel;
 	NodeInfo serverNodeInfo;
-	NodeInfo[] clientNodeInfos;
-
-	public int getNumConnections() {
-		return heartbeatConnectionMap.size();
-	}
 
 	public HeartbeatServer(NodeInfo serverNodeInfo, NodeInfo[] clientNodeInfos) {
 		this.serverNodeInfo = serverNodeInfo;
@@ -86,16 +81,16 @@ public class HeartbeatServer extends BasicThread {
 	}
 
 	void connnect() {
-		LOGGER.info("Heartbeat server is connecting.");
+		LOGGER.info("Node" + serverNodeInfo.nodeId + " is connecting.");
+
 		configueBootstrap();
 
 		// Listen as a server.
 		serverChannel = serverBootstrap.bind(serverNodeInfo.socketAddress);
 
 		// Connect to other nodes.
-
-		for (NodeInfo nodeInfo : clientNodeInfos) {
-			connectNode(nodeInfo);
+		for (HeartbeatConnection heartbeatConnection : heartbeatConnectionMap.values()) {
+			connectNode(heartbeatConnection.nodeInfo);
 		}
 	}
 
@@ -151,6 +146,10 @@ public class HeartbeatServer extends BasicThread {
 		}
 	}
 
+	public int getNumConnections() {
+		return heartbeatConnectionMap.size();
+	}
+
 	Map<Integer, HeartbeatConnection> heartbeatConnectionMap = new ConcurrentHashMap<>();
 
 	class ConnectCompleteHandler implements ChannelFutureListener {
@@ -202,14 +201,16 @@ public class HeartbeatServer extends BasicThread {
 	}
 
 	void disconnect() {
+		LOGGER.info("Node" + serverNodeInfo.nodeId + " is disconnecting.");
+
 		List<ChannelFuture> channelFutureList = new ArrayList<>();
 		channelFutureList.add(serverChannel.close());
 
 		for (HeartbeatConnection heartbeatConnection : heartbeatConnectionMap.values()) {
 			Channel channel = heartbeatConnection.getChannel();
 
-			if (channel.isConnected()) {
-				channelFutureList.add(channel.disconnect());
+			if (channel != null && channel.isConnected()) {
+				channelFutureList.add(channel.close());
 			}
 		}
 
@@ -221,6 +222,10 @@ public class HeartbeatServer extends BasicThread {
 		// And then we could explode the factory. Oh yeah.
 		serverChannelFactory.releaseExternalResources();
 		clientChannelFactory.releaseExternalResources();
+
+		for (HeatBeatServerEventListener listener : listenerList) {
+			listener.onClosed(this, new HeatBeatServerEventArgs(serverNodeInfo));
+		}
 	}
 
 	/*
@@ -230,6 +235,7 @@ public class HeartbeatServer extends BasicThread {
 	enum HeartbeatEventType {
 		Connect,
 		Disconnect,
+		Close,
 	}
 
 	class HearbeatEvent {
@@ -260,6 +266,10 @@ public class HeartbeatServer extends BasicThread {
 			for (HeatBeatServerEventListener listener : listenerList) {
 				if (event.type == HeartbeatEventType.Connect) {
 					listener.onConnected(this, new HeatBeatServerEventArgs(event.nodeInfo));
+				} else if (event.type == HeartbeatEventType.Disconnect) {
+					listener.onDisconnected(this, new HeatBeatServerEventArgs(event.nodeInfo));
+				} else if (event.type == HeartbeatEventType.Close) {
+					listener.onClosed(this, new HeatBeatServerEventArgs(event.nodeInfo));
 				}
 			}
 		}
