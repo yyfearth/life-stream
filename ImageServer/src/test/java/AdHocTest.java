@@ -117,7 +117,7 @@ public class AdHocTest {
 		heartbeatServers.add(heartbeatServer);
 
 		for (HeartbeatServer cm : heartbeatServers) {
-			cm.connnect();
+			cm.run();
 		}
 
 //		HeartbeatConnection nodeConnection = new HeartbeatConnection(heartbeatServer, new InetSocketAddress("localhost", 8080));
@@ -141,11 +141,17 @@ public class AdHocTest {
 		Thread.sleep(3000);
 
 		for (HeartbeatServer cm : heartbeatServers) {
-			cm.disconnect();
+			cm.stop();
 		}
 	}
 
 	@Test
-	public void testAwait() throws Exception {
+	public void testCurrentMethodName() throws Exception {
+		System.out.println(getMethodName());
+	}
+
+	String getMethodName() {
+		final StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+		return stackTraceElements[2].getMethodName();
 	}
 }
