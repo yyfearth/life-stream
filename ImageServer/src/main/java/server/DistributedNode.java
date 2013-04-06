@@ -146,7 +146,7 @@ public class DistributedNode extends BasicThread {
 
 	@Override
 	public void run() {
-		heartbeatServer = new HeartbeatServer(nodeId, 8080 + nodeId, generateNodeInfos(8080));
+		heartbeatServer = new HeartbeatServer(new NodeInfo(nodeId, 8080 + nodeId), generateNodeInfos(8080));
 
 		monitorThread = new Thread(heartbeatServer);
 		monitorThread.setPriority(Thread.MIN_PRIORITY);

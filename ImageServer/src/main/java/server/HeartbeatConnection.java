@@ -7,7 +7,6 @@ import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
 import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 
-import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -16,17 +15,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class HeartbeatConnection {
 
 	AtomicBoolean isStopping = new AtomicBoolean(false);
-
-	///// Static methods
-//	public static HeartbeatConnection[] generateReports(InetSocketAddress[] inetSocketAddresses) {
-//		HeartbeatConnection[] nodeConnections = new HeartbeatConnection[inetSocketAddresses.length];
-//
-//		for (int i = 0; i < nodeConnections.length; i++) {
-//			nodeConnections[i] = new HeartbeatConnection(inetSocketAddresses[i]);
-//		}
-//
-//		return nodeConnections;
-//	}
 
 	///// Constructors
 
@@ -67,7 +55,7 @@ public class HeartbeatConnection {
 		ClientBootstrap clientBootstrap = heartbeatServer.getClientBootstrap();
 		clientBootstrap.setPipelineFactory(new HeartbeatPipelineFactory(this));
 
-		ChannelFuture channelFuture = clientBootstrap.connect(this.socketAddress);
+		ChannelFuture channelFuture = clientBootstrap.connect(nodeInfo.socketAddress);
 		channelFuture.addListener(new ConnectListener(this));
 		setChannel(channelFuture.getChannel());
 	}
@@ -153,7 +141,7 @@ class DisconnectListener extends ConnectListener {
 			heartbeatConnection.isConnected(false);
 			heartbeatConnection.setChannel(null);
 		} else {
-			System.out.println("Cannot disconnect. Address: " + heartbeatConnection.getSocketAddress());
+			System.out.println("Cannot disconnect. Address: " + heartbeatConnection.nodeInfo.socketAddress);
 			future.getCause().printStackTrace();
 		}
 	}
