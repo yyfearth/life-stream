@@ -35,4 +35,9 @@ public class NodeInfo {
 	public NodeInfo(int nodeId, int port) {
 		this(nodeId, "localhost", port);
 	}
+
+	@Override
+	public String toString() {
+		return "Node:" + nodeId;
+	}
 }
