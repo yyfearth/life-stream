@@ -27,6 +27,11 @@ public class HeartbeatServerTest {
 			Assert.assertTrue(cm.isBound());
 		}
 
+		Thread.sleep(1000);
+
+		System.out.println("==========");
+
+
 		Assert.assertTrue(heartbeatServer.isBound());
 	}
 
@@ -60,19 +65,18 @@ public class HeartbeatServerTest {
 
 	@Test(groups = {"Event"}, dependsOnGroups = {"RemoveNode"}, priority = 100)
 	public void testEvents() throws Exception {
-
 		class CustomHeatBeatServerEventListener implements HeatBeatServerEventListener {
 			Integer connectedNodeId;
 			Integer disconnectedNodeId;
 
 			@Override
 			public void onConnected(Object caller, HeatBeatServerEventArgs eventArgs) {
-				connectedNodeId = eventArgs.nodeId;
+				connectedNodeId = eventArgs.nodeInfo.nodeId;
 			}
 
 			@Override
 			public void onDisconnected(Object caller, HeatBeatServerEventArgs eventArgs) {
-				disconnectedNodeId = eventArgs.nodeId;
+				disconnectedNodeId = eventArgs.nodeInfo.nodeId;
 			}
 		}
 
