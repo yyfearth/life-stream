@@ -6,8 +6,8 @@ public abstract class BasicThread implements Runnable {
 		return isStopping;
 	}
 
-	public void setStopping(boolean stopping) {
-		isStopping = stopping;
+	public void stop() {
+		isStopping = true;
 	}
 
 	boolean isStopping = false;

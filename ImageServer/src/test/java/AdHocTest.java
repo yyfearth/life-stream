@@ -1,7 +1,7 @@
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import server.HeartbeatServer;
 import server.DistributedNode;
+import server.HeartbeatServer;
 import server.NodeInfo;
 
 import java.io.File;
@@ -62,7 +62,7 @@ public class AdHocTest {
 		NodeInfo[] nodeInfos = new NodeInfo[2];
 
 		for (int i = 0; i < heartbeatServer.length; i++) {
-			heartbeatServer[i] = new HeartbeatServer(i, 8080 + i, nodeInfos);
+			heartbeatServer[i] = new HeartbeatServer(new NodeInfo(i, 8080 + i), nodeInfos);
 
 			Thread thread = new Thread(heartbeatServer[i], "Connection Monitor " + (i + 1));
 			thread.setPriority(Thread.MIN_PRIORITY);
@@ -106,18 +106,18 @@ public class AdHocTest {
 	public void testNodeConnection() throws Exception {
 		List<HeartbeatServer> heartbeatServers = new ArrayList<>();
 
-		HeartbeatServer heartbeatServer = new HeartbeatServer(0, 8090, new NodeInfo[]{
+		HeartbeatServer heartbeatServer = new HeartbeatServer(new NodeInfo(0, 8090), new NodeInfo[]{
 				new NodeInfo(1, new InetSocketAddress("localhost", 8091)),
 		});
 		heartbeatServers.add(heartbeatServer);
 
-		heartbeatServer = new HeartbeatServer(1, 8091, new NodeInfo[]{
-				new NodeInfo(0, new InetSocketAddress("localhost", 8090)),
+		heartbeatServer = new HeartbeatServer(new NodeInfo(1, 8091), new NodeInfo[]{
+				new NodeInfo(0, 8090),
 		});
 		heartbeatServers.add(heartbeatServer);
 
 		for (HeartbeatServer cm : heartbeatServers) {
-			cm.connnect();
+			cm.run();
 		}
 
 //		HeartbeatConnection nodeConnection = new HeartbeatConnection(heartbeatServer, new InetSocketAddress("localhost", 8080));
@@ -128,7 +128,7 @@ public class AdHocTest {
 //		while (true) {
 //			long nowTick = (new Date()).getTime();
 //
-//			if (nodeConnection.isConnected()) {
+//			if (nodeConnection.isBound()) {
 //				break;
 //			}
 //
@@ -141,7 +141,17 @@ public class AdHocTest {
 		Thread.sleep(3000);
 
 		for (HeartbeatServer cm : heartbeatServers) {
-			cm.disconnect();
+			cm.stop();
 		}
+	}
+
+	@Test
+	public void testCurrentMethodName() throws Exception {
+		System.out.println(getMethodName());
+	}
+
+	String getMethodName() {
+		final StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+		return stackTraceElements[2].getMethodName();
 	}
 }

@@ -26,4 +26,13 @@ public class NodeInfo {
 		this.nodeId = nodeId;
 		this.socketAddress = socketAddress;
 	}
+
+	public NodeInfo(int nodeId, String hostname, int port) {
+		this.nodeId = nodeId;
+		this.socketAddress = new InetSocketAddress(hostname, port);
+	}
+
+	public NodeInfo(int nodeId, int port) {
+		this(nodeId, "localhost", port);
+	}
 }

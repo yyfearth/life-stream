@@ -3,7 +3,6 @@ package server;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,32 +12,40 @@ public class HeartbeatServerTest {
 
 	@Test(groups = {"Connect"})
 	public void testConnect() throws Exception {
-		HeartbeatServer heartbeatServer = new HeartbeatServer(0, 8090, new NodeInfo[]{
-				new NodeInfo(1, new InetSocketAddress("localhost", 8091)),
+		HeartbeatServer heartbeatServer = new HeartbeatServer(new NodeInfo(0, 8090), new NodeInfo[]{
+				new NodeInfo(1, 8091),
 		});
 		heartbeatServers.add(heartbeatServer);
 
-		heartbeatServer = new HeartbeatServer(1, 8091, new NodeInfo[]{
-				new NodeInfo(0, new InetSocketAddress("localhost", 8090)),
+		heartbeatServer = new HeartbeatServer(new NodeInfo(1, 8091), new NodeInfo[]{
+				new NodeInfo(0, 8090),
 		});
 		heartbeatServers.add(heartbeatServer);
 
 		for (HeartbeatServer cm : heartbeatServers) {
 			cm.connnect();
+			Assert.assertTrue(cm.isBound());
 		}
+
+		Thread.sleep(1000);
+
+		System.out.println("==========");
+
+
+		Assert.assertTrue(heartbeatServer.isBound());
 	}
 
 	@Test(groups = {"AddNode"}, dependsOnGroups = {"Connect"})
 	public void testAddNode() throws Exception {
 
-		HeartbeatServer heartbeatServer2 = new HeartbeatServer(2, 8092, new NodeInfo[]{});
+		HeartbeatServer heartbeatServer2 = new HeartbeatServer(new NodeInfo(2, 8092), new NodeInfo[]{});
 		heartbeatServer2.connnect();
 		heartbeatServers.add(heartbeatServer2);
 
 		HeartbeatServer heartbeatServer0 = heartbeatServers.get(0);
-		heartbeatServer0.addNode(2, new InetSocketAddress("localhost", 8092));
+		heartbeatServer0.addNode(new NodeInfo(2, 8092));
 
-		heartbeatServer2.addNode(0, new InetSocketAddress("localhost", 8090));
+		heartbeatServer2.addNode(new NodeInfo(0, 8090));
 
 		Assert.assertEquals(heartbeatServer0.getNumConnections(), 2);
 		Assert.assertEquals(heartbeatServer2.getNumConnections(), 1);
@@ -56,10 +63,40 @@ public class HeartbeatServerTest {
 		Assert.assertEquals(heartbeatServer1.getNumConnections(), 0);
 	}
 
-	@Test(groups = {"Disonnect"}, dependsOnGroups = {"RemoveNode"})
+	@Test(groups = {"Event"}, dependsOnGroups = {"RemoveNode"}, priority = 100)
+	public void testEvents() throws Exception {
+		class CustomHeatBeatServerEventListener implements HeatBeatServerEventListener {
+			Integer connectedNodeId;
+			Integer disconnectedNodeId;
+
+			@Override
+			public void onConnected(Object caller, HeatBeatServerEventArgs eventArgs) {
+				connectedNodeId = eventArgs.nodeInfo.nodeId;
+			}
+
+			@Override
+			public void onDisconnected(Object caller, HeatBeatServerEventArgs eventArgs) {
+				disconnectedNodeId = eventArgs.nodeInfo.nodeId;
+			}
+		}
+
+		HeartbeatServer heartbeatServer0 = heartbeatServers.get(0);
+
+		CustomHeatBeatServerEventListener listener = new CustomHeatBeatServerEventListener();
+		heartbeatServer0.addEventListener(listener);
+
+		HeartbeatServer heartbeatServer2 = heartbeatServers.get(2);
+		heartbeatServer2.disconnect();
+
+		Assert.assertNotNull(listener.disconnectedNodeId);
+		Assert.assertEquals(listener.disconnectedNodeId.intValue(), 2);
+	}
+
+	@Test(groups = {"Disonnect"}, dependsOnGroups = {"RemoveNode"}, priority = 200)
 	public void testDisconnect() throws Exception {
 		for (HeartbeatServer cm : heartbeatServers) {
 			cm.disconnect();
+			Assert.assertFalse(cm.isBound());
 		}
 	}
 }
