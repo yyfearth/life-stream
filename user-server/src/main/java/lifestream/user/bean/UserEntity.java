@@ -29,9 +29,9 @@ public class UserEntity {
 
 	public UserEntity(UUID id, String username, String email, String password, Date created, Date modified) {
 		this.id = id == null ? UUID.randomUUID() : id;
-		this.username = username == null ? "" : username;
-		this.email = email == null ? "" : email;
-		this.password = password == null ? "" : password;
+		this.username = username;
+		this.email = email;
+		this.password = password;
 		this.createdTimestamp = created;
 		this.modifiedTimestamp = modified;
 	}
@@ -41,8 +41,8 @@ public class UserEntity {
 		username = user.getUsername();
 		email = user.getEmail();
 		password = user.getPassword();
-		createdTimestamp = new Date(user.getCreatedTimestamp());
-		modifiedTimestamp = new Date(user.getModifiedTimestamp());
+		setCreatedTimestamp(user.getCreatedTimestamp());
+		setModifiedTimestamp(user.getModifiedTimestamp());
 	}
 
 	@Id
@@ -112,6 +112,10 @@ public class UserEntity {
 		this.createdTimestamp = new Date();
 	}
 
+	public void setCreatedTimestamp(long created) {
+		this.createdTimestamp = created == 0 ? null : new Date(created);
+	}
+
 	public void setCreatedTimestamp(Date created) {
 		this.createdTimestamp = created;
 	}
@@ -124,8 +128,23 @@ public class UserEntity {
 		this.modifiedTimestamp = new Date();
 	}
 
+	public void setModifiedTimestamp(long modified) {
+		this.modifiedTimestamp = modified == 0 ? null : new Date(modified);
+	}
+
 	public void setModifiedTimestamp(Date modified) {
 		this.modifiedTimestamp = modified;
+	}
+
+	public UserMessage.User toProtobuf() {
+		return UserMessage.User.newBuilder()
+				.setId(id.toString())
+				.setUsername(username == null ? "" : username)
+				.setEmail(email == null ? "" : email)
+				.setPassword(password == null ? "" : password)
+				.setCreatedTimestamp(createdTimestamp == null ? 0 : createdTimestamp.getTime())
+				.setModifiedTimestamp(modifiedTimestamp == null ? 0 : modifiedTimestamp.getTime())
+				.build();
 	}
 
 	@Override
@@ -166,16 +185,5 @@ public class UserEntity {
 				", createdTimestamp=" + createdTimestamp +
 				", modifiedTimestamp=" + modifiedTimestamp +
 				'}';
-	}
-
-	public UserMessage.User toProtobuf() {
-		return UserMessage.User.newBuilder()
-				.setId(id.toString())
-				.setUsername(username)
-				.setEmail(email)
-				.setPassword(password)
-				.setCreatedTimestamp(createdTimestamp.getTime())
-				.setModifiedTimestamp(modifiedTimestamp.getTime())
-				.build();
 	}
 }
