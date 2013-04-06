@@ -1,10 +1,10 @@
-life-stream
+Life Stream
 ===========
 
 Project LifeStream for CMPE275
 
-contributor
-===========
+Contributors
+============
 * Chih-Han Chu
 * Menghsi Wan
 * Yufan Yang
