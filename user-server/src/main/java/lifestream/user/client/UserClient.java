@@ -11,8 +11,7 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
 import java.net.InetSocketAddress;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Executors;
 
 public class UserClient {
@@ -162,9 +161,81 @@ public class UserClient {
 //		}
 	}
 
+	private UserEntity genUser() { // for test
+
+		String username = "test." + UUID.randomUUID(); // generator.nextInt(65535);
+		UserEntity user = new UserEntity();
+		user.setEmail(username + "@ab.com");
+		user.setUsername(username);
+		user.setPassword(new String(new char[64]).replace('\0', '0'));
+
+		return user;
+	}
+
 	public void run() {
 
 		connect();
+
+		try {  // for test
+
+			Random generator = new Random();
+			// batch add
+			int delay, userCount = 1000; // generator.nextInt(100);
+
+			List<UUID> userIds = new ArrayList<>(userCount);
+			while (userCount-- > 0) {
+				final UserEntity user = genUser();
+				final UUID id = user.getId();
+				userIds.add(user.getId());
+				addUser(user, new UserClient.UserRequestResponseHandler() {
+
+					@Override
+					public void receivedUser(UserEntity user) {
+						if (id.equals(user.getId())) {
+							System.out.println("Add Passed: \n" + user + "\n");
+						} else {
+							System.out.println("Add Failed: user id not matched\n" + user + "\n");
+						}
+					}
+
+					@Override
+					public void receivedError(UserMessage.Response.ResultCode code, String message) {
+						System.out.println("Add Failed: " + message + "\n");
+					}
+				});
+				delay = generator.nextInt(111);
+				if (delay > 100) {
+					Thread.sleep(delay);
+				}
+			}
+			Thread.sleep(1000);
+			// batch get
+			for (final UUID id : userIds) {
+				getUser(id, new UserClient.UserRequestResponseHandler() {
+
+					@Override
+					public void receivedUser(UserEntity user) {
+						if (id.equals(user.getId())) {
+							System.out.println("Get Passed: \n" + user + "\n");
+						} else {
+							System.out.println("Get Failed: user id not matched\n" + user + "\n");
+						}
+					}
+
+					@Override
+					public void receivedError(UserMessage.Response.ResultCode code, String message) {
+						System.out.println("Get Failed: " + message + "\n");
+					}
+				});
+				delay = generator.nextInt(111);
+				if (delay > 100) {
+					Thread.sleep(delay);
+				}
+			}
+			Thread.sleep(3000);
+		} catch (InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
 
 	}
 
