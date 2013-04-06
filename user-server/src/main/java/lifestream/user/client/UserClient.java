@@ -11,6 +11,7 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
 import java.net.InetSocketAddress;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -48,19 +49,7 @@ public class UserClient {
 			}
 		});
 
-		clientHandler = new UserClientHandler() {
-			@Override
-			public void received(UserMessage.Response response) {
-				logger.info("Received: " + response.toString());
-				if (response.getResult() == UserMessage.Response.ResultCode.OK) {
-					if (response.getRequest() != UserMessage.RequestType.PING) {
-						receivedUser(UUID.fromString(response.getId()), response.getUser());
-					} // ignore pong for now
-				} else {
-					receivedError(UUID.fromString(response.getId()), response.getResult(), response.getMessage());
-				}
-			}
-		};
+		clientHandler = new UserClientHandler();
 	}
 
 	@Override
@@ -71,66 +60,107 @@ public class UserClient {
 		super.finalize();
 	}
 
-	public UUID ping() {
-		return clientHandler.request();
+	public UUID ping(ResultRequestResponseHandler handler) {
+		return clientHandler.request(handler);
 	}
 
-	public UUID getUser(UserEntity user) {
-		return getUser(user.getId());
+	public UUID getUser(UserEntity user, UserRequestResponseHandler handler) {
+		return getUser(user.getId(), handler);
 	}
 
-	public UUID getUser(UUID userId) {
-		return requestUser(UserMessage.RequestType.GET_USER, userId);
+	public UUID getUser(UUID userId, UserRequestResponseHandler handler) {
+		return requestUser(UserMessage.RequestType.GET_USER, userId, handler);
 	}
 
-	public UUID addUser(UserEntity user) {
-		return requestUser(UserMessage.RequestType.ADD_USER, user);
+	public UUID addUser(UserEntity user, UserRequestResponseHandler handler) {
+		return requestUser(UserMessage.RequestType.ADD_USER, user, handler);
 	}
 
-	public UUID updateUser(UserEntity user) {
-		return requestUser(UserMessage.RequestType.UPDATE_USER, user);
+	public UUID updateUser(UserEntity user, UserRequestResponseHandler handler) {
+		return requestUser(UserMessage.RequestType.UPDATE_USER, user, handler);
 	}
 
-	public UUID removeUser(UserEntity user) {
-		return removeUser(user.getId());
+	public UUID removeUser(UserEntity user, ResultRequestResponseHandler handler) {
+		return removeUser(user.getId(), handler);
 	}
 
-	public UUID removeUser(UUID userId) {
-		return requestUser(UserMessage.RequestType.UPDATE_USER, userId);
+	public UUID removeUser(UUID userId, ResultRequestResponseHandler handler) {
+		return requestUser(UserMessage.RequestType.UPDATE_USER, userId, handler);
 	}
 
-	public UUID requestUser(UserMessage.RequestType type, UserEntity user) {
-		return clientHandler.request(type, user);
+	public UUID requestUser(UserMessage.RequestType type, UserEntity user, UserClientHandler.RequestResponseHandler handler) {
+		return clientHandler.request(type, user, handler);
 	}
 
-	public UUID requestUser(UserMessage.RequestType type, UUID userId) {
-		return clientHandler.request(type, userId);
+	public UUID requestUser(UserMessage.RequestType type, UUID userId, UserClientHandler.RequestResponseHandler handler) {
+		return clientHandler.request(type, userId, handler);
 	}
 
-	private void receivedUser(UUID requestId, UserMessage.User user) {
-		receivedUser(requestId, user == null ? null : new UserEntity(user));
-	}
+	public Channel connect() {
+		// Start the connection attempt.
+		ChannelFuture channel = bootstrap.connect(new InetSocketAddress(host, port));
 
-	// should be override
-	public void receivedUser(UUID requestId, UserEntity user) {
-		logger.info("Response - Success: " + requestId + "\n" + user + "\n");
-	}
+		// wait for the connection to establish
+		channel.awaitUninterruptibly();
 
-	// should be override
-	public void receivedError(UUID requestId, UserMessage.Response.ResultCode code, String message) {
-		logger.info("Response - Failed: " + requestId + "\n" + message + "\n");
-	}
-
-	public ChannelFuture connectAsync() {
-		return bootstrap.connect(new InetSocketAddress(host, port));
-	}
-
-	public void connect() {
-		connectAsync().awaitUninterruptibly();
+		if (channel.isDone() && channel.isSuccess()) {
+			return channel.getChannel();
+		} else {
+			throw new RuntimeException("Not able to establish connection to server");
+		}
 	}
 
 	public void close() {
 		clientHandler.close();
+	}
+
+	public static abstract class ResultRequestResponseHandler extends UserClientHandler.RequestResponseHandler {
+		@Override
+		public void received(UserMessage.Response response) {
+			if (response.getResult() == UserMessage.Response.ResultCode.OK) {
+				receivedOK(new Date(response.getTimestamp()));
+			} else {
+				receivedError(response.getResult(), response.getMessage());
+			}
+		}
+
+		public abstract void receivedOK(Date timestamp);
+//		public void receivedOK(Date timestamp) {
+//			logger.info("Response - Success: " + requestId + "\n" + timestamp + "\n");
+//		}
+
+		public abstract void receivedError(UserMessage.Response.ResultCode code, String message);
+//		public void receivedError(UserMessage.Response.ResultCode code, String message) {
+//			logger.info("Response - Failed: " + requestId + "\n" + message + "\n");
+//		}
+	}
+
+	public static abstract class UserRequestResponseHandler extends UserClientHandler.RequestResponseHandler {
+
+		@Override
+		public void received(UserMessage.Response response) {
+			if (response.getResult() == UserMessage.Response.ResultCode.OK) {
+				if (response.getRequest() != UserMessage.RequestType.PING) {
+					receivedUser(response.getUser());
+				}
+			} else {
+				receivedError(response.getResult(), response.getMessage());
+			}
+		}
+
+		private void receivedUser(UserMessage.User user) {
+			receivedUser(user == null ? null : new UserEntity(user));
+		}
+
+		public abstract void receivedUser(UserEntity user);
+//		public void receivedUser(UserEntity user) {
+//			logger.info("Response - Success: " + requestId + "\n" + user + "\n");
+//		}
+
+		public abstract void receivedError(UserMessage.Response.ResultCode code, String message);
+//		public void receivedError(UserMessage.Response.ResultCode code, String message) {
+//			logger.info("Response - Failed: " + requestId + "\n" + message + "\n");
+//		}
 	}
 
 	public void run() {

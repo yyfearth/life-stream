@@ -4,6 +4,8 @@ import lifestream.user.bean.UserEntity;
 import lifestream.user.data.UserMessage;
 import org.jboss.netty.channel.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,52 +17,59 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 	// Stateful properties
 	private volatile Channel channel;
 
-	public UUID request(UserMessage.RequestType type, UserEntity user) {
-		return request(type, user.toProtobuf());
+	private final Map<String, RequestResponseHandler> handlerMap = new HashMap<>();
+
+	public UUID request(UserMessage.RequestType type, UserEntity user, RequestResponseHandler handler) {
+		return request(type, user.toProtobuf(), handler);
 	}
 
-	public UUID request(UserMessage.RequestType type, UUID userId) {
+	public UUID request(UserMessage.RequestType type, UUID userId, RequestResponseHandler handler) {
 		return request(UserMessage.Request.newBuilder()
 				.setId(UUID.randomUUID().toString())
 				.setRequest(type)
 				.setUserId(userId.toString())
 				.setTimestamp(System.currentTimeMillis())
-				.build());
+				.build(), handler);
 	}
 
-	public UUID request(UserMessage.RequestType type, UserMessage.User user) {
+	public UUID request(UserMessage.RequestType type, UserMessage.User user, RequestResponseHandler handler) {
 		return request(UserMessage.Request.newBuilder()
 				.setId(UUID.randomUUID().toString())
 				.setRequest(type)
 				.setUserId(user.getId())
 				.setUser(user)
 				.setTimestamp(System.currentTimeMillis())
-				.build());
+				.build(), handler);
 	}
 
-	public UUID request() { // ping
+	public UUID request(RequestResponseHandler handler) { // ping
 		return request(UserMessage.Request.newBuilder()
 				.setId(UUID.randomUUID().toString())
 				.setRequest(UserMessage.RequestType.PING)
 				.setTimestamp(System.currentTimeMillis())
-				.build());
+				.build(), handler);
 	}
 
-	protected UUID request(UserMessage.Request request) {
+	protected UUID request(UserMessage.Request request, RequestResponseHandler handler) {
 		if (channel == null) {
 			logger.warning("Not connected yet");
 			return null;
 		}
-//		else if (request.getId() == null) {
-//			logger.warning("a request id is required, auto generated for it");
-//			request = request.toBuilder().setId(UUID.randomUUID().toString()).build();
-//		}
-		channel.write(request);
-		logger.info("Sent request: " + request);
-		return UUID.fromString(request.getId());
+		String id = request.getId();
+		if (id != null && (handler == null || handler.beforeSend(request))) {
+			channel.write(request);
+			logger.info("Sent request: " + request);
+			if (handler != null) {
+				handlerMap.put(id, handler);
+			}
+			return UUID.fromString(id);
+		} else {
+			logger.info("Request canceled before send: " + request);
+			return null;
+		}
 	}
 
-	// should be override
+	// could be override
 	public void received(UserMessage.Response response) {
 		logger.info("Received response: " + response);
 	}
@@ -92,13 +101,29 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, final MessageEvent e) {
-		received((UserMessage.Response) e.getMessage());
+		UserMessage.Response resp = (UserMessage.Response) e.getMessage();
+		String id = resp.getId();
+		received(resp);
+		RequestResponseHandler handler = handlerMap.get(id);
+		if (handler != null) {
+			handlerMap.remove(id);
+			handler.received(resp);
+		}
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		logger.log(Level.WARNING, "Unexpected exception from downstream.", e.getCause());
 		e.getChannel().close();
+	}
+
+	public abstract static class RequestResponseHandler {
+		// can be override
+		public boolean beforeSend(UserMessage.Request request) {
+			return true;
+		}
+
+		public abstract void received(UserMessage.Response response);
 	}
 }
 
