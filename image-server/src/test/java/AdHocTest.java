@@ -79,29 +79,6 @@ public class AdHocTest {
 	}
 
 	@Test
-	public void testMultipleNodes() throws Exception {
-
-		Thread[] threads = new Thread[3];
-		DistributedNode[] distributedNodes = new DistributedNode[threads.length];
-
-		for (int i = 0; i < threads.length; i++) {
-			distributedNodes[i] = new DistributedNode(i);
-
-			Thread thread = new Thread(distributedNodes[i]);
-			thread.setName("Distribute node");
-			thread.start();
-		}
-
-		System.out.println("After 5 seconds, stop one thread earch 5 seconds.");
-		Thread.sleep(2000);
-
-		for (int i = 0; i < threads.length; i++) {
-			distributedNodes[i].stop();
-			Thread.sleep(5000);
-		}
-	}
-
-	@Test
 	public void testNodeConnection() throws Exception {
 		List<HeartbeatServer> heartbeatServers = new ArrayList<>();
 
@@ -144,6 +121,11 @@ public class AdHocTest {
 		}
 	}
 
+	/**
+	 * This is a console application used to test the Heartbeat server.
+	 *
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		class CustomeHeatBeatServerEventListener implements HeatBeatServerEventListener {
 			@Override
