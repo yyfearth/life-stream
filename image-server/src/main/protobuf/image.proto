@@ -1,0 +1,66 @@
+option optimize_for = SPEED;
+option java_package = "server";
+option java_outer_classname = "ImageMessage";
+
+message Image {
+    required string id = 1;
+
+    required string name = 10;
+    required string mime = 11;
+    required uint64 length = 12;
+
+    required uint64 created_timestamp = 18; // upload timestamp
+    required uint64 modified_timestamp = 19; // last modified timestamp
+
+    optional string description = 20;
+    optional Resolution size = 21;
+    optional GeoPoint geo_location = 22;
+    optional uint64 taken_timestamp = 23; // original taken timestamp
+
+    optional bytes data = 255;
+
+    message Resolution {
+        required uint32 width = 1;
+        required uint32 height = 2;
+    }
+
+    message GeoPoint {
+        required double lat = 1;
+        required double lng = 2;
+        optional double alt = 3;
+    }
+}
+
+message ServerMessage {
+	enum OperationType {
+		ADD_IMAGE = 0;
+		GET_IMAGE = 1;
+		RETURN_IMAGE = 2;
+		GET_META = 3;
+		UPDATE_META = 4;
+		RETURN_META = 5;
+	}
+
+	required OperationType operation = 1;
+	required uint32 node_id = 2;
+	optional Image image = 4;
+
+}
+
+message ImageRequest {
+	enum OperationType {
+		ADD_IMAGE = 0;
+		GET_IMAGE = 1;
+		GET_META = 3;
+		UPDATE_META = 4;
+	}
+
+    required OperationType type = 1;
+}
+
+message ImageResponse {
+	enum OperationType {
+		RETURN_IMAGE = 2;
+		RETURN_META = 5;
+	}
+}

@@ -1,0 +1,13 @@
+option optimize_for = SPEED;
+option java_package = "server";
+option java_outer_classname = "HeartbeatMessage";
+
+message HeartbeatRequest {
+    required uint32 node_id = 1;
+    required uint64 timestamp = 2;
+}
+
+message HeartbeatResponse {
+    required uint32 node_id = 1;
+    required uint64 timestamp = 2;
+}

@@ -1,0 +1,16 @@
+package meta;
+option optimize_for = SPEED;
+option java_package = "meta";
+
+message Image {
+    required string uuid = 1;
+    required string filename = 2;
+    optional bool processed = 3;
+    repeated Metadata metadata = 4;
+    optional bytes data = 5;
+
+    message Metadata {
+        required string name = 1;
+        required string value = 2;
+    }
+}

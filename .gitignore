@@ -1,6 +1,20 @@
+########## Java ##########
 *.class
 
 # Package Files #
 *.jar
 *.war
 *.ear
+
+########## Intellij ##########
+*.iml
+*.ipr
+*.iws
+.idea/
+
+########## output ##########
+/*/out
+out
+*.o
+classes/
+*.pyc
