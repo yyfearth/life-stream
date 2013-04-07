@@ -1,8 +1,6 @@
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import server.DistributedNode;
-import server.HeartbeatServer;
-import server.NodeInfo;
+import server.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +8,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class AdHocTest {
 	@Test
@@ -140,18 +139,64 @@ public class AdHocTest {
 
 		Thread.sleep(3000);
 
-		for (HeartbeatServer cm : heartbeatServers) {
-			cm.stop();
+		for (HeartbeatServer server : heartbeatServers) {
+			server.stop();
 		}
 	}
 
-	@Test
-	public void testCurrentMethodName() throws Exception {
-		System.out.println(getMethodName());
-	}
+	public static void main(String[] args) {
+		class CustomeHeatBeatServerEventListener implements HeatBeatServerEventListener {
+			@Override
+			public void onConnected(HeartbeatServer server, HeatBeatServerEventArgs eventArgs) {
+				System.out.println("Node" + eventArgs.getNodeInfo().getNodeId() + " is conncted");
+			}
 
-	String getMethodName() {
-		final StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-		return stackTraceElements[2].getMethodName();
+			@Override
+			public void onDisconnected(HeartbeatServer server, HeatBeatServerEventArgs eventArgs) {
+				System.out.println("Node" + eventArgs.getNodeInfo().getNodeId() + " is disconnected");
+			}
+
+			@Override
+			public void onClosed(HeartbeatServer server, HeatBeatServerEventArgs eventArgs) {
+				System.out.println("Node" + eventArgs.getNodeInfo().getNodeId() + " is closed");
+			}
+		}
+
+		Scanner scanner = new Scanner(System.in);
+
+		HeartbeatServer heartbeatServer0 = new HeartbeatServer(new NodeInfo(0, 8090), new NodeInfo[]{
+				new NodeInfo(1, 8091),
+		});
+		heartbeatServer0.addEventListener(new CustomeHeatBeatServerEventListener());
+		new Thread(heartbeatServer0).start();
+
+		System.out.println("Node0 is added");
+		System.out.println("Press enter to add Node1");
+		scanner.nextLine();
+
+		HeartbeatServer heartbeatServer1 = new HeartbeatServer(new NodeInfo(1, 8091), new NodeInfo[]{
+				new NodeInfo(0, 8090),
+		});
+		heartbeatServer1.addEventListener(new CustomeHeatBeatServerEventListener());
+		new Thread(heartbeatServer1).start();
+
+		System.out.println("Node1 is added");
+		System.out.println("Press enter to add Node2");
+		scanner.nextLine();
+
+		HeartbeatServer heartbeatServer2 = new HeartbeatServer(new NodeInfo(2, 8092), new NodeInfo[]{
+				new NodeInfo(0, 8090),
+				new NodeInfo(1, 8091),
+		});
+		heartbeatServer2.addEventListener(new CustomeHeatBeatServerEventListener());
+		new Thread(heartbeatServer2).start();
+
+		System.out.println("Node2 is added");
+		System.out.println("Press enter to kill Node1");
+		scanner.nextLine();
+
+		heartbeatServer1.stop();
+
+		System.out.println("Node1 is killed");
 	}
 }

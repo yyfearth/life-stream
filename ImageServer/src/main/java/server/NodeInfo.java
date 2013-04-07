@@ -22,6 +22,10 @@ public class NodeInfo {
 	int nodeId;
 	InetSocketAddress socketAddress;
 
+	public NodeInfo(NodeInfo nodeInfo) {
+		this(nodeInfo.nodeId, nodeInfo.socketAddress.getHostName(), nodeInfo.socketAddress.getPort());
+	}
+
 	public NodeInfo(int nodeId, InetSocketAddress socketAddress) {
 		this.nodeId = nodeId;
 		this.socketAddress = socketAddress;
@@ -34,5 +38,10 @@ public class NodeInfo {
 
 	public NodeInfo(int nodeId, int port) {
 		this(nodeId, "localhost", port);
+	}
+
+	@Override
+	public String toString() {
+		return "Node:" + nodeId;
 	}
 }
