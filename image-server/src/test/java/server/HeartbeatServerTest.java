@@ -107,6 +107,8 @@ public class HeartbeatServerTest {
 			Thread.sleep(1000);
 		}
 
+		heartbeatServers.remove(heartbeatServer2);
+
 		while (listener.disconnectedNodeId == null) {
 			System.out.println("Wait for event triggered...");
 			Thread.sleep(1000);
@@ -115,7 +117,7 @@ public class HeartbeatServerTest {
 		Assert.assertEquals(listener.disconnectedNodeId.intValue(), 2);
 	}
 
-	@Test(groups = {"Connect"}, dependsOnGroups = {"RemoveNode"}, priority = 200)
+	@Test(groups = {"Disonnect"}, dependsOnGroups = {"RemoveNode"}, priority = 200)
 	public void testDisconnect() throws Exception {
 		class CustomHeatBeatServerEventListener implements HeatBeatServerEventListener {
 			HeartbeatServer heartbeatServer;
