@@ -2,30 +2,40 @@ package server;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.channel.*;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelFactory;
+import org.jboss.netty.channel.ChannelFuture;
+import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
-import org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder;
-import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
-import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
-import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Logger;
 
 public class DistributedNode extends BasicThread {
-	final static Logger LOGGER = Logger.getLogger(DistributedNode.class.getName());
 
 	public static void main(String[] args) throws InterruptedException {
-//		new DistributedNode()
-//		Thread thread = new Thread();
+		Thread[] threads = new Thread[3];
+		DistributedNode[] distributedNodes = new DistributedNode[threads.length];
+
+		for (int i = 0; i < threads.length; i++) {
+			distributedNodes[i] = new DistributedNode(i);
+
+			Thread thread = new Thread(distributedNodes[i]);
+			thread.setName("Distribute node");
+			thread.start();
+		}
+
+		System.out.println("After 5 seconds, stop one thread earch 5 seconds.");
+		Thread.sleep(2000);
+
+		for (int i = 0; i < threads.length; i++) {
+			Thread.sleep(10000);
+			distributedNodes[i].stop();
+		}
 	}
 
 	ServerBootstrap serverBootstrap;
@@ -33,116 +43,78 @@ public class DistributedNode extends BasicThread {
 	ChannelFactory clientChannelFactory;
 	ChannelFactory serverChannelFactory;
 
-	public boolean isBound() {
-		return (serverChannel != null) && serverChannel.isBound();
-	}
-
-	Channel serverChannel;
+	Channel bindingChannel;
+	Channel[] connectorChannels;
 
 	List<HeartbeatServer> heartbeatServerList = new ArrayList<>();
 	List<InetSocketAddress> nodeList = new ArrayList<>();
 
-	NodeInfo serverNodeInfo;
-	Map<Integer, NodeConnection> nodeConnectionMap = new ConcurrentHashMap<>();
+	int nodeId = 0;
 
-	public DistributedNode(NodeInfo serverNodeInfo, NodeInfo[] clientNodeInfos) {
-		this.serverNodeInfo = serverNodeInfo;
-
-		for (NodeInfo nodeInfo : clientNodeInfos) {
-			NodeConnection nodeConnection = new NodeConnection(nodeInfo);
-			nodeConnectionMap.put(nodeInfo.nodeId, nodeConnection);
-		}
-	}
-
-	public void addNode(NodeInfo nodeInfo) {
-		NodeConnection nodeConnection = new NodeConnection(nodeInfo);
-		nodeConnectionMap.put(nodeInfo.nodeId, nodeConnection);
-
-		if (isBound()) {
-			heartbeatServer.addNode(nodeInfo);
-			connectNode(nodeConnection);
-		}
-	}
-
-	public boolean removeNode(int nodeId) {
-		NodeConnection nodeConnection = nodeConnectionMap.remove(nodeId);
-
-		if (nodeConnection == null) {
-			return false;
-		}
-
-		heartbeatServer.removeNode(nodeId);
-
-		if (nodeConnection.getChannel().isConnected()) {
-			nodeConnection.getChannel().close();
-		}
-
-		return true;
+	public DistributedNode(int nodeId) {
+		this.nodeId = nodeId;
 	}
 
 	void configueBootstrap() {
+
 		Executor bossPool = Executors.newCachedThreadPool();
 		Executor workerPool = Executors.newCachedThreadPool();
-		serverChannelFactory = new NioServerSocketChannelFactory(bossPool, workerPool);
-		serverBootstrap = new ServerBootstrap(serverChannelFactory);
-		serverBootstrap.setPipelineFactory(new NodeServerPipeLineFactory());
-		serverBootstrap.setOption("child.tcpNoDelay", true);
-		serverBootstrap.setOption("child.keepAlive", true);
+		clientChannelFactory = new NioClientSocketChannelFactory(bossPool, workerPool);
+		clientBootstrap = new ClientBootstrap(clientChannelFactory);
+		clientBootstrap.setPipelineFactory(new DistributedNodePipelineFactory());
+		clientBootstrap.setOption("tcpNoDelay", true);
+		clientBootstrap.setOption("keepAlive", true);
 
 		bossPool = Executors.newCachedThreadPool();
 		workerPool = Executors.newCachedThreadPool();
-		clientChannelFactory = new NioClientSocketChannelFactory(bossPool, workerPool);
-		clientBootstrap = new ClientBootstrap(clientChannelFactory);
-		clientBootstrap.setPipelineFactory(new NodeClientPipeLineFactory());
-		clientBootstrap.setOption("tcpNoDelay", true);
-		clientBootstrap.setOption("keepAlive", true);
+		serverChannelFactory = new NioServerSocketChannelFactory(bossPool, workerPool);
+		serverBootstrap = new ServerBootstrap(serverChannelFactory);
+		serverBootstrap.setPipelineFactory(new DistributedNodePipelineFactory());
+		serverBootstrap.setOption("child.tcpNoDelay", true);
+		serverBootstrap.setOption("child.keepAlive", true);
 	}
 
 	void connect() {
-		List<NodeInfo> nodeInfoList = new ArrayList<>();
-
-		for (NodeConnection nodeConnection : nodeConnectionMap.values()) {
-			int nodeId = nodeConnection.nodeInfo.nodeId;
-			nodeInfoList.add(new NodeInfo(nodeId, nodeConnection.nodeInfo.socketAddress.getHostName(), 8090 + nodeId));
-		}
-
-		heartbeatServer = new HeartbeatServer(new NodeInfo(serverNodeInfo.nodeId, 8090 + serverNodeInfo.nodeId), nodeInfoList.toArray(new NodeInfo[nodeInfoList.size()]));
-
-		heartbeatThread = new Thread(heartbeatServer);
-		heartbeatThread.setName("Heartbeat Thread " + serverNodeInfo.nodeId);
-		heartbeatThread.setPriority(Thread.MIN_PRIORITY);
-		heartbeatThread.start();
-
 		configueBootstrap();
 
-		serverChannel = serverBootstrap.bind(serverNodeInfo.socketAddress);
+		int bindingPort = 8090 + nodeId;
+		bindingChannel = serverBootstrap.bind(new InetSocketAddress(bindingPort));
 
-		for (NodeConnection nodeConnection : nodeConnectionMap.values()) {
-			connectNode(nodeConnection);
+		System.out.println("Node " + nodeId + " is binding port " + bindingPort);
+
+		NodeInfo[] nodeInfos = generateNodeInfos(8090);
+
+		connectorChannels = new Channel[nodeInfos.length];
+
+		for (int i = 0; i < nodeInfos.length; i++) {
+			InetSocketAddress otherNodeAddress = nodeInfos[i].getSocketAddress();
+			ChannelFuture channelFuture = clientBootstrap.connect(otherNodeAddress);
+
+			System.out.println("Node " + nodeId + " is connecting to " + otherNodeAddress);
+
+			channelFuture.addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+
+			channelFuture.awaitUninterruptibly();
+
+			if (channelFuture.isSuccess() == false) {
+				System.out.println("Node " + nodeId + ": Fail to connect " + otherNodeAddress.toString());
+				continue;
+			}
+
+			connectorChannels[i] = channelFuture.getChannel();
 		}
-	}
-
-	void runHeartbeatServer() {
-
-	}
-
-	void connectNode(NodeConnection nodeConnection) {
-		ChannelFuture channelFuture = clientBootstrap.connect(nodeConnection.nodeInfo.socketAddress);
-		channelFuture.addListener(new NodeConnectChannelFutureListener(nodeConnection));
 	}
 
 	void disconnect() {
-		heartbeatServer.stop();
 
-		List<ChannelFuture> channelFutureList = new ArrayList<>();
-		channelFutureList.add(serverChannel.close());
-
-		for (NodeConnection connection : nodeConnectionMap.values()) {
-			channelFutureList.add(connection.getChannel().close());
+		if (bindingChannel.isConnected()) {
+			bindingChannel.close().awaitUninterruptibly();
 		}
 
-		for (ChannelFuture future : channelFutureList) {
-			future.awaitUninterruptibly();
+		for (Channel c : connectorChannels) {
+			if (c != null && c.isConnected()) {
+				c.close().awaitUninterruptibly();
+			}
 		}
 
 		serverChannelFactory.releaseExternalResources();
@@ -153,13 +125,35 @@ public class DistributedNode extends BasicThread {
 		isStopping = true;
 	}
 
-	Thread heartbeatThread;
+	NodeInfo[] generateNodeInfos(int basePort) {
+		NodeInfo[] nodeInfos = new NodeInfo[2];
+
+		int addressIndex = 0;
+
+		for (int i = 0; i < nodeInfos.length + 1; i++) {
+			if (i != nodeId) {
+				NodeInfo nodeInfo = new NodeInfo(i, new InetSocketAddress("localhost", basePort + i));
+
+				nodeInfos[addressIndex++] = nodeInfo;
+			}
+		}
+
+		return nodeInfos;
+	}
+
+	Thread monitorThread;
 	HeartbeatServer heartbeatServer;
 
 	@Override
 	public void run() {
+		heartbeatServer = new HeartbeatServer(new NodeInfo(nodeId, 8080 + nodeId), generateNodeInfos(8080));
+
+		monitorThread = new Thread(heartbeatServer);
+		monitorThread.setPriority(Thread.MIN_PRIORITY);
+		monitorThread.start();
+
 		connect();
-		LOGGER.info("Node" + serverNodeInfo.nodeId + " is connected");
+		System.out.println("Node " + nodeId + " is connected");
 
 		while (isStopping == false) {
 			try {
@@ -174,127 +168,7 @@ public class DistributedNode extends BasicThread {
 		}
 
 		disconnect();
-		LOGGER.info("Node" + serverNodeInfo.nodeId + " is disconnnected");
+		System.out.println("Node " + nodeId + " is disconnnected");
 	}
 }
 
-class NodeConnectChannelFutureListener implements ChannelFutureListener {
-	NodeConnection nodeConnection;
-
-	NodeConnectChannelFutureListener(NodeConnection nodeConnection) {
-		this.nodeConnection = nodeConnection;
-	}
-
-	@Override
-	public void operationComplete(ChannelFuture future) throws Exception {
-		Channel channel = future.getChannel();
-
-		if (future.isSuccess()) {
-			nodeConnection.setChannel(channel);
-		}
-
-		channel.close();
-	}
-}
-
-class NodeConnection {
-
-	NodeInfo nodeInfo;
-
-	protected AtomicReference<Channel> channel = new AtomicReference<>();
-
-	public NodeConnection(NodeInfo nodeInfo) {
-		this.nodeInfo = nodeInfo;
-	}
-
-	public Channel getChannel() {
-		return channel.get();
-	}
-
-	public void setChannel(Channel channel) {
-		this.channel.set(channel);
-	}
-
-	public boolean isConnected() {
-		Channel channel = getChannel();
-		return (channel != null) && channel.isConnected();
-	}
-}
-
-class NodeServerPipeLineFactory implements ChannelPipelineFactory {
-
-	@Override
-	public ChannelPipeline getPipeline() throws Exception {
-		ChannelPipeline channelPipeline = Channels.pipeline();
-
-		// Decoders
-		channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
-		channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ImageMessage.ImageRequest.getDefaultInstance()));
-
-		// Encoder
-		channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
-		channelPipeline.addLast("protobufEncoder", new ProtobufEncoder());
-
-		channelPipeline.addLast("ServerHandler", new NodeServerChannelHandler());
-
-		return channelPipeline;
-	}
-}
-
-class NodeClientPipeLineFactory implements ChannelPipelineFactory {
-
-	@Override
-	public ChannelPipeline getPipeline() throws Exception {
-		ChannelPipeline channelPipeline = Channels.pipeline();
-
-		// Decoders
-		channelPipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
-		channelPipeline.addLast("protobufDecoder", new ProtobufDecoder(ImageMessage.ImageResponse.getDefaultInstance()));
-
-		// Encoder
-		channelPipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
-		channelPipeline.addLast("protobufEncoder", new ProtobufEncoder());
-
-		channelPipeline.addLast("ServerHandler", new NodeClientChannelHandler());
-
-		return channelPipeline;
-	}
-}
-
-// TODO
-class NodeServerChannelHandler extends SimpleChannelHandler {
-	@Override
-	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-	}
-
-	@Override
-	public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-	}
-
-	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-	}
-
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-	}
-}
-
-// TODO
-class NodeClientChannelHandler extends SimpleChannelHandler {
-	@Override
-	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-	}
-
-	@Override
-	public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-	}
-
-	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-	}
-
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-	}
-}
