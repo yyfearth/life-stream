@@ -427,7 +427,6 @@ class ClientChannelHandler extends SimpleChannelHandler {
  * This is a channel handler simply print the method name it reaches. It's for debugging purpose.
  */
 class LiteralChannelHandler extends SimpleChannelHandler {
-
 	final static Logger LOGGER = Logger.getLogger(HeartbeatServer.class.getName());
 
 	NodeInfo serverNodeInfo;

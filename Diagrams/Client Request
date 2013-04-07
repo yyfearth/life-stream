@@ -1,0 +1,10 @@
+# http://bramp.github.io/js-sequence-diagrams/
+
+Client->Node0: Request an image
+Node0-->Client: Image
+Client->Node1: Request an image
+Note right of Node1: Cannot find it in DB\nFigure out it's in Node2
+Node1->Node2: Request an image
+Node2-->Node1: Image
+Note right of Node1: Replicate the image
+Node1-->Client: Image
