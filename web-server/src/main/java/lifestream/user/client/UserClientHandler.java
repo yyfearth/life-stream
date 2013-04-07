@@ -121,7 +121,7 @@ public class UserClientHandler extends SimpleChannelUpstreamHandler {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		logger.error("Unexpected exception from downstream.", e.getCause());
-		close();
+		close(); // TODO: try to re-connect
 	}
 
 	public abstract static class RequestResponseHandler {
