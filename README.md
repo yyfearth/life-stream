@@ -1,10 +1,11 @@
 Life Stream
 ===========
 
-Project LifeStream for CMPE275
+Project Life Stream for CMPE275
 
 Contributors
-============
+------------
+
 * Chih-Han Chu
 * Menghsi Wan
 * Yufan Yang
